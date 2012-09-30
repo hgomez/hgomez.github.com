@@ -12,7 +12,7 @@ categories:
 
 Updated build process for tomcat-connector, 1.1.24, no more APXS variable or configure parameters required
 
-[bash]
+``` bash
 TCN_RELEASE=1.1.24
 curl http://mir2.ovh.net/ftp.apache.org/dist//tomcat/tomcat-connectors/native/$TCN_RELEASE/source/tomcat-native-$TCN_RELEASE-src.tar.gz -o tomcat-native-$TCN_RELEASE-src.tar.gz
 tar xvzf tomcat-native-$TCN_RELEASE-src.tar.gz
@@ -25,7 +25,7 @@ make
 sudo cp .libs/libtcnative-1.0.1.24.dylib /usr/lib/java
 sudo rm -f  /usr/lib/java/libtcnative-1.dylib
 sudo ln -s /usr/lib/java/libtcnative-1.0.1.24.dylib /usr/lib/java/libtcnative-1.dylib
-[/bash]
+```
 
 
 
@@ -36,11 +36,11 @@ sudo ln -s /usr/lib/java/libtcnative-1.0.1.24.dylib /usr/lib/java/libtcnative-1.
 If you get Java on Lion using the java command on terminal or via the Java Developer Package for Mac OS X 10.7, Java headers are not on the usual location and you could find them under **/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers**
 
 You should then update the **configure** command line like this :
-[bash]
+``` bash
 CFLAGS='-arch i386 -arch x86_64' ./configure --with-apr=/usr --with-ssl=/usr --with-java-home=/System/Library/Frameworks/JavaVM.framework/Versions/A/
-[/bash]
+```
 
-[bash]
+``` bash
 TCN_RELEASE=1.1.24
 curl http://mir2.ovh.net/ftp.apache.org/dist//tomcat/tomcat-connectors/native/$TCN_RELEASE/source/tomcat-native-$TCN_RELEASE-src.tar.gz -o tomcat-native-$TCN_RELEASE-src.tar.gz
 tar xvzf tomcat-native-$TCN_RELEASE-src.tar.gz
@@ -53,5 +53,5 @@ make
 sudo cp .libs/libtcnative-1.0.dylib /usr/lib/java
 sudo rm -f  /usr/lib/java/libtcnative-1.dylib
 sudo ln -s /usr/lib/java/libtcnative-1.0.dylib /usr/lib/java/libtcnative-1.dylib
-[/bash]
+```
 

@@ -11,15 +11,15 @@ categories:
 
 If you installed MacFuse on Lion (10.7) and tried to uninstall you may encountered the following error :
 
-[bash]
+``` bash
 sudo /Library/Filesystems/fusefs.fs/Support/uninstall-macfuse-core.sh
 MacFUSE Uninstaller: Can not find the Archive.bom for MacFUSE Core package.
-[/bash]
+```
 
 Uninstaller didn't check for Lion (uname -r reporting 11.x).
 So fix is easy, just edit uninstaller script **/Library/Filesystems/fusefs.fs/Support/uninstall-macfuse-core.sh** and add 11*) in case next to 10*)
 
-[bash]
+``` bash
 ...
 
 OS_RELEASE=`/usr/bin/uname -r`
@@ -38,4 +38,4 @@ case "$OS_RELEASE" in
      BOMFILE="$INSTALL_VOLUME/var/db/receipts/com.google.macfuse.core.bom"
      ;;
 esac
-[/bash]
+```

@@ -14,7 +14,7 @@ You'll need first mod_jk installed, follow [Building Guide](http://blog.hgomez.n
 
 Create /etc/apache2/other/jk.conf :
 
-[bash]
+``` bash
 # Load JK Module
 LoadModule jk_module     libexec/apache2/mod_jk.so
 # JK workers.properties
@@ -27,11 +27,11 @@ JkLogFile     /var/log/apache2/mod_jk.log
 JkLogLevel    info
 # JK timestamp log format
 JkLogStampFormat "[%a %b %d %H:%M:%S %Y] "
-[/bash]
+```
 
 Create /etc/apache2/other/workers.properties
 
-[bash]
+``` bash
 worker.list=jenkins,watch,manage
 
 # Set properties for worker jenkins (ajp13)
@@ -45,11 +45,11 @@ worker.watch.read_only=true
 worker.watch.mount=/user/status/jk
 worker.manage.type=status
 worker.manage.mount=/admin/status/jk
-[/bash]
+```
 
 I choose to use VirtualName Hosting and so defined one into /etc/apache2/extra/httpd-vhosts.conf :
 
-[bash]
+``` bash
 NameVirtualHost *:80
 
 <VirtualHost *:80>
@@ -64,4 +64,4 @@ NameVirtualHost *:80
     JkMount  /* jenkins
 
 </VirtualHost>
-[/bash]
+```

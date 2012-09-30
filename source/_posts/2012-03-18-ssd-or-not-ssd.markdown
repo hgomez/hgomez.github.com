@@ -36,7 +36,7 @@ Under Lion, MBP appears to be sometime laggy even if I already updated it :
 
 
 I run [GeekBench 2.2.7](http://www.primatelabs.ca/geekbench/) and give me a bench result of **3752** :
-[bash]
+``` bash
 Benchmark Summary
   Integer Score              3123 |||||||||
   Floating Point Score       5493 ||||||||||||||||
@@ -58,7 +58,7 @@ System Information
   L3 Cache              0.00 B
   Memory                8.00 GB 1067 MHz DDR3
   BIOS                  Apple Inc.    MBP51.88Z.007E.B06.1202061253
-[/bash]
+```
 
 
 
@@ -83,7 +83,7 @@ There is no tools like ****HD Tune ****on OSX, so I wrote a very simple shell sc
 
 
 
-[bash]
+``` bash
 #!/bin/sh
 COUNT=2048
 
@@ -101,7 +101,7 @@ dd if=PERFTEST of=/dev/null bs=1m count=$COUNT
 
 echo "testing IO write performances - 2nd Pass"
 dd if=/dev/zero of=PERFTEST bs=1m count=$COUNT
-[/bash]
+```
 
 
 
@@ -116,7 +116,7 @@ Results :
 
 
 
-[bash]
+``` bash
 testing pseudo-IO performances - 1st Pass
 2048+0 records in
 2048+0 records out
@@ -137,8 +137,7 @@ testing IO write performances - 2nd Pass
 2048+0 records in
 2048+0 records out
 2147483648 bytes transferred in 33.203725 secs (64675986 bytes/sec)
-[/bash]
-
+```
 
 Note, I run this performance tests from a directory excluded from Spotlight indexing !
 

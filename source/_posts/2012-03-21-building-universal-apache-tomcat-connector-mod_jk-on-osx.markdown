@@ -13,13 +13,13 @@ categories:
 
 Build Universal Apache Tomcat Connector (mod_jk) for OSX follow tricks used for Apache Tomcat Native Library.
 
-[bash]
+``` bash
 CFLAGS='-arch i386 -arch x86_64' APXSLDFLAGS='-arch i386-arch x86_64'
-[/bash]
+```
 
 Here is a small script to do it :
 
-[bash]
+``` bash
 #!/bin/sh
 #
 
@@ -32,16 +32,16 @@ cd tomcat-connectors-${JK_VERSION}-src/native
 ./configure --with-apxs=/usr/sbin/apxs CFLAGS='-arch i386 -arch x86_64' APXSLDFLAGS='-arch i386-arch x86_64'
 make clean
 make
-[/bash]
+```
 
 Installation is pretty simple : 
 
-[bash]
+``` bash
 sudo cp apache-2.0/.libs/mod_jk.so /usr/libexec/apache2/
-[/bash]
+```
 
 You could then restart your Apache HTTPd server to get new mod_jk used :
 
-[bash]
+``` bash
 sudo /usr/sbin/apachectl restart
-[/bash]
+```
