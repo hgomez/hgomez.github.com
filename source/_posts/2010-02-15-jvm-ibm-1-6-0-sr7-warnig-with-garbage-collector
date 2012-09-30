@@ -1,0 +1,86 @@
+---
+comments: true
+date: 2010-02-15 23:48:51
+layout: post
+slug: jvm-ibm-1-6-0-sr7-warnig-with-garbage-collector
+title: JVM IBM 1.6.0 SR7 - Warning with Garbage Collector
+wordpress_id: 434
+categories:
+- JVM
+---
+
+I updated to 1.6.0 IBM one of our Linux Suse SLES 10 in VMware ESX.
+
+A priori nothing too terrible passage of the JVM to SR6 SR7, nothing special except the changelog the usual list of bug fixes.
+
+Shortly after, I reported a CPU usage abnormal. The top command confirms that the JVM running between 70 and 80% when there is no particular activity.
+
+A little peek via JConsole shows abnormal behavior of the Garbage Collector. I pass one of the instances in SR6 and stimulus 2 instances similar to one another in SR6 and SR7:
+
+
+## Take a look on garbage collector via JConsole
+
+
+
+
+### IBM 1.6.0 SR6
+
+
+[caption id="attachment_444" align="aligncenter" width="536" caption="Etat du Heap sous IBM SR6"]![](http://blog.hgomez.net/wp-content/uploads/2010/04/Capture-d’écran-2010-02-15-à-22.26.28.png)[/caption]
+
+[caption id="attachment_445" align="aligncenter" width="501" caption="Un seul type de garbage, 2s maximum"]![](http://blog.hgomez.net/wp-content/uploads/2010/04/Capture-d’écran-2010-02-15-à-22.26.36.png)[/caption]
+
+
+### IBM 1.6.0 SR7
+
+
+[caption id="attachment_447" align="aligncenter" width="547" caption="Beaucoup plus d'activité de garbage collection en SR7"]![](http://blog.hgomez.net/wp-content/uploads/2010/04/Capture-d’écran-2010-02-15-à-22.30.08.png)[/caption]
+
+[caption id="attachment_441" align="aligncenter" width="374" caption="Un GC utilisant les méthodes Copy et MarkSweepCompact"]![](http://blog.hgomez.net/wp-content/uploads/2010/04/Capture-d’écran-2010-02-15-à-22.23.50.png)[/caption]
+
+On voit une activité GC plus constante, d'où la consommation de CPU qui passe du coup de 2s à 20s et ce même en absence totale d'activité coté Tomcat.
+
+
+### GC strategy on IBM JVM
+
+
+
+
+### There is 3 Garbage Collection strategy on IBM JVM x86 :
+
+
+
+
+
+	
+  * _-Xgcpolicy:optthruput (Default and recommended value.) : Delivers very high throughput to applications, but at the cost of occasional pauses._
+
+	
+  * _-Xgcpolicy:optavgpause : Reduces the time spent in garbage collection pauses and limits the effect of increasing heap size on the length of the garbage collection pause. Use optavgpause if your configuration has a very large heap._
+
+	
+  * _-Xgcpolicy:gencon : Requests the combined use of concurrent and generational GC to help minimize the time that is spent in any garbage collection pause._
+
+
+So we have :
+
+  * A strategy that gives very good performance for your application but with periods of rest.
+
+
+  * A method where the average GC takes less time.
+
+
+  * A GC running more often by raising operations shorter and therefore reducing the break time.
+
+
+Problem, regardless of the setting of GC was the same behavior and excessive CPU consumption.
+
+
+# # # Conclusion
+
+
+An update seemingly innocuous especially as there is nothing in the changelog that something has changed in the operating mode of the GC.
+
+In the meantime have a corresponding behavior expectations and taking into account the JVM settings, it's back to version SR6.
+
+Be prudent.	
