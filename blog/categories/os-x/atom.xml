@@ -4,7 +4,7 @@
   <title><![CDATA[Category: OS/X | Rico's Blog]]></title>
   <link href="http://hgomez.github.com/blog/categories/os-x/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2012-09-30T18:34:39+02:00</updated>
+  <updated>2012-09-30T18:39:09+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -505,7 +505,7 @@ testing IO write performances - 2nd Pass
 
 <p>Note, I run this performance tests from a directory excluded from Spotlight indexing !</p>
 
-<p><a href="http://blog.hgomez.net/wp-content/uploads/2012/03/SpotLight-Exclude.png"><img src="http://blog.hgomez.net/wp-content/uploads/2012/03/SpotLight-Exclude.png" alt="" /></a></p>
+<p><img class="center" src="/images/SpotLight-Exclude.png" title="[SpotLight Exclude [SpotLight Exclude]]" ></p>
 
 <ul>
 <li><p>Pseudo IO performance is justing virtual IO (/dev/zero and /dev/null), so it provide max raw IO performance : <strong>9078 MB/s</strong></p></li>
@@ -518,7 +518,7 @@ testing IO write performances - 2nd Pass
 
 <h3>iStat Menu disk activity - Write Performance</h3>
 
-<p><a href="http://blog.hgomez.net/wp-content/uploads/2012/03/WD-Perfs.png"><img src="http://blog.hgomez.net/wp-content/uploads/2012/03/WD-Perfs.png" alt="" /></a></p>
+<p><img class="center" src="/images/WD-Perfs.png" title="[WD Perfs [WD Perfs]]" ></p>
 
 <h2>Conclusions</h2>
 
