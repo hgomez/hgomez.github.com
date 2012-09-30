@@ -12,7 +12,7 @@ categories:
 Here is the second try of logos for DevOps, still provided by Sabrina (@saabpii).
 She carefully tracked comments here and on Twitter :
 
-[![](http://blog.hgomez.net/wp-content/uploads/2012/02/logo_devops_v2.jpg)](http://blog.hgomez.net/wp-content/uploads/2012/02/logo_devops_v2.jpg)
+{% img center /images/logo_devops_v2.jpg %}
 
 Please vote for your preferred one.
 

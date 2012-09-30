@@ -15,7 +15,8 @@ As expected she has been very motivated and inspired.
 
 Here are the results :
 
-[caption id="attachment_964" align="alignnone" width="1181" caption="some DevOps Logo"][![](http://blog.hgomez.net/wp-content/uploads/2012/02/logo_devops2.jpg)](http://blog.hgomez.net/wp-content/uploads/2012/02/logo_devops2.jpg)[/caption]
+{% img center /images/logo_devops2.jpg %}
+
 
 Now I need you to comments and votes for them.
 
