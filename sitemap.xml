@@ -80,7 +80,7 @@
         <loc>
             http://hgomez.github.com/blog/2011/07/13/building-universal-apache-tomcat-native-library-on-osx/
         </loc>
-        <lastmod>2012-09-30T18:14:12+02:00</lastmod>
+        <lastmod>2012-09-30T18:22:08+02:00</lastmod>
     </url>
     <url>
         <loc>http://hgomez.github.com/blog/2011/07/15/servlet-containers-startup-time/</loc>
@@ -136,10 +136,10 @@
     </url>
     <url>
         <loc>http://hgomez.github.com/blog/archives/</loc>
-        <lastmod>2012-09-30T18:19:10+02:00</lastmod>
+        <lastmod>2012-09-30T18:22:08+02:00</lastmod>
     </url>
     <url>
         <loc>http://hgomez.github.com/</loc>
-        <lastmod>2012-09-30T18:19:10+02:00</lastmod>
+        <lastmod>2012-09-30T18:22:08+02:00</lastmod>
     </url>
 </urlset>
