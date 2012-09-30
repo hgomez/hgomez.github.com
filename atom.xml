@@ -4,7 +4,7 @@
   <title><![CDATA[Rico's Blog]]></title>
   <link href="http://hgomez.github.com/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2012-09-30T18:39:09+02:00</updated>
+  <updated>2012-09-30T18:42:46+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -753,7 +753,7 @@
     <content type="html"><![CDATA[<p>Here is the second try of logos for DevOps, still provided by Sabrina (@saabpii).
 She carefully tracked comments here and on Twitter :</p>
 
-<p><a href="http://blog.hgomez.net/wp-content/uploads/2012/02/logo_devops_v2.jpg"><img src="http://blog.hgomez.net/wp-content/uploads/2012/02/logo_devops_v2.jpg" alt="" /></a></p>
+<p><img class="center" src="http://hgomez.github.com/images/logo_devops_v2.jpg"></p>
 
 <p>Please vote for your preferred one.</p>
 ]]></content>
@@ -770,7 +770,7 @@ She carefully tracked comments here and on Twitter :</p>
 
 <p>Here are the results :</p>
 
-<p>[caption id=&#8221;attachment_964&#8221; align=&#8221;alignnone&#8221; width=&#8221;1181&#8221; caption=&#8221;some DevOps Logo&#8221;]<a href="http://blog.hgomez.net/wp-content/uploads/2012/02/logo_devops2.jpg"><img src="http://blog.hgomez.net/wp-content/uploads/2012/02/logo_devops2.jpg" alt="" /></a>[/caption]</p>
+<p><img class="center" src="http://hgomez.github.com/images/logo_devops2.jpg"></p>
 
 <p>Now I need you to comments and votes for them.</p>
 
