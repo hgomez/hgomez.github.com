@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Java | Rico's Blog]]></title>
   <link href="http://hgomez.github.com/blog/categories/java/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2012-09-30T16:43:13+02:00</updated>
+  <updated>2012-09-30T16:46:11+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -62,13 +62,13 @@ Java HotSpot(TM) 64-Bit Server VM (build 20.8-b03-424, mixed mode)
 <h2>Standard Unix way</h2>
 
 <p>You could just update your PATH environment variable to update search path :
-[bash]
+<code>bash
 mbp-rico:~ henri$ export PATH=/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home/bin:$PATH
 mbp-rico:~ henri$ java -version
 openjdk version "1.7.0-jdk7u6-b20"
 OpenJDK Runtime Environment (build 1.7.0-jdk7u6-b20-20120719)
 OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)
-[/bash]</p>
+</code></p>
 
 <p>It works but OSX provide smarter mechanism.</p>
 
@@ -76,13 +76,13 @@ OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)
 
 <p>Keeping in mind we're discussing command line operation, updating default JVM via Java Preferences will not be retained, will define instead <strong>JAVA_HOME</strong> environment variable like this :</p>
 
-<p>[bash]
+<p><code>bash
 mbp-rico:~ henri$ export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home/
 mbp-rico:~ henri$ java -version
 openjdk version "1.7.0-jdk7u6-b20"
 OpenJDK Runtime Environment (build 1.7.0-jdk7u6-b20-20120719)
-OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)</pre>
-[/bash]</p>
+OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)&lt;/pre&gt;
+</code></p>
 
 <p>We could keep our current PATH and it will be <strong>Apple java bootstrap</strong> system, living into <strong>/usr/bin/java</strong> who make use of <strong>JAVA_HOME</strong> and launch the proper JVM. Simple but efficient .</p>
 
@@ -92,7 +92,7 @@ OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)</pre>
 
 <p>java_home is located in /usr/libexec and has many useful features :</p>
 
-<p>[bash]
+<p>``` bash
 mbp-rico:~ henri$ /usr/libexec/java_home --help
 Usage: java_home [options...]</p>
 
@@ -113,62 +113,62 @@ Usage: java_home [options...]</p>
 [-h/--help]                      This usage information.
 </code></pre>
 
-<p>[/bash]</p>
+<p>```</p>
 
 <p>Let's play with <strong>java_home</strong> now.</p>
 
 <p>Obtaining path of default JVM :
-[bash]
+<code>bash
 mbp-rico:~ henri$ /usr/libexec/java_home
-/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home</pre>
-[/bash]</p>
+/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home&lt;/pre&gt;
+</code></p>
 
 <p>Obtaining path of default Java 7 JVM :
-[bash]
+<code>bash
 mbp-rico:~ henri$ /usr/libexec/java_home -v 1.7
-/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home</pre>
-[/bash]</p>
+/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home&lt;/pre&gt;
+</code></p>
 
 <p>Obtaining path of default Java 8 JVM :
-[bash]
+<code>bash
 mbp-rico:~ henri$ /usr/libexec/java_home -v 1.8
 /Library/Java/JavaVirtualMachines/1.8.0.jdk/Contents/Home
-[/bash]</p>
+</code></p>
 
 <p>Obtaining path of default Java 1.6 32 bits JVM :
-[bash]
+<code>bash
 mbp-rico:~ henri$ /usr/libexec/java_home -v 1.6 -a i386
-/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home</pre>
-[/bash]</p>
+/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home&lt;/pre&gt;
+</code></p>
 
 <p>Obtaining path of default Java 1.6 64 bits JVM :
-[bash]
+<code>bash
 mbp-rico:~ henri$ /usr/libexec/java_home -v 1.6 -a x86_64
 /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
-[/bash]</p>
+</code></p>
 
 <p>Here you could see that 32 and 64bits JVM have the same path. This is because due to universal mode (i386/x86_64), <strong>Apple</strong> produce a dual mode JVM. This is not the case for <strong>Oracle Java 7</strong> where only 64bits JVM is available.</p>
 
 <p>Let's combine <strong>java_home</strong> and <strong>JAVA_HOME</strong> :
-[bash]
-mbp-rico:~ henri$ export JAVA_HOME=<code>/usr/libexec/java_home -v 1.7</code>
+<code>bash
+mbp-rico:~ henri$ export JAVA_HOME=`/usr/libexec/java_home -v 1.7`
 mbp-rico:~ henri$ java -version
 openjdk version "1.7.0-jdk7u6-b20"
 OpenJDK Runtime Environment (build 1.7.0-jdk7u6-b20-20120719)
 OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)
-[/bash]</p>
+</code></p>
 
 <p>This is a very nice features if you want to specify a Java Level (6 or 7) following your<strong> Java Preferences </strong>for some of your server side application (let say <strong>Apache Tomcat</strong>) or command operation (like <strong>Apache Maven</strong>).</p>
 
 <p>Typically for my Apache Tomcat powered application like Jenkins, I usually set it in bin/setenv.sh :
-[bash]
-export JAVA_HOME=<code>/usr/libexec/java_home -v 1.7</code>
+<code>bash
+export JAVA_HOME=`/usr/libexec/java_home -v 1.7`
 CATALINA_OPTS=-Xms256m -Xmx512m -DJENKINS_HOME=$JENKINS_HOME -Dhudson.model.Hudson.logStartupPerformance=true -Duser.language=en -Djava.awt.headless=true
-[/bash]</p>
+</code></p>
 
 <p>Do you want to get a list of all JVM on your system ?</p>
 
-<p>[bash]
+<p>``` bash
 mbp-rico:~ henri$ /usr/libexec/java_home -V
 Matching Java Virtual Machines (33):</p>
 
@@ -208,7 +208,7 @@ Matching Java Virtual Machines (33):</p>
 </code></pre>
 
 <p>/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
-[/bash]</p>
+```</p>
 
 <h2>Note on JVM Locations</h2>
 

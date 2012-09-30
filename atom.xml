@@ -4,7 +4,7 @@
   <title><![CDATA[Rico's Blog]]></title>
   <link href="http://hgomez.github.com/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2012-09-30T16:43:13+02:00</updated>
+  <updated>2012-09-30T16:46:11+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -65,14 +65,20 @@
 
 <h2>Standard Unix way</h2>
 
-<p>You could just update your PATH environment variable to update search path :
-[bash]
-mbp-rico:~ henri$ export PATH=/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home/bin:$PATH
-mbp-rico:~ henri$ java -version
-openjdk version &#8220;1.7.0-jdk7u6-b20&#8221;
-OpenJDK Runtime Environment (build 1.7.0-jdk7u6-b20-20120719)
-OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)
-[/bash]</p>
+<p>You could just update your PATH environment variable to update search path :</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mbp-rico:~ henri<span class="nv">$ </span><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span>/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home/bin:<span class="nv">$PATH</span>
+</span><span class='line'>mbp-rico:~ henri<span class="nv">$ </span>java -version
+</span><span class='line'>openjdk version <span class="s2">&quot;1.7.0-jdk7u6-b20&quot;</span>
+</span><span class='line'>OpenJDK Runtime Environment <span class="o">(</span>build 1.7.0-jdk7u6-b20-20120719<span class="o">)</span>
+</span><span class='line'>OpenJDK 64-Bit Server VM <span class="o">(</span>build 23.2-b09, mixed mode<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>It works but OSX provide smarter mechanism.</p>
 
@@ -80,13 +86,18 @@ OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)
 
 <p>Keeping in mind we&#8217;re discussing command line operation, updating default JVM via Java Preferences will not be retained, will define instead <strong>JAVA_HOME</strong> environment variable like this :</p>
 
-<p>[bash]
-mbp-rico:~ henri$ export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home/
-mbp-rico:~ henri$ java -version
-openjdk version &#8220;1.7.0-jdk7u6-b20&#8221;
-OpenJDK Runtime Environment (build 1.7.0-jdk7u6-b20-20120719)
-OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)</pre>
-[/bash]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mbp-rico:~ henri<span class="nv">$ </span><span class="nb">export </span><span class="nv">JAVA_HOME</span><span class="o">=</span>/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home/
+</span><span class='line'>mbp-rico:~ henri<span class="nv">$ </span>java -version
+</span><span class='line'>openjdk version <span class="s2">&quot;1.7.0-jdk7u6-b20&quot;</span>
+</span><span class='line'>OpenJDK Runtime Environment <span class="o">(</span>build 1.7.0-jdk7u6-b20-20120719<span class="o">)</span>
+</span><span class='line'>OpenJDK 64-Bit Server VM <span class="o">(</span>build 23.2-b09, mixed mode<span class="o">)</span>&lt;/pre&gt;
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>We could keep our current PATH and it will be <strong>Apple java bootstrap</strong> system, living into <strong>/usr/bin/java</strong> who make use of <strong>JAVA_HOME</strong> and launch the proper JVM. Simple but efficient .</p>
 
@@ -96,123 +107,192 @@ OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)</pre>
 
 <p>java_home is located in /usr/libexec and has many useful features :</p>
 
-<p>[bash]
-mbp-rico:~ henri$ /usr/libexec/java_home &#8211;help
-Usage: java_home [options&#8230;]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mbp-rico:~ henri<span class="nv">$ </span>/usr/libexec/java_home --help
+</span><span class='line'>Usage: java_home <span class="o">[</span>options...<span class="o">]</span>
+</span><span class='line'>    Returns the path to a Java home directory from the current user<span class="err">&#39;</span>s settings.
+</span><span class='line'>
+</span><span class='line'>Options:
+</span><span class='line'>    <span class="o">[</span>-v/--version   &lt;version&gt;<span class="o">]</span>       Filter Java versions in the <span class="s2">&quot;JVMVersion&quot;</span> form 1.X<span class="o">(</span>+ or *<span class="o">)</span>.
+</span><span class='line'>    <span class="o">[</span>-a/--arch      &lt;architecture&gt;<span class="o">]</span>  Filter JVMs matching architecture <span class="o">(</span>i386, x86_64, etc<span class="o">)</span>.
+</span><span class='line'>    <span class="o">[</span>-d/--datamodel &lt;datamodel&gt;<span class="o">]</span>     Filter JVMs capable of -d32 or -d64
+</span><span class='line'>    <span class="o">[</span>-t/--task      &lt;task&gt;<span class="o">]</span>          Use the JVM list <span class="k">for </span>a specific task <span class="o">(</span>Applets, WebStart, BundledApp, JNI, or CommandLine<span class="o">)</span>
+</span><span class='line'>    <span class="o">[</span>-F/--failfast<span class="o">]</span>                  Fail when filters <span class="k">return </span>no JVMs, <span class="k">do </span>not <span class="k">continue </span>with default.
+</span><span class='line'>    <span class="o">[</span>   --exec      &lt;<span class="nb">command</span>&gt; ...<span class="o">]</span>   Execute the <span class="nv">$JAVA_HOME</span>/bin/&lt;<span class="nb">command</span>&gt; with the remaining arguments.
+</span><span class='line'>    <span class="o">[</span>-R/--request<span class="o">]</span>                   Request installation of a Java Runtime <span class="k">if </span>not installed.
+</span><span class='line'>    <span class="o">[</span>-X/--xml<span class="o">]</span>                       Print full JVM list and additional data as XML plist.
+</span><span class='line'>    <span class="o">[</span>-V/--verbose<span class="o">]</span>                   Print full JVM list with architectures.
+</span><span class='line'>    <span class="o">[</span>-h/--help<span class="o">]</span>                      This usage information.
+</span></code></pre></td></tr></table></div></figure>
 
-<pre><code>Returns the path to a Java home directory from the current user's settings.
-</code></pre>
-
-<p>Options:</p>
-
-<pre><code>[-v/--version   &lt;version&gt;]       Filter Java versions in the "JVMVersion" form 1.X(+ or *).
-[-a/--arch      &lt;architecture&gt;]  Filter JVMs matching architecture (i386, x86_64, etc).
-[-d/--datamodel &lt;datamodel&gt;]     Filter JVMs capable of -d32 or -d64
-[-t/--task      &lt;task&gt;]          Use the JVM list for a specific task (Applets, WebStart, BundledApp, JNI, or CommandLine)
-[-F/--failfast]                  Fail when filters return no JVMs, do not continue with default.
-[   --exec      &lt;command&gt; ...]   Execute the $JAVA_HOME/bin/&lt;command&gt; with the remaining arguments.
-[-R/--request]                   Request installation of a Java Runtime if not installed.
-[-X/--xml]                       Print full JVM list and additional data as XML plist.
-[-V/--verbose]                   Print full JVM list with architectures.
-[-h/--help]                      This usage information.
-</code></pre>
-
-<p>[/bash]</p>
 
 <p>Let&#8217;s play with <strong>java_home</strong> now.</p>
 
-<p>Obtaining path of default JVM :
-[bash]
-mbp-rico:~ henri$ /usr/libexec/java_home
-/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home</pre>
-[/bash]</p>
+<p>Obtaining path of default JVM :</p>
 
-<p>Obtaining path of default Java 7 JVM :
-[bash]
-mbp-rico:~ henri$ /usr/libexec/java_home -v 1.7
-/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home</pre>
-[/bash]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mbp-rico:~ henri<span class="nv">$ </span>/usr/libexec/java_home
+</span><span class='line'>/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home&lt;/pre&gt;
+</span></code></pre></td></tr></table></div></figure>
 
-<p>Obtaining path of default Java 8 JVM :
-[bash]
-mbp-rico:~ henri$ /usr/libexec/java_home -v 1.8
-/Library/Java/JavaVirtualMachines/1.8.0.jdk/Contents/Home
-[/bash]</p>
 
-<p>Obtaining path of default Java 1.6 32 bits JVM :
-[bash]
-mbp-rico:~ henri$ /usr/libexec/java_home -v 1.6 -a i386
-/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home</pre>
-[/bash]</p>
+<p>Obtaining path of default Java 7 JVM :</p>
 
-<p>Obtaining path of default Java 1.6 64 bits JVM :
-[bash]
-mbp-rico:~ henri$ /usr/libexec/java_home -v 1.6 -a x86_64
-/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
-[/bash]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mbp-rico:~ henri<span class="nv">$ </span>/usr/libexec/java_home -v 1.7
+</span><span class='line'>/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home&lt;/pre&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Obtaining path of default Java 8 JVM :</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mbp-rico:~ henri<span class="nv">$ </span>/usr/libexec/java_home -v 1.8
+</span><span class='line'>/Library/Java/JavaVirtualMachines/1.8.0.jdk/Contents/Home
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Obtaining path of default Java 1.6 32 bits JVM :</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mbp-rico:~ henri<span class="nv">$ </span>/usr/libexec/java_home -v 1.6 -a i386
+</span><span class='line'>/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home&lt;/pre&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Obtaining path of default Java 1.6 64 bits JVM :</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mbp-rico:~ henri<span class="nv">$ </span>/usr/libexec/java_home -v 1.6 -a x86_64
+</span><span class='line'>/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>Here you could see that 32 and 64bits JVM have the same path. This is because due to universal mode (i386/x86_64), <strong>Apple</strong> produce a dual mode JVM. This is not the case for <strong>Oracle Java 7</strong> where only 64bits JVM is available.</p>
 
-<p>Let&#8217;s combine <strong>java_home</strong> and <strong>JAVA_HOME</strong> :
-[bash]
-mbp-rico:~ henri$ export JAVA_HOME=<code>/usr/libexec/java_home -v 1.7</code>
-mbp-rico:~ henri$ java -version
-openjdk version &#8220;1.7.0-jdk7u6-b20&#8221;
-OpenJDK Runtime Environment (build 1.7.0-jdk7u6-b20-20120719)
-OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)
-[/bash]</p>
+<p>Let&#8217;s combine <strong>java_home</strong> and <strong>JAVA_HOME</strong> :</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mbp-rico:~ henri<span class="nv">$ </span><span class="nb">export </span><span class="nv">JAVA_HOME</span><span class="o">=</span><span class="sb">`</span>/usr/libexec/java_home -v 1.7<span class="sb">`</span>
+</span><span class='line'>mbp-rico:~ henri<span class="nv">$ </span>java -version
+</span><span class='line'>openjdk version <span class="s2">&quot;1.7.0-jdk7u6-b20&quot;</span>
+</span><span class='line'>OpenJDK Runtime Environment <span class="o">(</span>build 1.7.0-jdk7u6-b20-20120719<span class="o">)</span>
+</span><span class='line'>OpenJDK 64-Bit Server VM <span class="o">(</span>build 23.2-b09, mixed mode<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>This is a very nice features if you want to specify a Java Level (6 or 7) following your<strong> Java Preferences </strong>for some of your server side application (let say <strong>Apache Tomcat</strong>) or command operation (like <strong>Apache Maven</strong>).</p>
 
-<p>Typically for my Apache Tomcat powered application like Jenkins, I usually set it in bin/setenv.sh :
-[bash]
-export JAVA_HOME=<code>/usr/libexec/java_home -v 1.7</code>
-CATALINA_OPTS=-Xms256m -Xmx512m -DJENKINS_HOME=$JENKINS_HOME -Dhudson.model.Hudson.logStartupPerformance=true -Duser.language=en -Djava.awt.headless=true
-[/bash]</p>
+<p>Typically for my Apache Tomcat powered application like Jenkins, I usually set it in bin/setenv.sh :</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nb">export </span><span class="nv">JAVA_HOME</span><span class="o">=</span><span class="sb">`</span>/usr/libexec/java_home -v 1.7<span class="sb">`</span>
+</span><span class='line'><span class="nv">CATALINA_OPTS</span><span class="o">=</span>-Xms256m -Xmx512m -DJENKINS_HOME<span class="o">=</span><span class="nv">$JENKINS_HOME</span> -Dhudson.model.Hudson.logStartupPerformance<span class="o">=</span><span class="nb">true</span> -Duser.language<span class="o">=</span>en -Djava.awt.headless<span class="o">=</span><span class="nb">true</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>Do you want to get a list of all JVM on your system ?</p>
 
-<p>[bash]
-mbp-rico:~ henri$ /usr/libexec/java_home -V
-Matching Java Virtual Machines (33):</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mbp-rico:~ henri<span class="nv">$ </span>/usr/libexec/java_home -V
+</span><span class='line'>Matching Java Virtual Machines <span class="o">(</span>33<span class="o">)</span>:
+</span><span class='line'>    1.6.0_33-b03-424, x86_64: <span class="s2">&quot;Java SE 6&quot;</span>   /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+</span><span class='line'>    1.6.0_33-b03-424, i386:   <span class="s2">&quot;Java SE 6&quot;</span>   /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+</span><span class='line'>    1.6.0_31-b04-411, x86_64: <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_31-b04-411.jdk/Contents/Home
+</span><span class='line'>    1.6.0_31-b04-411, i386:   <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_31-b04-411.jdk/Contents/Home
+</span><span class='line'>    1.7.0-jdk7u6-b20-20120719, x86_64:    <span class="s2">&quot;OpenJDK 7&quot;</span>   /Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home
+</span><span class='line'>    1.8.0-jdk8-b47-20120720, x86_64:  <span class="s2">&quot;OpenJDK 8&quot;</span>   /Library/Java/JavaVirtualMachines/1.8.0.jdk/Contents/Home
+</span><span class='line'>    1.7.0-jdk7u4-b21-20120427, i386:  <span class="s2">&quot;OpenJDK 7&quot;</span>   /Library/Java/JavaVirtualMachines/1.7.0u4.jdk/Contents/Home
+</span><span class='line'>    1.7.0_05, x86_64: <span class="s2">&quot;Java SE 7&quot;</span>   /Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home
+</span><span class='line'>    1.6.0_33-b03-424, x86_64: <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_33-b03-424.jdk/Contents/Home
+</span><span class='line'>    1.6.0_33-b03-424, i386:   <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_33-b03-424.jdk/Contents/Home
+</span><span class='line'>    1.8.0-jdk8-b45-20120713-jigsaw, x86_64:   <span class="s2">&quot;OpenJDK 8&quot;</span>   /Library/Java/JavaVirtualMachines/1.8.0-jigsaw.jdk/Contents/Home
+</span><span class='line'>    1.8.0-b48-20120720-lambda, x86_64:    <span class="s2">&quot;OpenJDK 8&quot;</span>   /Library/Java/JavaVirtualMachines/1.8.0-lambda.jdk/Contents/Home
+</span><span class='line'>    1.7.0-jdk7u6-b20-20120719, i386:  <span class="s2">&quot;OpenJDK 7&quot;</span>   /Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home
+</span><span class='line'>    1.7.0-jdk7u4-b21-20120427, x86_64:    <span class="s2">&quot;OpenJDK 7&quot;</span>   /Library/Java/JavaVirtualMachines/1.7.0u4.jdk/Contents/Home
+</span><span class='line'>    1.7.0-jdk7u4-b21-20120421, x86_64:    <span class="s2">&quot;OpenJDK 7&quot;</span>   /Library/Java/JavaVirtualMachines/1.7.0u4-64.jdk/Contents/Home
+</span><span class='line'>    1.7.0, x86_64:    <span class="s2">&quot;OpenJDK 7&quot;</span>   /Library/Java/JavaVirtualMachines/1.7.0u.jdk/Contents/Home
+</span><span class='line'>    1.7.0, i386:  <span class="s2">&quot;OpenJDK 7&quot;</span>   /Library/Java/JavaVirtualMachines/1.7.0u.jdk/Contents/Home
+</span><span class='line'>    1.6.0_32-b05-420, x86_64: <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_32-b05-420.jdk/Contents/Home
+</span><span class='line'>    1.6.0_32-b05-420, i386:   <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_32-b05-420.jdk/Contents/Home
+</span><span class='line'>    1.6.0_32-b05-417, x86_64: <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_32-b05-417.jdk/Contents/Home
+</span><span class='line'>    1.6.0_32-b05-417, i386:   <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_32-b05-417.jdk/Contents/Home
+</span><span class='line'>    1.6.0_31-b04-413, x86_64: <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_31-b04-413.jdk/Contents/Home
+</span><span class='line'>    1.6.0_31-b04-413, i386:   <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_31-b04-413.jdk/Contents/Home
+</span><span class='line'>    1.6.0_30-b12-409, x86_64: <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_30-b12-409.jdk/Contents/Home
+</span><span class='line'>    1.6.0_30-b12-409, i386:   <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_30-b12-409.jdk/Contents/Home
+</span><span class='line'>    1.6.0_30-b12-404, x86_64: <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_30-b12-404.jdk/Contents/Home
+</span><span class='line'>    1.6.0_30-b12-404, i386:   <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_30-b12-404.jdk/Contents/Home
+</span><span class='line'>    1.6.0_29-b11-397, x86_64: <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_29-b11-397.jdk/Contents/Home
+</span><span class='line'>    1.6.0_29-b11-397, i386:   <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_29-b11-397.jdk/Contents/Home
+</span><span class='line'>    1.6.0_27-b07-395, x86_64: <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_27-b07-395.jdk/Contents/Home
+</span><span class='line'>    1.6.0_27-b07-395, i386:   <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_27-b07-395.jdk/Contents/Home
+</span><span class='line'>    1.6.0_26-b03-383, x86_64: <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_26-b03-383.jdk/Contents/Home
+</span><span class='line'>    1.6.0_26-b03-383, i386:   <span class="s2">&quot;Java SE 6&quot;</span>   /Library/Java/JavaVirtualMachines/1.6.0_26-b03-383.jdk/Contents/Home
+</span><span class='line'>
+</span><span class='line'>/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+</span></code></pre></td></tr></table></div></figure>
 
-<pre><code>1.6.0_33-b03-424, x86_64:   "Java SE 6" /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
-1.6.0_33-b03-424, i386: "Java SE 6" /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
-1.6.0_31-b04-411, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_31-b04-411.jdk/Contents/Home
-1.6.0_31-b04-411, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_31-b04-411.jdk/Contents/Home
-1.7.0-jdk7u6-b20-20120719, x86_64:  "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home
-1.8.0-jdk8-b47-20120720, x86_64:    "OpenJDK 8" /Library/Java/JavaVirtualMachines/1.8.0.jdk/Contents/Home
-1.7.0-jdk7u4-b21-20120427, i386:    "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u4.jdk/Contents/Home
-1.7.0_05, x86_64:   "Java SE 7" /Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home
-1.6.0_33-b03-424, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_33-b03-424.jdk/Contents/Home
-1.6.0_33-b03-424, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_33-b03-424.jdk/Contents/Home
-1.8.0-jdk8-b45-20120713-jigsaw, x86_64: "OpenJDK 8" /Library/Java/JavaVirtualMachines/1.8.0-jigsaw.jdk/Contents/Home
-1.8.0-b48-20120720-lambda, x86_64:  "OpenJDK 8" /Library/Java/JavaVirtualMachines/1.8.0-lambda.jdk/Contents/Home
-1.7.0-jdk7u6-b20-20120719, i386:    "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home
-1.7.0-jdk7u4-b21-20120427, x86_64:  "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u4.jdk/Contents/Home
-1.7.0-jdk7u4-b21-20120421, x86_64:  "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u4-64.jdk/Contents/Home
-1.7.0, x86_64:  "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u.jdk/Contents/Home
-1.7.0, i386:    "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u.jdk/Contents/Home
-1.6.0_32-b05-420, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_32-b05-420.jdk/Contents/Home
-1.6.0_32-b05-420, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_32-b05-420.jdk/Contents/Home
-1.6.0_32-b05-417, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_32-b05-417.jdk/Contents/Home
-1.6.0_32-b05-417, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_32-b05-417.jdk/Contents/Home
-1.6.0_31-b04-413, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_31-b04-413.jdk/Contents/Home
-1.6.0_31-b04-413, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_31-b04-413.jdk/Contents/Home
-1.6.0_30-b12-409, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_30-b12-409.jdk/Contents/Home
-1.6.0_30-b12-409, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_30-b12-409.jdk/Contents/Home
-1.6.0_30-b12-404, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_30-b12-404.jdk/Contents/Home
-1.6.0_30-b12-404, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_30-b12-404.jdk/Contents/Home
-1.6.0_29-b11-397, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_29-b11-397.jdk/Contents/Home
-1.6.0_29-b11-397, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_29-b11-397.jdk/Contents/Home
-1.6.0_27-b07-395, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_27-b07-395.jdk/Contents/Home
-1.6.0_27-b07-395, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_27-b07-395.jdk/Contents/Home
-1.6.0_26-b03-383, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_26-b03-383.jdk/Contents/Home
-1.6.0_26-b03-383, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_26-b03-383.jdk/Contents/Home
-</code></pre>
-
-<p>/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
-[/bash]</p>
 
 <h2>Note on JVM Locations</h2>
 
