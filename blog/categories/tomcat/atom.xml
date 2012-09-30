@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tomcat | Rico's Blog]]></title>
   <link href="http://hgomez.github.com/blog/categories/tomcat/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2012-09-30T16:48:22+02:00</updated>
+  <updated>2012-09-30T16:50:50+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -68,13 +68,13 @@ sudo ln -s /usr/lib/java/libtcnative-1.0.dylib /usr/lib/java/libtcnative-1.dylib
     <id>http://hgomez.github.com/blog/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx</id>
     <content type="html"><![CDATA[<p>Build Universal Apache Tomcat Connector (mod_jk) for OSX follow tricks used for Apache Tomcat Native Library.</p>
 
-<p>[bash]
+<p><code>bash
 CFLAGS='-arch i386 -arch x86_64' APXSLDFLAGS='-arch i386-arch x86_64'
-[/bash]</p>
+</code></p>
 
 <p>Here is a small script to do it :</p>
 
-<p>[bash]</p>
+<p>``` bash</p>
 
 <h1>!/bin/sh</h1>
 
@@ -89,19 +89,19 @@ cd tomcat-connectors-${JK_VERSION}-src/native</p>
 <p>./configure --with-apxs=/usr/sbin/apxs CFLAGS='-arch i386 -arch x86_64' APXSLDFLAGS='-arch i386-arch x86_64'
 make clean
 make
-[/bash]</p>
+```</p>
 
 <p>Installation is pretty simple :</p>
 
-<p>[bash]
+<p><code>bash
 sudo cp apache-2.0/.libs/mod_jk.so /usr/libexec/apache2/
-[/bash]</p>
+</code></p>
 
 <p>You could then restart your Apache HTTPd server to get new mod_jk used :</p>
 
-<p>[bash]
+<p><code>bash
 sudo /usr/sbin/apachectl restart
-[/bash]</p>
+</code></p>
 ]]></content>
   </entry>
   

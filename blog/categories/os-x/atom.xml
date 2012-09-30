@@ -4,7 +4,7 @@
   <title><![CDATA[Category: OS/X | Rico's Blog]]></title>
   <link href="http://hgomez.github.com/blog/categories/os-x/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2012-09-30T16:48:22+02:00</updated>
+  <updated>2012-09-30T16:50:50+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -288,7 +288,7 @@ sudo ln -s /usr/lib/java/libtcnative-1.0.dylib /usr/lib/java/libtcnative-1.dylib
 
 <p>Create /etc/apache2/other/jk.conf :</p>
 
-<p>[bash]</p>
+<p>``` bash</p>
 
 <h1>Load JK Module</h1>
 
@@ -313,11 +313,11 @@ sudo ln -s /usr/lib/java/libtcnative-1.0.dylib /usr/lib/java/libtcnative-1.dylib
 <h1>JK timestamp log format</h1>
 
 <p>JkLogStampFormat "[%a %b %d %H:%M:%S %Y] "
-[/bash]</p>
+```</p>
 
 <p>Create /etc/apache2/other/workers.properties</p>
 
-<p>[bash]
+<p>``` bash
 worker.list=jenkins,watch,manage</p>
 
 <h1>Set properties for worker jenkins (ajp13)</h1>
@@ -333,11 +333,11 @@ worker.watch.read_only=true
 worker.watch.mount=/user/status/jk
 worker.manage.type=status
 worker.manage.mount=/admin/status/jk
-[/bash]</p>
+```</p>
 
 <p>I choose to use VirtualName Hosting and so defined one into /etc/apache2/extra/httpd-vhosts.conf :</p>
 
-<p>[bash]
+<p>``` bash
 NameVirtualHost *:80</p>
 
 <p><VirtualHost *:80></p>
@@ -353,7 +353,7 @@ JkMount  /* jenkins
 </code></pre>
 
 <p></VirtualHost>
-[/bash]</p>
+```</p>
 ]]></content>
   </entry>
   
@@ -364,13 +364,13 @@ JkMount  /* jenkins
     <id>http://hgomez.github.com/blog/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx</id>
     <content type="html"><![CDATA[<p>Build Universal Apache Tomcat Connector (mod_jk) for OSX follow tricks used for Apache Tomcat Native Library.</p>
 
-<p>[bash]
+<p><code>bash
 CFLAGS='-arch i386 -arch x86_64' APXSLDFLAGS='-arch i386-arch x86_64'
-[/bash]</p>
+</code></p>
 
 <p>Here is a small script to do it :</p>
 
-<p>[bash]</p>
+<p>``` bash</p>
 
 <h1>!/bin/sh</h1>
 
@@ -385,19 +385,19 @@ cd tomcat-connectors-${JK_VERSION}-src/native</p>
 <p>./configure --with-apxs=/usr/sbin/apxs CFLAGS='-arch i386 -arch x86_64' APXSLDFLAGS='-arch i386-arch x86_64'
 make clean
 make
-[/bash]</p>
+```</p>
 
 <p>Installation is pretty simple :</p>
 
-<p>[bash]
+<p><code>bash
 sudo cp apache-2.0/.libs/mod_jk.so /usr/libexec/apache2/
-[/bash]</p>
+</code></p>
 
 <p>You could then restart your Apache HTTPd server to get new mod_jk used :</p>
 
-<p>[bash]
+<p><code>bash
 sudo /usr/sbin/apachectl restart
-[/bash]</p>
+</code></p>
 ]]></content>
   </entry>
   

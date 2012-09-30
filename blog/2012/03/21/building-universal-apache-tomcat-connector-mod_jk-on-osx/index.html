@@ -9,8 +9,8 @@
   <meta name="author" content="Henri Gomez">
 
   
-  <meta name="description" content="Build Universal Apache Tomcat Connector (mod_jk) for OSX follow tricks used for Apache Tomcat Native Library. [bash]
-CFLAGS=&#8217;-arch i386 -arch &hellip;">
+  <meta name="description" content="Build Universal Apache Tomcat Connector (mod_jk) for OSX follow tricks used for Apache Tomcat Native Library. 1
+CFLAGS=&#39;-arch i386 -arch x86_64&# &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -93,40 +93,53 @@ CFLAGS=&#8217;-arch i386 -arch &hellip;">
 
 <div class="entry-content"><p>Build Universal Apache Tomcat Connector (mod_jk) for OSX follow tricks used for Apache Tomcat Native Library.</p>
 
-<p>[bash]
-CFLAGS=&#8217;-arch i386 -arch x86_64&#8217; APXSLDFLAGS=&#8217;-arch i386-arch x86_64&#8217;
-[/bash]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">CFLAGS</span><span class="o">=</span><span class="s1">&#39;-arch i386 -arch x86_64&#39;</span> <span class="nv">APXSLDFLAGS</span><span class="o">=</span><span class="s1">&#39;-arch i386-arch x86_64&#39;</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>Here is a small script to do it :</p>
 
-<p>[bash]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/sh</span>
+</span><span class='line'><span class="c">#</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">JK_VERSION</span><span class="o">=</span>1.2.37
+</span><span class='line'>
+</span><span class='line'>curl http://mir2.ovh.net/ftp.apache.org/dist/tomcat/tomcat-connectors/jk/tomcat-connectors-<span class="k">${</span><span class="nv">JK_VERSION</span><span class="k">}</span>-src.tar.gz -o tomcat-connectors-<span class="k">${</span><span class="nv">JK_VERSION</span><span class="k">}</span>-src.tar.gz
+</span><span class='line'>tar xvzf tomcat-connectors-<span class="k">${</span><span class="nv">JK_VERSION</span><span class="k">}</span>-src.tar.gz
+</span><span class='line'><span class="nb">cd </span>tomcat-connectors-<span class="k">${</span><span class="nv">JK_VERSION</span><span class="k">}</span>-src/native
+</span><span class='line'>
+</span><span class='line'>./configure --with-apxs<span class="o">=</span>/usr/sbin/apxs <span class="nv">CFLAGS</span><span class="o">=</span><span class="s1">&#39;-arch i386 -arch x86_64&#39;</span> <span class="nv">APXSLDFLAGS</span><span class="o">=</span><span class="s1">&#39;-arch i386-arch x86_64&#39;</span>
+</span><span class='line'>make clean
+</span><span class='line'>make
+</span></code></pre></td></tr></table></div></figure>
 
-<h1>!/bin/sh</h1>
-
-<p>#</p>
-
-<p>JK_VERSION=1.2.37</p>
-
-<p>curl http://mir2.ovh.net/ftp.apache.org/dist/tomcat/tomcat-connectors/jk/tomcat-connectors-${JK_VERSION}-src.tar.gz -o tomcat-connectors-${JK_VERSION}-src.tar.gz
-tar xvzf tomcat-connectors-${JK_VERSION}-src.tar.gz
-cd tomcat-connectors-${JK_VERSION}-src/native</p>
-
-<p>./configure &#8211;with-apxs=/usr/sbin/apxs CFLAGS=&#8217;-arch i386 -arch x86_64&#8217; APXSLDFLAGS=&#8217;-arch i386-arch x86_64&#8217;
-make clean
-make
-[/bash]</p>
 
 <p>Installation is pretty simple :</p>
 
-<p>[bash]
-sudo cp apache-2.0/.libs/mod_jk.so /usr/libexec/apache2/
-[/bash]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo cp apache-2.0/.libs/mod_jk.so /usr/libexec/apache2/
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>You could then restart your Apache HTTPd server to get new mod_jk used :</p>
 
-<p>[bash]
-sudo /usr/sbin/apachectl restart
-[/bash]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo /usr/sbin/apachectl restart
+</span></code></pre></td></tr></table></div></figure>
+
 </div>
 
 

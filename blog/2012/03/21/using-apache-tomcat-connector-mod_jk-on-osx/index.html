@@ -9,7 +9,19 @@
   <meta name="author" content="Henri Gomez">
 
   
-  <meta name="description" content="You&#8217;ll need first mod_jk installed, follow Building Guide. Create /etc/apache2/other/jk.conf : [bash] Load JK Module LoadModule jk_module &hellip;">
+  <meta name="description" content="You&#8217;ll need first mod_jk installed, follow Building Guide. Create /etc/apache2/other/jk.conf : 1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+# Load JK Module &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -94,72 +106,96 @@
 
 <p>Create /etc/apache2/other/jk.conf :</p>
 
-<p>[bash]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Load JK Module</span>
+</span><span class='line'>LoadModule jk_module     libexec/apache2/mod_jk.so
+</span><span class='line'><span class="c"># JK workers.properties</span>
+</span><span class='line'>JkWorkersFile /etc/apache2/other/workers.properties
+</span><span class='line'><span class="c"># JK shared memory location</span>
+</span><span class='line'>JkShmFile     /var/log/apache2/mod_jk.shm
+</span><span class='line'><span class="c"># JK logs</span>
+</span><span class='line'>JkLogFile     /var/log/apache2/mod_jk.log
+</span><span class='line'><span class="c"># JK log level [debug/error/info]</span>
+</span><span class='line'>JkLogLevel    info
+</span><span class='line'><span class="c"># JK timestamp log format</span>
+</span><span class='line'>JkLogStampFormat <span class="s2">&quot;[%a %b %d %H:%M:%S %Y] &quot;</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<h1>Load JK Module</h1>
-
-<p>LoadModule jk_module     libexec/apache2/mod_jk.so</p>
-
-<h1>JK workers.properties</h1>
-
-<p>JkWorkersFile /etc/apache2/other/workers.properties</p>
-
-<h1>JK shared memory location</h1>
-
-<p>JkShmFile     /var/log/apache2/mod_jk.shm</p>
-
-<h1>JK logs</h1>
-
-<p>JkLogFile     /var/log/apache2/mod_jk.log</p>
-
-<h1>JK log level [debug/error/info]</h1>
-
-<p>JkLogLevel    info</p>
-
-<h1>JK timestamp log format</h1>
-
-<p>JkLogStampFormat &#8220;[%a %b %d %H:%M:%S %Y] &#8221;
-[/bash]</p>
 
 <p>Create /etc/apache2/other/workers.properties</p>
 
-<p>[bash]
-worker.list=jenkins,watch,manage</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>worker.list<span class="o">=</span>jenkins,watch,manage
+</span><span class='line'>
+</span><span class='line'><span class="c"># Set properties for worker jenkins (ajp13)</span>
+</span><span class='line'>worker.jenkins.type<span class="o">=</span>ajp13
+</span><span class='line'>worker.jenkins.host<span class="o">=</span>localhost
+</span><span class='line'>worker.jenkins.port<span class="o">=</span>8009
+</span><span class='line'>
+</span><span class='line'><span class="c"># status workers</span>
+</span><span class='line'>worker.watch.type<span class="o">=</span>status
+</span><span class='line'>worker.watch.read_only<span class="o">=</span><span class="nb">true</span>
+</span><span class='line'>worker.watch.mount<span class="o">=</span>/user/status/jk
+</span><span class='line'>worker.manage.type<span class="o">=</span>status
+</span><span class='line'>worker.manage.mount<span class="o">=</span>/admin/status/jk
+</span></code></pre></td></tr></table></div></figure>
 
-<h1>Set properties for worker jenkins (ajp13)</h1>
-
-<p>worker.jenkins.type=ajp13
-worker.jenkins.host=localhost
-worker.jenkins.port=8009</p>
-
-<h1>status workers</h1>
-
-<p>worker.watch.type=status
-worker.watch.read_only=true
-worker.watch.mount=/user/status/jk
-worker.manage.type=status
-worker.manage.mount=/admin/status/jk
-[/bash]</p>
 
 <p>I choose to use VirtualName Hosting and so defined one into /etc/apache2/extra/httpd-vhosts.conf :</p>
 
-<p>[bash]
-NameVirtualHost *:80</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>NameVirtualHost *:80
+</span><span class='line'>
+</span><span class='line'>&lt;VirtualHost *:80&gt;
+</span><span class='line'>
+</span><span class='line'>    ServerName  mbpbuilder.hgomez.net
+</span><span class='line'>    ServerAlias mbpbuilder
+</span><span class='line'>    ServerAdmin webmaster@mbpbuilder.hgomez.net
+</span><span class='line'>
+</span><span class='line'>    ErrorLog    <span class="s2">&quot;/var/log/apache2/mbpbuilder.org-error_log&quot;</span>
+</span><span class='line'>    CustomLog   <span class="s2">&quot;/var/log/apache2/mbpbuilder-access_log&quot;</span> common
+</span><span class='line'>
+</span><span class='line'>    JkMount  /* jenkins
+</span><span class='line'>
+</span><span class='line'>&lt;/VirtualHost&gt;
+</span></code></pre></td></tr></table></div></figure>
 
-<p><VirtualHost *:80></p>
-
-<pre><code>ServerName  mbpbuilder.hgomez.net
-ServerAlias mbpbuilder
-ServerAdmin webmaster@mbpbuilder.hgomez.net
-
-ErrorLog    "/var/log/apache2/mbpbuilder.org-error_log"
-CustomLog   "/var/log/apache2/mbpbuilder-access_log" common
-
-JkMount  /* jenkins
-</code></pre>
-
-<p></VirtualHost>
-[/bash]</p>
 </div>
 
 
