@@ -4,7 +4,7 @@
   <title><![CDATA[Category: OpenJDK | Rico's Blog]]></title>
   <link href="http://hgomez.github.com/blog/categories/openjdk/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2012-09-30T18:45:37+02:00</updated>
+  <updated>2012-09-30T18:48:24+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -27,7 +27,7 @@ Even if this appears marginal in real life (an application server is expected to
 
 <h3>Results on MacBook Pro - Core2Duo 2.66Ghz</h3>
 
-<p><a href="http://blog.hgomez.net/wp-content/uploads/2011/07/Startup6.png"><img src="http://blog.hgomez.net/wp-content/uploads/2011/07/Startup6-1024x473.png" alt="Startup Time of App Servers (3rd try)" /></a></p>
+<p><img class="center" src="/images/Startup6.png"></p>
 
 <p>all time in millisecondes</p>
 
