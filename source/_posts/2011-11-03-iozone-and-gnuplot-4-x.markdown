@@ -14,9 +14,8 @@ You could find 10 examples [here](http://www.thegeekstuff.com/2011/05/iozone-exa
 
 In it latest version, 3.97, it came with reporting tools, **report.pl** and **gengnuplot.sh**, who use gnuplot to render images.
 
-[![](http://blog.hgomez.net/wp-content/uploads/2011/11/2d-recrewrite.png)](http://blog.hgomez.net/wp-content/uploads/2011/11/2d-recrewrite.png)
-
-[![](http://blog.hgomez.net/wp-content/uploads/2011/11/recrewrite.png)](http://blog.hgomez.net/wp-content/uploads/2011/11/recrewrite.png)
+{% img center /images/2d-recrewrite.png %}
+{% img center /images/recrewrite.png %}
 
 Due to changes in GnuPlot 4.x, **report.pl** and **gnu3d.dem** need to be updated to works.
 Also you may get only **8 metrics** in reports instead of **15** expected in latest release of **report.pl**
