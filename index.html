@@ -424,44 +424,74 @@
 
   <div class="entry-content"><p>Updated build process for tomcat-connector, 1.1.24, no more APXS variable or configure parameters required</p>
 
-<p>[bash]
-TCN_RELEASE=1.1.24
-curl http://mir2.ovh.net/ftp.apache.org/dist//tomcat/tomcat-connectors/native/$TCN_RELEASE/source/tomcat-native-$TCN_RELEASE-src.tar.gz -o tomcat-native-$TCN_RELEASE-src.tar.gz
-tar xvzf tomcat-native-$TCN_RELEASE-src.tar.gz
-cd tomcat-native-$TCN_RELEASE-src/jni/native</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">TCN_RELEASE</span><span class="o">=</span>1.1.24
+</span><span class='line'>curl http://mir2.ovh.net/ftp.apache.org/dist//tomcat/tomcat-connectors/native/<span class="nv">$TCN_RELEASE</span>/source/tomcat-native-<span class="nv">$TCN_RELEASE</span>-src.tar.gz -o tomcat-native-<span class="nv">$TCN_RELEASE</span>-src.tar.gz
+</span><span class='line'>tar xvzf tomcat-native-<span class="nv">$TCN_RELEASE</span>-src.tar.gz
+</span><span class='line'><span class="nb">cd </span>tomcat-native-<span class="nv">$TCN_RELEASE</span>-src/jni/native
+</span><span class='line'>
+</span><span class='line'><span class="nv">CFLAGS</span><span class="o">=</span><span class="s1">&#39;-arch i386 -arch x86_64&#39;</span> <span class="nv">APXSLDFLAGS</span><span class="o">=</span><span class="s1">&#39;-arch i386 -arch x86_64&#39;</span> ./configure --with-apr<span class="o">=</span>/usr --with-ssl<span class="o">=</span>/usr --with-java-home<span class="o">=</span>/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+</span><span class='line'>make clean
+</span><span class='line'>make
+</span><span class='line'>
+</span><span class='line'>sudo cp .libs/libtcnative-1.0.1.24.dylib /usr/lib/java
+</span><span class='line'>sudo rm -f  /usr/lib/java/libtcnative-1.dylib
+</span><span class='line'>sudo ln -s /usr/lib/java/libtcnative-1.0.1.24.dylib /usr/lib/java/libtcnative-1.dylib
+</span></code></pre></td></tr></table></div></figure>
 
-<p>CFLAGS=&#8217;-arch i386 -arch x86_64&#8217; APXSLDFLAGS=&#8217;-arch i386 -arch x86_64&#8217; ./configure &#8211;with-apr=/usr &#8211;with-ssl=/usr &#8211;with-java-home=/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
-make clean
-make</p>
-
-<p>sudo cp .libs/libtcnative-1.0.1.24.dylib /usr/lib/java
-sudo rm -f  /usr/lib/java/libtcnative-1.dylib
-sudo ln -s /usr/lib/java/libtcnative-1.0.1.24.dylib /usr/lib/java/libtcnative-1.dylib
-[/bash]</p>
 
 <h3>A note about Lion</h3>
 
 <p>If you get Java on Lion using the java command on terminal or via the Java Developer Package for Mac OS X 10.7, Java headers are not on the usual location and you could find them under <strong>/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers</strong></p>
 
-<p>You should then update the <strong>configure</strong> command line like this :
-[bash]
-CFLAGS=&#8217;-arch i386 -arch x86_64&#8217; ./configure &#8211;with-apr=/usr &#8211;with-ssl=/usr &#8211;with-java-home=/System/Library/Frameworks/JavaVM.framework/Versions/A/
-[/bash]</p>
+<p>You should then update the <strong>configure</strong> command line like this :</p>
 
-<p>[bash]
-TCN_RELEASE=1.1.24
-curl http://mir2.ovh.net/ftp.apache.org/dist//tomcat/tomcat-connectors/native/$TCN_RELEASE/source/tomcat-native-$TCN_RELEASE-src.tar.gz -o tomcat-native-$TCN_RELEASE-src.tar.gz
-tar xvzf tomcat-native-$TCN_RELEASE-src.tar.gz
-cd tomcat-native-$TCN_RELEASE-src/jni/native</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">CFLAGS</span><span class="o">=</span><span class="s1">&#39;-arch i386 -arch x86_64&#39;</span> ./configure --with-apr<span class="o">=</span>/usr --with-ssl<span class="o">=</span>/usr --with-java-home<span class="o">=</span>/System/Library/Frameworks/JavaVM.framework/Versions/A/
+</span></code></pre></td></tr></table></div></figure>
 
-<p>CFLAGS=&#8217;-arch i386 -arch x86_64&#8217; ./configure &#8211;with-apr=/usr &#8211;with-ssl=/usr &#8211;with-java-home=/System/Library/Frameworks/JavaVM.framework/Versions/A/
-make clean
-make</p>
 
-<p>sudo cp .libs/libtcnative-1.0.dylib /usr/lib/java
-sudo rm -f  /usr/lib/java/libtcnative-1.dylib
-sudo ln -s /usr/lib/java/libtcnative-1.0.dylib /usr/lib/java/libtcnative-1.dylib
-[/bash]</p>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">TCN_RELEASE</span><span class="o">=</span>1.1.24
+</span><span class='line'>curl http://mir2.ovh.net/ftp.apache.org/dist//tomcat/tomcat-connectors/native/<span class="nv">$TCN_RELEASE</span>/source/tomcat-native-<span class="nv">$TCN_RELEASE</span>-src.tar.gz -o tomcat-native-<span class="nv">$TCN_RELEASE</span>-src.tar.gz
+</span><span class='line'>tar xvzf tomcat-native-<span class="nv">$TCN_RELEASE</span>-src.tar.gz
+</span><span class='line'><span class="nb">cd </span>tomcat-native-<span class="nv">$TCN_RELEASE</span>-src/jni/native
+</span><span class='line'>
+</span><span class='line'><span class="nv">CFLAGS</span><span class="o">=</span><span class="s1">&#39;-arch i386 -arch x86_64&#39;</span> ./configure --with-apr<span class="o">=</span>/usr --with-ssl<span class="o">=</span>/usr --with-java-home<span class="o">=</span>/System/Library/Frameworks/JavaVM.framework/Versions/A/
+</span><span class='line'>make clean
+</span><span class='line'>make
+</span><span class='line'>
+</span><span class='line'>sudo cp .libs/libtcnative-1.0.dylib /usr/lib/java
+</span><span class='line'>sudo rm -f  /usr/lib/java/libtcnative-1.dylib
+</span><span class='line'>sudo ln -s /usr/lib/java/libtcnative-1.0.dylib /usr/lib/java/libtcnative-1.dylib
+</span></code></pre></td></tr></table></div></figure>
+
+
+
 </div>
   
   
