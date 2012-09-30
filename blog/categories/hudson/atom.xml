@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Hudson | Rico's Blog]]></title>
+  <link href="http://hgomez.github.com/blog/categories/hudson/atom.xml" rel="self"/>
+  <link href="http://hgomez.github.com/"/>
+  <updated>2012-09-30T16:34:23+02:00</updated>
+  <id>http://hgomez.github.com/</id>
+  <author>
+    <name><![CDATA[Henri Gomez]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[OpenJDK 1.7 for OS/X continuous build with Hudson - Episode 2]]></title>
+    <link href="http://hgomez.github.com/blog/2010/11/25/openjdk-1-7-for-osx-continuous-build-with-hudson-episode-2/"/>
+    <updated>2010-11-25T22:49:48+01:00</updated>
+    <id>http://hgomez.github.com/blog/2010/11/25/openjdk-1-7-for-osx-continuous-build-with-hudson-episode-2</id>
+    <content type="html"><![CDATA[<p><a href="http://blog.hgomez.net/?p=670">First episode</a> of OpenJDK 1.7 for OS/X covered build of 32 and 64 bits VM via Hudson.</p>
+
+<p>We ended with two VMs, 32bits was under build/bsd-i586/j2sdk-image and 64bits in build/bsd-amd64/j2sdk-image
+And here appears a new OS/X jedi, <a href="http://www.hikage.be/">Gildas</a>, providing .PKG and .DMG scripting.</p>
+
+<p>This episode will describe how packaging, PKG and DMG was done.</p>
+
+<h2>OS/X Package .PKG</h2>
+
+<p>First we need to transform j2sdk-image folder into .PKG</p>
+
+<p>We used OS/X <strong>packagemaker</strong>, provided by <strong>XCode</strong> :</p>
+
+<p>[bash]
+  /Developer/usr/bin/packagemaker \</p>
+
+<pre><code>--title "Open JDK 7 (32bits) for OS X Installer" \
+--version 1.0 \
+--filter "\.DS_Store" \
+--root-volume-only \
+--domain system \
+--verbose \
+--no-relocate \
+-l "/Library/Java/JavaVirtualMachines/openjdk-1.7-i586" \
+--target 10.5 \
+--id net.openjdk.java.i586.pkg \
+--root ${SOURCE_DIR} \
+--out ${BUILD_DIR}/openjdk-1.7-i586.pkg \
+-v
+</code></pre>
+
+<p>[/bash]</p>
+
+<h2>From .PKG to .DMG</h2>
+
+<p>Next step is to transform the <strong>.PKG</strong> into a mountable image <strong>.DMG</strong>.
+Here we used hdiutil :</p>
+
+<p>[bash]
+  hdiutil create -srcfolder ${BUILD_DIR}/openjdk-1.7-i586.pkg -volname 'Open JDK 7 (32bits)' -fs HFS+ -fsargs '-c c=64,a=16,e=16' -format UDRW ${BUILD_DIR}/openjdk-1.7-i586-tmp.dmg
+  hdiutil convert ${BUILD_DIR}/openjdk-1.7-i586-tmp.dmg -format UDZO -imagekey zlib-level=9 -o ${BUILD_DIR}/OpenJDK-1.7-i586.dmg
+[/bash]</p>
+
+<h2>Scripts for 32 and 64bits VM</h2>
+
+<p>The following scripts could be added at the end of the Hudson script zone, or called in a second pass.</p>
+
+<h3>32bits</h3>
+
+<p>[bash]</p>
+
+<h1>!/bin/bash</h1>
+
+<p>SOURCE_DIR=<code>pwd</code>/build/bsd-i586/j2sdk-image
+BUILD_DIR=<code>pwd</code>/java-osx
+DMG_MOUNT_DIR=$BUILD_DIR/mount</p>
+
+<p>mkdir -p ${BUILD_DIR}</p>
+
+<p>if [ -x build/bsd-i586/j2sdk-image/bin/java ]; then</p>
+
+<p>  rm -f ${BUILD_DIR}/OpenJDK-1.7-i586.dmg ${BUILD_DIR}/openjdk-1.7-i586.pkg</p>
+
+<p>  /Developer/usr/bin/packagemaker \</p>
+
+<pre><code>--title "Open JDK 7 (32bits) for OS X Installer" \
+--version 1.0 \
+--filter "\.DS_Store" \
+--root-volume-only \
+--domain system \
+--verbose \
+--no-relocate \
+-l "/Library/Java/JavaVirtualMachines/openjdk-1.7-i586" \
+--target 10.5 \
+--id net.openjdk.java.i586.pkg \
+--root ${SOURCE_DIR} \
+--out ${BUILD_DIR}/openjdk-1.7-i586.pkg \
+-v
+</code></pre>
+
+<p>  hdiutil create -srcfolder ${BUILD_DIR}/openjdk-1.7-i586.pkg -volname 'Open JDK 7 (32bits)' -fs HFS+ -fsargs '-c c=64,a=16,e=16' -format UDRW ${BUILD_DIR}/openjdk-1.7-i586-tmp.dmg
+  hdiutil convert ${BUILD_DIR}/openjdk-1.7-i586-tmp.dmg -format UDZO -imagekey zlib-level=9 -o ${BUILD_DIR}/OpenJDK-1.7-i586.dmg</p>
+
+<p>  rm -f ${BUILD_DIR}/openjdk-1.7-i586-tmp.dmg</p>
+
+<p>else</p>
+
+<p>  echo "no valid exec under build/bsd-i586/j2sdk-image/bin/java, packaging skipped"</p>
+
+<p>fi
+[/bash]</p>
+
+<h3>64bits</h3>
+
+<p>[bash]</p>
+
+<h1>!/bin/bash</h1>
+
+<p>SOURCE_DIR=<code>pwd</code>/build/bsd-amd64/j2sdk-image
+BUILD_DIR=<code>pwd</code>/java-osx
+DMG_MOUNT_DIR=$BUILD_DIR/mount</p>
+
+<p>mkdir -p ${BUILD_DIR}</p>
+
+<p>if [ -x build/bsd-amd64/j2sdk-image/bin/java ]; then</p>
+
+<p>  rm -f ${BUILD_DIR}/OpenJDK-1.7-x86_64.dmg ${BUILD_DIR}/openjdk-1.7-x86_64.pkg</p>
+
+<p>  /Developer/usr/bin/packagemaker \</p>
+
+<pre><code>--title "Open JDK 7 (64bits) for OS X Installer" \
+--version 1.0 \
+--filter "\.DS_Store" \
+--root-volume-only \
+--domain system \
+--verbose \
+--no-relocate \
+-l "/Library/Java/JavaVirtualMachines/openjdk-1.7-x86_64" \
+--target 10.5 \
+--id net.openjdk.java.x86_64.pkg \
+--root ${SOURCE_DIR} \
+--out ${BUILD_DIR}/openjdk-1.7-x86_64.pkg \
+-v
+</code></pre>
+
+<p>  hdiutil create -srcfolder ${BUILD_DIR}/openjdk-1.7-x86_64.pkg -volname 'Open JDK 7 (64bits)' -fs HFS+ -fsargs '-c c=64,a=16,e=16' -format UDRW ${BUILD_DIR}/openjdk-1.7-x86_64-tmp.dmg
+  hdiutil convert ${BUILD_DIR}/openjdk-1.7-x86_64-tmp.dmg -format UDZO -imagekey zlib-level=9 -o ${BUILD_DIR}/OpenJDK-1.7-x86_64.dmg</p>
+
+<p>  rm -f ${BUILD_DIR}/openjdk-1.7-x86_64-tmp.dmg</p>
+
+<p>else</p>
+
+<p>  echo "no valid exec under build/bsd-amd64/j2sdk-image/bin/java, packaging skipped"</p>
+
+<p>fi
+[/bash]</p>
+
+<h2>Next Step</h2>
+
+<p>Gildas and I, will continue to improve these basic .PKG/.DMG scripts and OS/X gurus advices are more than welcome.</p>
+
+<p>Next steps is to find storage on the net so we could provide DMG regularly. Even better, an OS/X box (under SnowLeopard) available on the net, will help us provide continuous DMG.</p>
+
+<p>Plus on est de fous, ....</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[OpenJDK 1.7 for OS/X continuous build with Hudson]]></title>
+    <link href="http://hgomez.github.com/blog/2010/11/21/openjdk-1-7-for-osx-continuous-build-with-hudson/"/>
+    <updated>2010-11-21T03:06:22+01:00</updated>
+    <id>http://hgomez.github.com/blog/2010/11/21/openjdk-1-7-for-osx-continuous-build-with-hudson</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+</feed>

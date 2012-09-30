@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Mercurial | Rico's Blog]]></title>
+  <link href="http://hgomez.github.com/blog/categories/mercurial/atom.xml" rel="self"/>
+  <link href="http://hgomez.github.com/"/>
+  <updated>2012-09-30T16:34:23+02:00</updated>
+  <id>http://hgomez.github.com/</id>
+  <author>
+    <name><![CDATA[Henri Gomez]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Forest extension fixes for Mercurial 1.7]]></title>
+    <link href="http://hgomez.github.com/blog/2010/11/16/forest-extension-fixes-for-mercurial-1-7/"/>
+    <updated>2010-11-16T21:36:15+01:00</updated>
+    <id>http://hgomez.github.com/blog/2010/11/16/forest-extension-fixes-for-mercurial-1-7</id>
+    <content type="html"><![CDATA[<p>I'm using Mercurial 1.7 from MacPorts to sync with OpenJDK sources. This operation is usually done with <strong>hg fclone</strong></p>
+
+<p>[bash]
+hg fclone http://hg.openjdk.java.net/bsd-port/bsd-port
+[/bash]</p>
+
+<p><strong>fclone</strong> came from <strong>forest</strong></p>
+
+<p>Mercurial 1.7 changes some API and call to <strong>do_read</strong> should be changed to <strong>_call</strong>.</p>
+
+<p>Hopefully, I found a maintained <strong>Forest</strong> for Mercurial by GXTI and they now handle correctly  pre/post Mercurial 1.6 or 1.7.</p>
+
+<p>To install this updated extension.</p>
+
+<p>[bash]
+hg clone https://bitbucket.org/gxti/hgforest
+[/bash]</p>
+
+<p>Make sure this forest.py is included in your <strong>~/.hgrc</strong></p>
+
+<p>[bash]
+hgext.forest=/Users/henri/hgforest/forest.py
+[/bash]</p>
+]]></content>
+  </entry>
+  
+</feed>

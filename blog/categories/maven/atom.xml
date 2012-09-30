@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Maven | Rico's Blog]]></title>
   <link href="http://hgomez.github.com/blog/categories/maven/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2012-09-30T16:23:42+02:00</updated>
+  <updated>2012-09-30T16:34:23+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -133,6 +133,147 @@
 <p>[/xml]</p>
 
 <h3>Notice: An updated version of Tomcat Maven Plugin 1.2-SNAPSHOT has been released, this hack is no more necessary</h3>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Maven JMeter plugin ]]></title>
+    <link href="http://hgomez.github.com/blog/2010/11/04/maven-jmeter-plugin/"/>
+    <updated>2010-11-04T19:13:48+01:00</updated>
+    <id>http://hgomez.github.com/blog/2010/11/04/maven-jmeter-plugin</id>
+    <content type="html"><![CDATA[<p>While playing with JMeter Maven plugin, I got some problems :</p>
+
+<p>First the official Jakarta plugin is pretty old and no more maintened.</p>
+
+<p>So you should get a new one, from <a href="http://code.google.com/p/jmeter-maven-plugin/">GoogleCode</a>
+This project moved to <a href="https://github.com/Ronnie76er/jmeter-maven-plugin">GitHub</a></p>
+
+<p>Great project but it miss 2 dependencies, <strong>commons-logging</strong> and <strong>soap</strong>
+Without <strong>commons-logging</strong> your tests may fail and you could see :
+[bash]
+Error in NonGUIDriver java.lang.NullPointerException
+[INFO] ------------------------------------------------------------------------
+[ERROR] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] There were test errors
+[/bash]</p>
+
+<p>The fix is easy, get the plugin project and add the following dependencies in it :</p>
+
+<p>[xml]</p>
+
+<pre><code>        soap
+        soap
+        2.3.1
+
+
+
+        commons-logging
+        commons-logging
+        1.1.1
+</code></pre>
+
+<p>[/xml]</p>
+
+<p>Just rebuild and install (or deploy), this updated plugin, may be changing it's version from <strong>1.0</strong> to <strong>1.1-SNAPSHOT</strong> to avoid conflict with current one.</p>
+
+<p>Full pom.xml is here :</p>
+
+<p>[xml]</p>
+
+<pre><code>4.0.0
+org.apache.jmeter
+maven-jmeter-plugin
+maven-plugin
+1.0
+Maven JMeter Plugin
+http://jakarta.apache.org/jmeter
+
+
+
+        ant
+        ant
+        1.6
+
+
+        commons-io
+        commons-io
+        1.2
+
+
+        org.apache.maven
+        maven-plugin-api
+        2.0
+
+
+        org.apache.maven
+        maven-project
+        2.0.9
+
+
+        junit
+        junit
+        3.8.1
+        test
+
+
+        org.apache.jmeter
+        jmeter
+        2.3
+
+
+
+        soap
+        soap
+        2.3.1
+
+
+
+        commons-logging
+        commons-logging
+        1.1.1
+
+
+
+        org.apache.jmeter
+        jmeter
+        2.3
+
+
+        org.apache.maven.wagon
+        wagon-webdav
+        1.0-beta-2
+
+
+
+
+        central
+        Gestalt Central Repo
+        dav://artifactory.int.gestalt-llc.com:8080/archiva/repository/repo
+
+
+
+
+
+
+
+            org.apache.maven.plugins
+            maven-compiler-plugin
+            2.0.2
+
+                1.5
+                1.5
+
+
+
+            org.apache.maven.plugins
+            maven-surefire-plugin
+            2.3
+</code></pre>
+
+<p>[/xml]</p>
+
+<p>I hope this plugin will soon include these fixes and update JMeter to its latest version, 2.4 :)</p>
 ]]></content>
   </entry>
   

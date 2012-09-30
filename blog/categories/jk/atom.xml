@@ -4,7 +4,7 @@
   <title><![CDATA[Category: jk | Rico's Blog]]></title>
   <link href="http://hgomez.github.com/blog/categories/jk/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2012-09-30T16:23:42+02:00</updated>
+  <updated>2012-09-30T16:34:23+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -132,6 +132,48 @@ sudo cp apache-2.0/.libs/mod_jk.so /usr/libexec/apache2/
 <p>[bash]
 sudo /usr/sbin/apachectl restart
 [/bash]</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Unified handling of HTTP error pages]]></title>
+    <link href="http://hgomez.github.com/blog/2010/10/24/unified-handling-of-http-error-pages/"/>
+    <updated>2010-10-24T11:31:00+02:00</updated>
+    <id>http://hgomez.github.com/blog/2010/10/24/unified-handling-of-http-error-pages</id>
+    <content type="html"><![CDATA[<p>In configuration with a front Apache HTTPd 2.2.x server and backend Tomcat servers, you may have defined customs error page on the HTTPd configuration using <a href="http://httpd.apache.org/docs/2.2/mod/core.html#errordocument">ErrorDocument</a> directive.</p>
+
+<p>[bash]
+ErrorDocument 401 /errors/err-401.html
+ErrorDocument 403 /errors/err-403.html
+ErrorDocument 404 /errors/err-404.html
+ErrorDocument 500 /errors/err-500.html
+[/bash]</p>
+
+<p>It works well for resources handled by HTTPd but errors for contents served by Tomcat are still handled by Tomcat error mecanism.</p>
+
+<p>Imagine a web application myapp, served by a Tomcat behind HTTPd, you could have the following setup.</p>
+
+<p>[bash]
+JkMount  /myapp/* worker1
+[/bash]</p>
+
+<p>If someone hit an inexisting page, ie /myapp/myfaultypage, you'll get back the 404 error from Tomcat but not the one defined in HTTPd.</p>
+
+<p>Since version 1.2.27, mod_jk could handle such situation via <a href="http://tomcat.apache.org/connectors-doc/reference/uriworkermap.html">uriworkermap</a> <strong>use_server_errors</strong> directive.</p>
+
+<p>But if you don't want to change your current setup, ie using <strong>JkMount</strong>, you could use the following :</p>
+
+<p>[bash]
+JkMount  /myapp/* worker1;use_server_errors=400
+[/bash]</p>
+
+<p>If Tomcat allready handle Page Not Found, 404, and you only wan't to see Apache HTTPd handling error greater than or egal to 500, just use :</p>
+
+<p>[bash]
+JkMount  /myapp/* worker1;use_server_errors=500
+[/bash]</p>
+
+<p>Thanks to Mladen for the trick :)</p>
 ]]></content>
   </entry>
   

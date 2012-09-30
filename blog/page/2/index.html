@@ -618,7 +618,340 @@ I tested with both NetBeans 7 RC1 and RC2 but it didn&#8217;t works. I hope it w
 
     </article>
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/12/04/openjdk-1-7-for-osx-benchs/">OpenJDK 1.7 for OS/X Benchs</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-12-04T11:17:10+01:00" pubdate data-updated="true">Dec 4<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>After building and packaging OpenJDK 1.7 for OS/X, I wanted to see how performed new VMs.</p>
+
+<h2>Test vms</h2>
+
+<p>Recents OpenJDK 1.7 32 and 64bits where used :</p>
+
+<p><code>
+openjdk version "1.7.0-internal"
+OpenJDK Runtime Environment (build 1.7.0-internal-henri_2010_12_01_00_46-b00)
+OpenJDK Server VM (build 20.0-b02, mixed mode)
+</code></p>
+
+<p><code>
+openjdk version "1.7.0-internal"
+OpenJDK Runtime Environment (build 1.7.0-internal-henri_2010_12_01_00_49-b00)
+OpenJDK 64-Bit Server VM (build 20.0-b02, mixed mode)
+</code></p>
+
+<h2>Test system</h2>
+
+<p>My test system is an Apple Mac Book Pro (MacBookPro5,1) with Intel Core 2 Duo 2.66Ghz and 4Gb DDR3 1067Mhz, running under SnowLeopard 10.6.5 32bits.</p>
+
+<h3>DaCapo Benchmarks</h3>
+
+<p>I used again <a href="http://www.dacapobench.org/">DaCapo 9.12-bach</a>, discarding <strong>batik</strong> test, this one requiring a working AWT/Swing support .</p>
+
+<p>Bench tests launched with -n X, ie (java -jar dacapo-9.12-bach.jar -n 10 pmd)</p>
+
+<p>[table id=3 /]</p>
+
+<h2>Conclusion</h2>
+
+<p>Good news, two tests <strong>Tomcat</strong> and <strong>tradebeans</strong> now pass the bench</p>
+
+<p>OpenJDK 1.7 64bits perform better than OpenJDK 1.7 32bits and OpenJDK 6.</p>
+
+<p>Even if OpenJDK 1.7 32bits performances are better than Apple Java 6, it&#8217;s allways behind OpenJDK 1.7 64bits version on OS/X, so you should select the 64bits version if performance is the key for your use.</p>
+
+<p>Next article will cover OpenJDK 1.7 and <a href="http://openjdk.java.net/jtreg/">jtreg</a>, the Regression Test Harness for the OpenJDK platform.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/11/26/openjdk-1-7-for-osx-continuous-build-with-hudson-e28093-episode-3/">OpenJDK 1.7 for OS/X Continuous Build With Hudson – Episode 3</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-11-26T10:55:36+01:00" pubdate data-updated="true">Nov 26<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Gildas and I create a project on GoogleCode where we&#8217;ll maintain build/package scripts and provide packages.</p>
+
+<p>My Dropbox download page was overloaded and we needed another location, here is it :</p>
+
+<p><a href="http://code.google.com/p/openjdk-osx-build/">http://code.google.com/p/openjdk-osx-build/</a></p>
+
+<p>Contributors are very welcome, especially OS/X gurus</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/11/25/openjdk-1-7-for-osx-continuous-build-with-hudson-episode-2/">OpenJDK 1.7 for OS/X Continuous Build With Hudson - Episode 2</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-11-25T22:49:48+01:00" pubdate data-updated="true">Nov 25<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://blog.hgomez.net/?p=670">First episode</a> of OpenJDK 1.7 for OS/X covered build of 32 and 64 bits VM via Hudson.</p>
+
+<p>We ended with two VMs, 32bits was under build/bsd-i586/j2sdk-image and 64bits in build/bsd-amd64/j2sdk-image
+And here appears a new OS/X jedi, <a href="http://www.hikage.be/">Gildas</a>, providing .PKG and .DMG scripting.</p>
+
+<p>This episode will describe how packaging, PKG and DMG was done.</p>
+
+<h2>OS/X Package .PKG</h2>
+
+<p>First we need to transform j2sdk-image folder into .PKG</p>
+
+<p>We used OS/X <strong>packagemaker</strong>, provided by <strong>XCode</strong> :</p>
+
+<p>[bash]
+  /Developer/usr/bin/packagemaker \</p>
+
+<pre><code>--title "Open JDK 7 (32bits) for OS X Installer" \
+--version 1.0 \
+--filter "\.DS_Store" \
+--root-volume-only \
+--domain system \
+--verbose \
+--no-relocate \
+-l "/Library/Java/JavaVirtualMachines/openjdk-1.7-i586" \
+--target 10.5 \
+--id net.openjdk.java.i586.pkg \
+--root ${SOURCE_DIR} \
+--out ${BUILD_DIR}/openjdk-1.7-i586.pkg \
+-v
+</code></pre>
+
+<p>[/bash]</p>
+
+<h2>From .PKG to .DMG</h2>
+
+<p>Next step is to transform the <strong>.PKG</strong> into a mountable image <strong>.DMG</strong>.
+Here we used hdiutil :</p>
+
+<p>[bash]
+  hdiutil create -srcfolder ${BUILD_DIR}/openjdk-1.7-i586.pkg -volname &#8216;Open JDK 7 (32bits)&#8217; -fs HFS+ -fsargs &#8216;-c c=64,a=16,e=16&#8217; -format UDRW ${BUILD_DIR}/openjdk-1.7-i586-tmp.dmg
+  hdiutil convert ${BUILD_DIR}/openjdk-1.7-i586-tmp.dmg -format UDZO -imagekey zlib-level=9 -o ${BUILD_DIR}/OpenJDK-1.7-i586.dmg
+[/bash]</p>
+
+<h2>Scripts for 32 and 64bits VM</h2>
+
+<p>The following scripts could be added at the end of the Hudson script zone, or called in a second pass.</p>
+
+<h3>32bits</h3>
+
+<p>[bash]</p>
+
+<h1>!/bin/bash</h1>
+
+<p>SOURCE_DIR=<code>pwd</code>/build/bsd-i586/j2sdk-image
+BUILD_DIR=<code>pwd</code>/java-osx
+DMG_MOUNT_DIR=$BUILD_DIR/mount</p>
+
+<p>mkdir -p ${BUILD_DIR}</p>
+
+<p>if [ -x build/bsd-i586/j2sdk-image/bin/java ]; then</p>
+
+<p>  rm -f ${BUILD_DIR}/OpenJDK-1.7-i586.dmg ${BUILD_DIR}/openjdk-1.7-i586.pkg</p>
+
+<p>  /Developer/usr/bin/packagemaker \</p>
+
+<pre><code>--title "Open JDK 7 (32bits) for OS X Installer" \
+--version 1.0 \
+--filter "\.DS_Store" \
+--root-volume-only \
+--domain system \
+--verbose \
+--no-relocate \
+-l "/Library/Java/JavaVirtualMachines/openjdk-1.7-i586" \
+--target 10.5 \
+--id net.openjdk.java.i586.pkg \
+--root ${SOURCE_DIR} \
+--out ${BUILD_DIR}/openjdk-1.7-i586.pkg \
+-v
+</code></pre>
+
+<p>  hdiutil create -srcfolder ${BUILD_DIR}/openjdk-1.7-i586.pkg -volname &#8216;Open JDK 7 (32bits)&#8217; -fs HFS+ -fsargs &#8216;-c c=64,a=16,e=16&#8217; -format UDRW ${BUILD_DIR}/openjdk-1.7-i586-tmp.dmg
+  hdiutil convert ${BUILD_DIR}/openjdk-1.7-i586-tmp.dmg -format UDZO -imagekey zlib-level=9 -o ${BUILD_DIR}/OpenJDK-1.7-i586.dmg</p>
+
+<p>  rm -f ${BUILD_DIR}/openjdk-1.7-i586-tmp.dmg</p>
+
+<p>else</p>
+
+<p>  echo &#8220;no valid exec under build/bsd-i586/j2sdk-image/bin/java, packaging skipped&#8221;</p>
+
+<p>fi
+[/bash]</p>
+
+<h3>64bits</h3>
+
+<p>[bash]</p>
+
+<h1>!/bin/bash</h1>
+
+<p>SOURCE_DIR=<code>pwd</code>/build/bsd-amd64/j2sdk-image
+BUILD_DIR=<code>pwd</code>/java-osx
+DMG_MOUNT_DIR=$BUILD_DIR/mount</p>
+
+<p>mkdir -p ${BUILD_DIR}</p>
+
+<p>if [ -x build/bsd-amd64/j2sdk-image/bin/java ]; then</p>
+
+<p>  rm -f ${BUILD_DIR}/OpenJDK-1.7-x86_64.dmg ${BUILD_DIR}/openjdk-1.7-x86_64.pkg</p>
+
+<p>  /Developer/usr/bin/packagemaker \</p>
+
+<pre><code>--title "Open JDK 7 (64bits) for OS X Installer" \
+--version 1.0 \
+--filter "\.DS_Store" \
+--root-volume-only \
+--domain system \
+--verbose \
+--no-relocate \
+-l "/Library/Java/JavaVirtualMachines/openjdk-1.7-x86_64" \
+--target 10.5 \
+--id net.openjdk.java.x86_64.pkg \
+--root ${SOURCE_DIR} \
+--out ${BUILD_DIR}/openjdk-1.7-x86_64.pkg \
+-v
+</code></pre>
+
+<p>  hdiutil create -srcfolder ${BUILD_DIR}/openjdk-1.7-x86_64.pkg -volname &#8216;Open JDK 7 (64bits)&#8217; -fs HFS+ -fsargs &#8216;-c c=64,a=16,e=16&#8217; -format UDRW ${BUILD_DIR}/openjdk-1.7-x86_64-tmp.dmg
+  hdiutil convert ${BUILD_DIR}/openjdk-1.7-x86_64-tmp.dmg -format UDZO -imagekey zlib-level=9 -o ${BUILD_DIR}/OpenJDK-1.7-x86_64.dmg</p>
+
+<p>  rm -f ${BUILD_DIR}/openjdk-1.7-x86_64-tmp.dmg</p>
+
+<p>else</p>
+
+<p>  echo &#8220;no valid exec under build/bsd-amd64/j2sdk-image/bin/java, packaging skipped&#8221;</p>
+
+<p>fi
+[/bash]</p>
+
+<h2>Next Step</h2>
+
+<p>Gildas and I, will continue to improve these basic .PKG/.DMG scripts and OS/X gurus advices are more than welcome.</p>
+
+<p>Next steps is to find storage on the net so we could provide DMG regularly. Even better, an OS/X box (under SnowLeopard) available on the net, will help us provide continuous DMG.</p>
+
+<p>Plus on est de fous, &#8230;.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2010/11/21/openjdk-1-7-for-osx-continuous-build-with-hudson/">OpenJDK 1.7 for OS/X Continuous Build With Hudson</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-11-21T03:06:22+01:00" pubdate data-updated="true">Nov 21<span>st</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content">
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/3/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     

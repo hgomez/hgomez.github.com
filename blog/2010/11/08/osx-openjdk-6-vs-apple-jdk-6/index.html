@@ -1,0 +1,455 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>OS/X - OpenJDK 6 vs Apple JDK 6 - Rico's Blog</title>
+  <meta name="author" content="Henri Gomez">
+
+  
+  <meta name="description" content="From finished building OpenJDK 6 on OS / X Snowleopard, I wanted to test just to see how he behaved towards the implementation of Apple.
+I used a &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://hgomez.github.com/blog/2010/11/08/osx-openjdk-6-vs-apple-jdk-6/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Rico's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Rico's Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:hgomez.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">OS/X - OpenJDK 6 vs Apple JDK 6</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-11-08T01:34:41+01:00" pubdate data-updated="true">Nov 8<span>th</span>, 2010</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>From finished building OpenJDK 6 on OS / X Snowleopard, I wanted to test just to see how he behaved towards the implementation of Apple.
+I used a development version of MacPorts (<a href="https://trac.macports.org/ticket/20956">see it trac</a>) that appears very promising and got OpenJDK 1.6.0-b20.</p>
+
+<p><code>
+openjdk version "1.6.0"
+OpenJDK Runtime Environment (build 1.6.0-b20)
+OpenJDK 64-Bit Server VM (build 17.0-b16, mixed mode)
+</code></p>
+
+<h2>A Java application with GUI under OS/X - OpenJDK</h2>
+
+<p>First test was to launched a big application like Eclipse under OS/X with OpenJDK.
+I selected OpenJDK 6 as default VM by adding the properties file in this eclipse.ini <em>Eclipse.app / Contents / MacOS / eclipse.ini</em></p>
+
+<p><code>
+-vm
+/opt/local/share/java/openjdk6/bin/java
+</code></p>
+
+<p>It worked pretty well :</p>
+
+<p><a href="http://blog.hgomez.net/wp-content/uploads/2010/11/eclipse-on-osx-openjdk6.png"><img src="http://blog.hgomez.net/wp-content/uploads/2010/11/eclipse-on-osx-openjdk6-1024x647.png" alt="" /></a></p>
+
+<p>A big thank you to SWT / Cocoa since there are still problems with AWT and OS / X</p>
+
+<h2>Speed and stability of OpenJDK</h2>
+
+<p>My test system is an Apple Mac Book Pro (MacBookPro5,1) with Intel Core 2 Duo 2.66Ghz and 4Gb DDR3 1067Mhz.</p>
+
+<h3>DaCapo Benchmarks</h3>
+
+<p>I do some tests with <a href="http://www.dacapobench.org/">DaCapo 9.12-bach</a>, discarding <strong>batik</strong> test, this one requiring a working AWT/Swing support .</p>
+
+<p>Bench tests launched with -n X, ie (java -jar dacapo-9.12-bach.jar -n 10 pmd)</p>
+
+<p>[table id=1 /]</p>
+
+<p>Some tests failed under OpenJDK 6, related on Tomcat / IO but as we can see in next section, Tomcat 6 or 7 worked with OpenJDK.</p>
+
+<h3>IO Benchs with ApacheBench and Tomcat6/7</h3>
+
+<p>Then I wanted to see the speed of the JVM under IO load and why I made a little stress test two well-known applications, Tomcat 6 and 7.
+I used <a href="http://httpd.apache.org/docs/2.2/programs/ab.html">ApacheBench</a> to request 1000000 time a simple URI (/examples/servlets/servlet/RequestInfoExample), with 100 concurrents clients.</p>
+
+<p>ApacheBench and Tomcat were on the same machine, to avoid network bottleneck.
+Activity Monitor show a CPU load of 120% for Java and 20% for ab</p>
+
+<p>Here also OpenJDK 6 perform well even slighty better than Apple own implementation.</p>
+
+<p>[table id=2 /]</p>
+
+<p><strong>Apache 6.0.29 / Open JDK 6</strong>
+<code>
+Server Software:        Apache-Coyote/1.1
+Server Hostname:        localhost
+Server Port:            8080</code></p>
+
+<p><code></code></p>
+
+<p><code>Document Path:          /examples/servlets/servlet/RequestInfoExample
+Document Length:        715 bytes</code></p>
+
+<p><code>Concurrency Level:      100
+Time taken for tests:   62.456 seconds
+Complete requests:      1000000
+Failed requests:        0
+Write errors:           0
+Keep-Alive requests:    1000000
+Total transferred:      868001736 bytes
+HTML transferred:       715001430 bytes
+Requests per second:    16011.35 [#/sec] (mean)
+Time per request:       6.246 [ms] (mean)
+Time per request:       0.062 [ms] (mean, across all concurrent requests)
+Transfer rate:          13572.15 [Kbytes/sec] received</code></p>
+
+<p><code>Connection Times (ms)
+min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       3
+Processing:     0    6   3.1      6     123
+Waiting:        0    6   3.1      6     123
+Total:          0    6   3.1      6     123</code></p>
+
+<p><code></code></p>
+
+<p><code>Percentage of the requests served within a certain time (ms)
+50%      6
+66%      6
+75%      7
+80%      8
+90%      9
+95%     11
+98%     13
+99%     15
+100%    123 (longest request)
+</code></p>
+
+<p><strong>Apache 7.0.4beta / Open JDK 6</strong>
+<code>
+Server Software:        Apache-Coyote/1.1
+Server Hostname:        localhost
+Server Port:            8080</code></p>
+
+<p><code></code></p>
+
+<p><code>Document Path:          /examples/servlets/servlet/RequestInfoExample
+Document Length:        683 bytes</code></p>
+
+<p><code>Concurrency Level:      100
+Time taken for tests:   70.360 seconds
+Complete requests:      1000000
+Failed requests:        0
+Write errors:           0
+Keep-Alive requests:    1000000
+Total transferred:      855000855 bytes
+HTML transferred:       683000683 bytes
+Requests per second:    14212.64 [#/sec] (mean)
+Time per request:       7.036 [ms] (mean)
+Time per request:       0.070 [ms] (mean, across all concurrent requests)
+Transfer rate:          11867.01 [Kbytes/sec] received</code></p>
+
+<p><code>Connection Times (ms)
+min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       3
+Processing:     0    7   6.6      6     379
+Waiting:        0    7   6.6      6     379
+Total:          0    7   6.6      6     379</code></p>
+
+<p><code></code></p>
+
+<p><code>Percentage of the requests served within a certain time (ms)
+50%      6
+66%      7
+75%      8
+80%      9
+90%     11
+95%     12
+98%     14
+99%     15
+100%    379 (longest request)
+</code></p>
+
+<p><strong>Apache 6.0.29 / Apple JDK 6</strong>
+<code>
+Server Software:        Apache-Coyote/1.1
+Server Hostname:        localhost
+Server Port:            8080</code></p>
+
+<p><code></code></p>
+
+<p><code>Document Path:          /examples/servlets/servlet/RequestInfoExample
+Document Length:        715 bytes</code></p>
+
+<p><code>Concurrency Level:      100
+Time taken for tests:   63.082 seconds
+Complete requests:      1000000
+Failed requests:        0
+Write errors:           0
+Keep-Alive requests:    1000000
+Total transferred:      868005208 bytes
+HTML transferred:       715004290 bytes
+Requests per second:    15852.36 [#/sec] (mean)
+Time per request:       6.308 [ms] (mean)
+Time per request:       0.063 [ms] (mean, across all concurrent requests)
+Transfer rate:          13437.43 [Kbytes/sec] received</code></p>
+
+<p><code>Connection Times (ms)
+min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       4
+Processing:     0    6   3.0      6     125
+Waiting:        0    6   3.0      6     125
+Total:          0    6   3.0      6     125</code></p>
+
+<p><code></code></p>
+
+<p><code>Percentage of the requests served within a certain time (ms)
+50%      6
+66%      6
+75%      7
+80%      7
+90%      9
+95%     11
+98%     13
+99%     15
+100%    125 (longest request)
+</code></p>
+
+<p><strong>Apache 7.0.4beta / Apple JDK 6</strong>
+<code>
+Server Software:        Apache-Coyote/1.1
+Server Hostname:        localhost
+Server Port:            8080</code></p>
+
+<p><code></code></p>
+
+<p><code>Document Path:          /examples/servlets/servlet/RequestInfoExample
+Document Length:        683 bytes</code></p>
+
+<p><code>Concurrency Level:      100
+Time taken for tests:   72.992 seconds
+Complete requests:      1000000
+Failed requests:        0
+Write errors:           0
+Keep-Alive requests:    1000000
+Total transferred:      855067545 bytes
+HTML transferred:       683053957 bytes
+Requests per second:    13700.05 [#/sec] (mean)
+Time per request:       7.299 [ms] (mean)
+Time per request:       0.073 [ms] (mean, across all concurrent requests)
+Transfer rate:          11439.91 [Kbytes/sec] received</code></p>
+
+<p><code>Connection Times (ms)
+min  mean[+/-sd] median   max
+Connect:        0    0   0.0      0       6
+Processing:     0    7   8.7      7     770
+Waiting:        0    7   8.7      7     770
+Total:          0    7   8.7      7     770</code></p>
+
+<p><code></code></p>
+
+<p><code>Percentage of the requests served within a certain time (ms)
+50%      7
+66%      8
+75%      8
+80%      9
+90%     11
+95%     12
+98%     14
+99%     16
+100%    770 (longest request)
+</code></p>
+
+<h2>Conclusion</h2>
+
+<p>OpenJDK 6 appears very promising and Apple&#8217;s decision to suspend the maintenance of Java on its next OS / X will not be so bad.</p>
+
+<p>Hoping now that porting AWT / Swing and Cocoa to appear quickly in the Project OpenJDK / BSD</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Henri Gomez</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2010-11-08T01:34:41+01:00" pubdate data-updated="true">Nov 8<span>th</span>, 2010</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/os-x/'>OS/X</a>, <a class='category' href='/blog/categories/openjdk/'>OpenJDK</a>, <a class='category' href='/blog/categories/tomcat/'>Tomcat</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hgomez.github.com/blog/2010/11/08/osx-openjdk-6-vs-apple-jdk-6/" data-via="" data-counturl="http://hgomez.github.com/blog/2010/11/08/osx-openjdk-6-vs-apple-jdk-6/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2010/11/04/maven-jmeter-plugin/" title="Previous Post: Maven JMeter plugin ">&laquo; Maven JMeter plugin </a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2010/11/16/forest-extension-fixes-for-mercurial-1-7/" title="Next Post: Forest extension fixes for Mercurial 1.7">Forest extension fixes for Mercurial 1.7 &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/07/20/understanding-java-from-command-line-on-osx/">Understanding java from command line on OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/13/building-universal-apache-tomcat-native-library-on-osx-updated/">Building Universal Apache Tomcat Native Library on OS/X - updated</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/21/using-apache-tomcat-connector-mod_jk-on-osx/">Using Apache Tomcat Connector (mod_jk) on OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx/">Building Universal Apache Tomcat Connector (mod_jk) on OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/18/ssd-or-not-ssd/">SSD or not SSD ?</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Henri Gomez -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

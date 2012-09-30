@@ -1,6 +1,62 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
+        <loc>http://hgomez.github.com/blog/2010/01/08/computer-archeology-resurrect-jonama/</loc>
+        <lastmod>2012-09-30T16:26:12+02:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://hgomez.github.com/blog/2010/05/04/desactiver-le-controle-de-fuite-memoire-dans-tomcat-6-0-26/
+        </loc>
+        <lastmod>2012-09-30T16:32:57+02:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://hgomez.github.com/blog/2010/09/25/how-to-fix-hp-laserjet-1102w-printeragent-using-port-8080-on-mac/
+        </loc>
+        <lastmod>2012-09-30T16:26:12+02:00</lastmod>
+    </url>
+    <url>
+        <loc>http://hgomez.github.com/blog/2010/10/24/unified-handling-of-http-error-pages/</loc>
+        <lastmod>2012-09-30T16:26:12+02:00</lastmod>
+    </url>
+    <url>
+        <loc>http://hgomez.github.com/blog/2010/11/04/maven-jmeter-plugin/</loc>
+        <lastmod>2012-09-30T16:26:12+02:00</lastmod>
+    </url>
+    <url>
+        <loc>http://hgomez.github.com/blog/2010/11/08/osx-openjdk-6-vs-apple-jdk-6/</loc>
+        <lastmod>2012-09-30T16:26:12+02:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://hgomez.github.com/blog/2010/11/16/forest-extension-fixes-for-mercurial-1-7/
+        </loc>
+        <lastmod>2012-09-30T16:26:12+02:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://hgomez.github.com/blog/2010/11/21/openjdk-1-7-for-osx-continuous-build-with-hudson/
+        </loc>
+        <lastmod>2012-09-30T16:26:12+02:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://hgomez.github.com/blog/2010/11/25/openjdk-1-7-for-osx-continuous-build-with-hudson-episode-2/
+        </loc>
+        <lastmod>2012-09-30T16:26:12+02:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://hgomez.github.com/blog/2010/11/26/openjdk-1-7-for-osx-continuous-build-with-hudson-e28093-episode-3/
+        </loc>
+        <lastmod>2012-09-30T16:26:12+02:00</lastmod>
+    </url>
+    <url>
+        <loc>http://hgomez.github.com/blog/2010/12/04/openjdk-1-7-for-osx-benchs/</loc>
+        <lastmod>2012-09-30T16:26:12+02:00</lastmod>
+    </url>
+    <url>
         <loc>
             http://hgomez.github.com/blog/2011/03/11/maven-tomcat-plugin-and-post-6-0-29-tomcat/
         </loc>
@@ -80,10 +136,10 @@
     </url>
     <url>
         <loc>http://hgomez.github.com/blog/archives/</loc>
-        <lastmod>2012-09-30T16:23:22+02:00</lastmod>
+        <lastmod>2012-09-30T16:32:57+02:00</lastmod>
     </url>
     <url>
         <loc>http://hgomez.github.com/</loc>
-        <lastmod>2012-09-30T16:23:22+02:00</lastmod>
+        <lastmod>2012-09-30T16:32:57+02:00</lastmod>
     </url>
 </urlset>
