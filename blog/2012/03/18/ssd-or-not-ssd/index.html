@@ -107,33 +107,52 @@ Core2Duo 2.66Ghz Under Lion, MBP appears to be sometime laggy even if I already 
 </ul>
 
 
-<p>I run <a href="http://www.primatelabs.ca/geekbench/">GeekBench 2.2.7</a> and give me a bench result of <strong>3752</strong> :
-[bash]
-Benchmark Summary
-  Integer Score              3123 |||||||||
-  Floating Point Score       5493 ||||||||||||||||
-  Memory Score               2629 |||||||
-  Stream Score               2110 ||||||</p>
+<p>I run <a href="http://www.primatelabs.ca/geekbench/">GeekBench 2.2.7</a> and give me a bench result of <strong>3752</strong> :</p>
 
-<p>  Geekbench Score            3752 |||||||||||</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>Benchmark Summary
+</span><span class='line'>  Integer Score              3123 <span class="o">||||||||</span>|
+</span><span class='line'>  Floating Point Score       5493 <span class="o">||||||||||||||||</span>
+</span><span class='line'>  Memory Score               2629 <span class="o">||||||</span>|
+</span><span class='line'>  Stream Score               2110 <span class="o">||||||</span>
+</span><span class='line'>
+</span><span class='line'>  Geekbench Score            3752 <span class="o">||||||||||</span>|
+</span><span class='line'>
+</span><span class='line'>System Information
+</span><span class='line'>  Operating System      Mac OS X 10.7.3 <span class="o">(</span>Build 11D50<span class="o">)</span>
+</span><span class='line'>  Model                 MacBook Pro <span class="o">(</span>Late 2008<span class="o">)</span>
+</span><span class='line'>  Motherboard           Apple Inc. Mac-F42D86A9 Proto
+</span><span class='line'>  Processor             Intel Core 2 Duo T9550 @ 2.66 GHz
+</span><span class='line'>                        1 Processor, 2 Cores, 2 Threads
+</span><span class='line'>  Processor ID          GenuineIntel Family 6 Model 23 Stepping 10
+</span><span class='line'>  L1 Instruction Cache  32.0 KB x 2
+</span><span class='line'>  L1 Data Cache         32.0 KB x 2
+</span><span class='line'>  L2 Cache              6.00 MB
+</span><span class='line'>  L3 Cache              0.00 B
+</span><span class='line'>  Memory                8.00 GB 1067 MHz DDR3
+</span><span class='line'>  BIOS                  Apple Inc.    MBP51.88Z.007E.B06.1202061253
+</span></code></pre></td></tr></table></div></figure>
 
-<p>System Information
-  Operating System      Mac OS X 10.7.3 (Build 11D50)
-  Model                 MacBook Pro (Late 2008)
-  Motherboard           Apple Inc. Mac-F42D86A9 Proto
-  Processor             Intel Core 2 Duo T9550 @ 2.66 GHz</p>
-
-<pre><code>                    1 Processor, 2 Cores, 2 Threads
-</code></pre>
-
-<p>  Processor ID          GenuineIntel Family 6 Model 23 Stepping 10
-  L1 Instruction Cache  32.0 KB x 2
-  L1 Data Cache         32.0 KB x 2
-  L2 Cache              6.00 MB
-  L3 Cache              0.00 B
-  Memory                8.00 GB 1067 MHz DDR3
-  BIOS                  Apple Inc.    MBP51.88Z.007E.B06.1202061253
-[/bash]</p>
 
 <p>IOs seems to be the limiting factor, especially when I&#8217;m using VirtualBox, I feel a slow IO performances.</p>
 
@@ -141,52 +160,87 @@ Benchmark Summary
 
 <p>There is no tools like <strong><strong>HD Tune </strong></strong>on OSX, so I wrote a very simple shell script to measure raw IO performances.</p>
 
-<p>[bash]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/bin/sh</span>
+</span><span class='line'><span class="nv">COUNT</span><span class="o">=</span>2048
+</span><span class='line'>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;testing pseudo-IO performances - 1st Pass&quot;</span>
+</span><span class='line'>dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>/dev/null <span class="nv">bs</span><span class="o">=</span>1m <span class="nv">count</span><span class="o">=</span><span class="nv">$COUNT</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;testing IO write performances - 1st Pass&quot;</span>
+</span><span class='line'>dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>PERFTEST <span class="nv">bs</span><span class="o">=</span>1m <span class="nv">count</span><span class="o">=</span><span class="nv">$COUNT</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;testing IO read performances - 1st Pass&quot;</span>
+</span><span class='line'>dd <span class="k">if</span><span class="o">=</span>PERFTEST <span class="nv">of</span><span class="o">=</span>/dev/null <span class="nv">bs</span><span class="o">=</span>1m <span class="nv">count</span><span class="o">=</span><span class="nv">$COUNT</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;testing IO read performances - 2nd Pass&quot;</span>
+</span><span class='line'>dd <span class="k">if</span><span class="o">=</span>PERFTEST <span class="nv">of</span><span class="o">=</span>/dev/null <span class="nv">bs</span><span class="o">=</span>1m <span class="nv">count</span><span class="o">=</span><span class="nv">$COUNT</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">echo</span> <span class="s2">&quot;testing IO write performances - 2nd Pass&quot;</span>
+</span><span class='line'>dd <span class="k">if</span><span class="o">=</span>/dev/zero <span class="nv">of</span><span class="o">=</span>PERFTEST <span class="nv">bs</span><span class="o">=</span>1m <span class="nv">count</span><span class="o">=</span><span class="nv">$COUNT</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<h1>!/bin/sh</h1>
-
-<p>COUNT=2048</p>
-
-<p>echo &#8220;testing pseudo-IO performances - 1st Pass&#8221;
-dd if=/dev/zero of=/dev/null bs=1m count=$COUNT</p>
-
-<p>echo &#8220;testing IO write performances - 1st Pass&#8221;
-dd if=/dev/zero of=PERFTEST bs=1m count=$COUNT</p>
-
-<p>echo &#8220;testing IO read performances - 1st Pass&#8221;
-dd if=PERFTEST of=/dev/null bs=1m count=$COUNT</p>
-
-<p>echo &#8220;testing IO read performances - 2nd Pass&#8221;
-dd if=PERFTEST of=/dev/null bs=1m count=$COUNT</p>
-
-<p>echo &#8220;testing IO write performances - 2nd Pass&#8221;
-dd if=/dev/zero of=PERFTEST bs=1m count=$COUNT
-[/bash]</p>
 
 <p>Results :</p>
 
-<p>[bash]
-testing pseudo-IO performances - 1st Pass
-2048+0 records in
-2048+0 records out
-2147483648 bytes transferred in 0.225590 secs (9519410157 bytes/sec)
-testing IO write performances - 1st Pass
-2048+0 records in
-2048+0 records out
-2147483648 bytes transferred in 29.882202 secs (71864973 bytes/sec)
-testing IO read performances - 1st Pass
-2048+0 records in
-2048+0 records out
-2147483648 bytes transferred in 0.677308 secs (3170615711 bytes/sec)
-testing IO read performances - 2nd Pass
-2048+0 records in
-2048+0 records out
-2147483648 bytes transferred in 0.675835 secs (3177527036 bytes/sec)
-testing IO write performances - 2nd Pass
-2048+0 records in
-2048+0 records out
-2147483648 bytes transferred in 33.203725 secs (64675986 bytes/sec)
-[/bash]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>testing pseudo-IO performances - 1st Pass
+</span><span class='line'>2048+0 records in
+</span><span class='line'>2048+0 records out
+</span><span class='line'>2147483648 bytes transferred in 0.225590 secs <span class="o">(</span>9519410157 bytes/sec<span class="o">)</span>
+</span><span class='line'>testing IO write performances - 1st Pass
+</span><span class='line'>2048+0 records in
+</span><span class='line'>2048+0 records out
+</span><span class='line'>2147483648 bytes transferred in 29.882202 secs <span class="o">(</span>71864973 bytes/sec<span class="o">)</span>
+</span><span class='line'>testing IO <span class="nb">read </span>performances - 1st Pass
+</span><span class='line'>2048+0 records in
+</span><span class='line'>2048+0 records out
+</span><span class='line'>2147483648 bytes transferred in 0.677308 secs <span class="o">(</span>3170615711 bytes/sec<span class="o">)</span>
+</span><span class='line'>testing IO <span class="nb">read </span>performances - 2nd Pass
+</span><span class='line'>2048+0 records in
+</span><span class='line'>2048+0 records out
+</span><span class='line'>2147483648 bytes transferred in 0.675835 secs <span class="o">(</span>3177527036 bytes/sec<span class="o">)</span>
+</span><span class='line'>testing IO write performances - 2nd Pass
+</span><span class='line'>2048+0 records in
+</span><span class='line'>2048+0 records out
+</span><span class='line'>2147483648 bytes transferred in 33.203725 secs <span class="o">(</span>64675986 bytes/sec<span class="o">)</span>
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>Note, I run this performance tests from a directory excluded from Spotlight indexing !</p>
 

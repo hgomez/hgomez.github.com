@@ -4,7 +4,7 @@
   <title><![CDATA[Category: OS/X | Rico's Blog]]></title>
   <link href="http://hgomez.github.com/blog/categories/os-x/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2012-09-30T16:50:50+02:00</updated>
+  <updated>2012-09-30T16:52:40+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -423,7 +423,7 @@ sudo /usr/sbin/apachectl restart
 
 
 <p>I run <a href="http://www.primatelabs.ca/geekbench/">GeekBench 2.2.7</a> and give me a bench result of <strong>3752</strong> :
-[bash]
+``` bash
 Benchmark Summary
   Integer Score              3123 |||||||||
   Floating Point Score       5493 ||||||||||||||||
@@ -448,7 +448,7 @@ Benchmark Summary
   L3 Cache              0.00 B
   Memory                8.00 GB 1067 MHz DDR3
   BIOS                  Apple Inc.    MBP51.88Z.007E.B06.1202061253
-[/bash]</p>
+```</p>
 
 <p>IOs seems to be the limiting factor, especially when I'm using VirtualBox, I feel a slow IO performances.</p>
 
@@ -456,7 +456,7 @@ Benchmark Summary
 
 <p>There is no tools like <strong><strong>HD Tune </strong></strong>on OSX, so I wrote a very simple shell script to measure raw IO performances.</p>
 
-<p>[bash]</p>
+<p>``` bash</p>
 
 <h1>!/bin/sh</h1>
 
@@ -476,11 +476,11 @@ dd if=PERFTEST of=/dev/null bs=1m count=$COUNT</p>
 
 <p>echo "testing IO write performances - 2nd Pass"
 dd if=/dev/zero of=PERFTEST bs=1m count=$COUNT
-[/bash]</p>
+```</p>
 
 <p>Results :</p>
 
-<p>[bash]
+<p><code>bash
 testing pseudo-IO performances - 1st Pass
 2048+0 records in
 2048+0 records out
@@ -501,7 +501,7 @@ testing IO write performances - 2nd Pass
 2048+0 records in
 2048+0 records out
 2147483648 bytes transferred in 33.203725 secs (64675986 bytes/sec)
-[/bash]</p>
+</code></p>
 
 <p>Note, I run this performance tests from a directory excluded from Spotlight indexing !</p>
 
