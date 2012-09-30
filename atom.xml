@@ -4,7 +4,7 @@
   <title><![CDATA[Rico's Blog]]></title>
   <link href="http://hgomez.github.com/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2012-09-30T16:52:40+02:00</updated>
+  <updated>2012-09-30T16:54:10+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -787,43 +787,54 @@ She carefully tracked comments here and on Twitter :</p>
     <id>http://hgomez.github.com/blog/2012/01/28/uninstalling-macfuse-on-lion</id>
     <content type="html"><![CDATA[<p>If you installed MacFuse on Lion (10.7) and tried to uninstall you may encountered the following error :</p>
 
-<p>[bash]
-sudo /Library/Filesystems/fusefs.fs/Support/uninstall-macfuse-core.sh
-MacFUSE Uninstaller: Can not find the Archive.bom for MacFUSE Core package.
-[/bash]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo /Library/Filesystems/fusefs.fs/Support/uninstall-macfuse-core.sh
+</span><span class='line'>MacFUSE Uninstaller: Can not find the Archive.bom <span class="k">for </span>MacFUSE Core package.
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>Uninstaller didn&#8217;t check for Lion (uname -r reporting 11.x).
 So fix is easy, just edit uninstaller script <strong>/Library/Filesystems/fusefs.fs/Support/uninstall-macfuse-core.sh</strong> and add 11<em>) in case next to 10</em>)</p>
 
-<p>[bash]
-&#8230;</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>...
+</span><span class='line'>
+</span><span class='line'><span class="nv">OS_RELEASE</span><span class="o">=</span><span class="sb">`</span>/usr/bin/uname -r<span class="sb">`</span>
+</span><span class='line'><span class="k">case</span> <span class="s2">&quot;$OS_RELEASE&quot;</span> in
+</span><span class='line'>  8*<span class="o">)</span>
+</span><span class='line'>    log <span class="s2">&quot;Incorrect uninstall. Use the Tiger version please.&quot;</span>
+</span><span class='line'>    <span class="nb">exit </span>1
+</span><span class='line'>    ;;
+</span><span class='line'>  9*<span class="o">)</span>
+</span><span class='line'>    <span class="nv">PACKAGE_RECEIPT</span><span class="o">=</span><span class="s2">&quot;$INSTALL_VOLUME/Library/Receipts/MacFUSE Core.pkg&quot;</span>
+</span><span class='line'>    <span class="nv">OUTER_PACKAGE_RECEIPT</span><span class="o">=</span><span class="s2">&quot;$INSTALL_VOLUME/Library/Receipts/MacFUSE.pkg&quot;</span>
+</span><span class='line'>    <span class="nv">BOMFILE</span><span class="o">=</span><span class="s2">&quot;$PACKAGE_RECEIPT/Contents/Archive.bom&quot;</span>
+</span><span class='line'>    ;;
+</span><span class='line'>  10*|11*<span class="o">)</span>
+</span><span class='line'>     <span class="nv">PACKAGE_RECEIPT</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+</span><span class='line'>     <span class="nv">BOMFILE</span><span class="o">=</span><span class="s2">&quot;$INSTALL_VOLUME/var/db/receipts/com.google.macfuse.core.bom&quot;</span>
+</span><span class='line'>     ;;
+</span><span class='line'><span class="k">esac</span>
+</span></code></pre></td></tr></table></div></figure>
 
-<p>OS_RELEASE=<code>/usr/bin/uname -r</code>
-case &#8220;$OS_RELEASE&#8221; in
-  8*)</p>
-
-<pre><code>log "Incorrect uninstall. Use the Tiger version please."
-exit 1
-;;
-</code></pre>
-
-<p>  9*)</p>
-
-<pre><code>PACKAGE_RECEIPT="$INSTALL_VOLUME/Library/Receipts/MacFUSE Core.pkg"
-OUTER_PACKAGE_RECEIPT="$INSTALL_VOLUME/Library/Receipts/MacFUSE.pkg"
-BOMFILE="$PACKAGE_RECEIPT/Contents/Archive.bom"
-;;
-</code></pre>
-
-<p>  10<em>|11</em>)</p>
-
-<pre><code> PACKAGE_RECEIPT=""
- BOMFILE="$INSTALL_VOLUME/var/db/receipts/com.google.macfuse.core.bom"
- ;;
-</code></pre>
-
-<p>esac
-[/bash]</p>
 ]]></content>
   </entry>
   
