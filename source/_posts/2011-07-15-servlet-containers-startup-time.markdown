@@ -23,7 +23,7 @@ And in this days of Java 7 fever, try these servers with OpenJDK 7 (OS/X version
 
 
 
-[![Startup Time of App Servers (3rd try)](http://blog.hgomez.net/wp-content/uploads/2011/07/Startup6-1024x473.png)](http://blog.hgomez.net/wp-content/uploads/2011/07/Startup6.png)
+{% img center /images/Startup6.png %}
 
 all time in millisecondes 
 
