@@ -31,7 +31,8 @@ If you install Java's from [Oracle](http://www.oracle.com/technetwork/java/javas
 
 Apple provide a good tool to select default JVM, Java Preferences :
 
-[![](http://blog.hgomez.net/wp-content/uploads/2012/07/JavaPreferences.png)](http://blog.hgomez.net/wp-content/uploads/2012/07/JavaPreferences.png)
+{% img center /images/JavaPreferences.png [Java Preferences [Java Preferences]] %}
+--- [![](http://blog.hgomez.net/wp-content/uploads/2012/07/JavaPreferences.png)](http://blog.hgomez.net/wp-content/uploads/2012/07/JavaPreferences.png)
 
 In this screenshot you could see many JVM, from many sources, **Apple, Oracle** and **openjdk-osx-build** and default ordering Java (from up to bottom).
 

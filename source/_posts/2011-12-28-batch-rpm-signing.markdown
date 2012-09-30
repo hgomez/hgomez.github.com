@@ -23,11 +23,10 @@ Here you could be in trouble since rpm signing require a password to be passed i
 
 
 
-[bash]
+```bash
 rpm --addsign -D "_signature gpg" -D "_gpg_name packagers@myforge.org" RPMS/noarch/myjenkins-1.0.0-1.noarch.rpm<br />
 Enter pass phrase:<br />
-[/bash]
-
+```
 
 
 
@@ -52,7 +51,7 @@ After digging around Internet, best solution appears to be using [expect](http:/
 
 
 
-[bash]
+```bash
 #!/usr/bin/expect -f
 #
 # rpmsign-batch.expect : expect powered rpm signing command
@@ -75,16 +74,15 @@ spawn rpm --addsign -D "_signature gpg" -D "_gpg_name $gpgname" $rpmfile
 expect -exact "Enter pass phrase: "
 send -- "$passphrase\r"
 expect eof
-[/bash]
+```
 
 You could then use it to sign rpms from your freestyle jobs like :
 
-[bash]
+```bash
 # Password provided in clear in job (weird)
 rpmsign-batch.expect packagers@myforge.org mypassphrase RPMS/noarch/myjenkins-1.0.0-1.noarch.rpm
 
 # Password grabbed from a secret file (better)
 PASSPHRASE=`cat /my/secret-passphrase-file`
 rpmsign-batch.expect packagers@myforge.org $PASSPHRASE RPMS/noarch/myjenkins-1.0.0-1.noarch.rpm
-[/bash]
-
+```

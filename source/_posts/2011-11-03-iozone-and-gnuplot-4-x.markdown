@@ -27,7 +27,7 @@ Also you may get only **8 metrics** in reports instead of **15** expected in lat
 
 
 
-[perl]
+``` perl
 #
 # $Id: 3D plot of performance
 #
@@ -323,15 +323,14 @@ pause -1 "Hit return to exit"
 set terminal postscript color
 set output "freread/freread.ps"
 splot 'freread/iozone_gen_out.gnuplot' using 1:2:3 title "Freread performance" with lines
-[/perl]
-
+```
 
 
 ## report.pl
 
 
 
-[perl]
+``` perl
 #!/usr/bin/perl
 #
 # arguments: one of more report files
@@ -484,5 +483,4 @@ set output "2d-$column.png"
 }
 
 print STDERR "done.\n";
-[/perl]
-
+```
