@@ -4,7 +4,7 @@
   <title><![CDATA[Category: RPM | Rico's Blog]]></title>
   <link href="http://hgomez.github.com/blog/categories/rpm/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2012-09-30T18:14:21+02:00</updated>
+  <updated>2012-09-30T18:19:15+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -24,10 +24,10 @@
 
 <p>Here you could be in trouble since rpm signing require a password to be passed in command line :</p>
 
-<p>[bash]
-rpm --addsign -D "<em>signature gpg" -D "</em>gpg_name packagers@myforge.org" RPMS/noarch/myjenkins-1.0.0-1.noarch.rpm<br />
-Enter pass phrase:<br />
-[/bash]</p>
+<p><code>bash
+rpm --addsign -D "_signature gpg" -D "_gpg_name packagers@myforge.org" RPMS/noarch/myjenkins-1.0.0-1.noarch.rpm&lt;br /&gt;
+Enter pass phrase:&lt;br /&gt;
+</code></p>
 
 <p>It's quite problematic for a RPM build factory.</p>
 
@@ -39,7 +39,7 @@ Enter pass phrase:<br />
 </ul>
 
 
-<p>[bash]</p>
+<p>```bash</p>
 
 <h1>!/usr/bin/expect -f</h1>
 
@@ -69,11 +69,11 @@ set rpmfile [lrange $argv 2 2]</p>
 expect -exact "Enter pass phrase: "
 send -- "$passphrase\r"
 expect eof
-[/bash]</p>
+```</p>
 
 <p>You could then use it to sign rpms from your freestyle jobs like :</p>
 
-<p>[bash]</p>
+<p>```bash</p>
 
 <h1>Password provided in clear in job (weird)</h1>
 
@@ -83,7 +83,7 @@ expect eof
 
 <p>PASSPHRASE=<code>cat /my/secret-passphrase-file</code>
 rpmsign-batch.expect packagers@myforge.org $PASSPHRASE RPMS/noarch/myjenkins-1.0.0-1.noarch.rpm
-[/bash]</p>
+```</p>
 ]]></content>
   </entry>
   

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Performances | Rico's Blog]]></title>
   <link href="http://hgomez.github.com/blog/categories/performances/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2012-09-30T18:14:21+02:00</updated>
+  <updated>2012-09-30T18:19:15+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -32,7 +32,7 @@ Also you may get only <strong>8 metrics</strong> in reports instead of <strong>1
 
 <h2>gnu3d.dem</h2>
 
-<p>[perl]
+<p>``` perl
 #</p>
 
 <h1>$Id: 3D plot of performance</h1>
@@ -385,11 +385,11 @@ pause -1 "Hit return to exit"
 set terminal postscript color
 set output "freread/freread.ps"
 splot 'freread/iozone_gen_out.gnuplot' using 1:2:3 title "Freread performance" with lines
-[/perl]</p>
+```</p>
 
 <h2>report.pl</h2>
 
-<p>[perl]</p>
+<p>``` perl</p>
 
 <h1>!/usr/bin/perl</h1>
 
@@ -594,7 +594,7 @@ else
 <p>}</p>
 
 <p>print STDERR "done.\n";
-[/perl]</p>
+```</p>
 ]]></content>
   </entry>
   

@@ -106,10 +106,12 @@
 
 <p>Here you could be in trouble since rpm signing require a password to be passed in command line :</p>
 
-<p>[bash]
-rpm &#8211;addsign -D &#8221;<em>signature gpg&#8221; -D &#8221;</em>gpg_name packagers@myforge.org&#8221; RPMS/noarch/myjenkins-1.0.0-1.noarch.rpm<br />
-Enter pass phrase:<br />
-[/bash]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>rpm --addsign -D <span class="s2">&quot;_signature gpg&quot;</span> -D <span class="s2">&quot;_gpg_name packagers@myforge.org&quot;</span> RPMS/noarch/myjenkins-1.0.0-1.noarch.rpm&lt;br /&gt;
+</span><span class='line'>Enter pass phrase:&lt;br /&gt;
+</span></code></pre></td></tr></table></div></figure>
+
 
 <p>It&#8217;s quite problematic for a RPM build factory.</p>
 
@@ -121,51 +123,69 @@ Enter pass phrase:<br />
 </ul>
 
 
-<p>[bash]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/usr/bin/expect -f</span>
+</span><span class='line'><span class="c">#</span>
+</span><span class='line'><span class="c"># rpmsign-batch.expect : expect powered rpm signing command</span>
+</span><span class='line'><span class="c">#</span>
+</span><span class='line'>
+</span><span class='line'>proc usage <span class="o">{}</span> <span class="o">{</span>
+</span><span class='line'>        send_user <span class="s2">&quot;Usage: rpmsign-batch.expect gpgname passphrase rpmfile\n\n&quot;</span>
+</span><span class='line'>        <span class="nb">exit</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="o">{[</span>llength <span class="nv">$argv</span><span class="o">]</span>!<span class="o">=</span>3<span class="o">}</span> usage
+</span><span class='line'>
+</span><span class='line'><span class="nb">set </span>gpgname <span class="o">[</span>lrange <span class="nv">$argv</span> 0 0<span class="o">]</span>
+</span><span class='line'><span class="nb">set </span>passphrase <span class="o">[</span>lrange <span class="nv">$argv</span> 1 1<span class="o">]</span>
+</span><span class='line'><span class="nb">set </span>rpmfile <span class="o">[</span>lrange <span class="nv">$argv</span> 2 2<span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>send_user <span class="s2">&quot;passphrase=$passphrase gpgname=$gpgname\n&quot;</span>
+</span><span class='line'>
+</span><span class='line'>spawn rpm --addsign -D <span class="s2">&quot;_signature gpg&quot;</span> -D <span class="s2">&quot;_gpg_name $gpgname&quot;</span> <span class="nv">$rpmfile</span>
+</span><span class='line'>expect -exact <span class="s2">&quot;Enter pass phrase: &quot;</span>
+</span><span class='line'>send -- <span class="s2">&quot;$passphrase\r&quot;</span>
+</span><span class='line'>expect eof
+</span></code></pre></td></tr></table></div></figure>
 
-<h1>!/usr/bin/expect -f</h1>
-
-<p>#</p>
-
-<h1>rpmsign-batch.expect : expect powered rpm signing command</h1>
-
-<p>#</p>
-
-<p>proc usage {} {</p>
-
-<pre><code>    send_user "Usage: rpmsign-batch.expect gpgname passphrase rpmfile\n\n"
-    exit
-</code></pre>
-
-<p>}</p>
-
-<p>if {[llength $argv]!=3} usage</p>
-
-<p>set gpgname [lrange $argv 0 0]
-set passphrase [lrange $argv 1 1]
-set rpmfile [lrange $argv 2 2]</p>
-
-<p>send_user &#8220;passphrase=$passphrase gpgname=$gpgname\n&#8221;</p>
-
-<p>spawn rpm &#8211;addsign -D &#8221;<em>signature gpg&#8221; -D &#8221;</em>gpg_name $gpgname&#8221; $rpmfile
-expect -exact &#8220;Enter pass phrase: &#8221;
-send &#8211; &#8220;$passphrase\r&#8221;
-expect eof
-[/bash]</p>
 
 <p>You could then use it to sign rpms from your freestyle jobs like :</p>
 
-<p>[bash]</p>
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Password provided in clear in job (weird)</span>
+</span><span class='line'>rpmsign-batch.expect packagers@myforge.org mypassphrase RPMS/noarch/myjenkins-1.0.0-1.noarch.rpm
+</span><span class='line'>
+</span><span class='line'><span class="c"># Password grabbed from a secret file (better)</span>
+</span><span class='line'><span class="nv">PASSPHRASE</span><span class="o">=</span><span class="sb">`</span>cat /my/secret-passphrase-file<span class="sb">`</span>
+</span><span class='line'>rpmsign-batch.expect packagers@myforge.org <span class="nv">$PASSPHRASE</span> RPMS/noarch/myjenkins-1.0.0-1.noarch.rpm
+</span></code></pre></td></tr></table></div></figure>
 
-<h1>Password provided in clear in job (weird)</h1>
-
-<p>rpmsign-batch.expect packagers@myforge.org mypassphrase RPMS/noarch/myjenkins-1.0.0-1.noarch.rpm</p>
-
-<h1>Password grabbed from a secret file (better)</h1>
-
-<p>PASSPHRASE=<code>cat /my/secret-passphrase-file</code>
-rpmsign-batch.expect packagers@myforge.org $PASSPHRASE RPMS/noarch/myjenkins-1.0.0-1.noarch.rpm
-[/bash]</p>
 </div>
 
 
