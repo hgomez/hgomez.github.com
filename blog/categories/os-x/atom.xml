@@ -4,7 +4,7 @@
   <title><![CDATA[Category: OS/X | Rico's Blog]]></title>
   <link href="http://hgomez.github.com/blog/categories/os-x/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2012-09-30T18:55:35+02:00</updated>
+  <updated>2012-09-30T18:57:10+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -88,7 +88,7 @@ mbp-rico:~ henri$ export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0u6.jdk
 mbp-rico:~ henri$ java -version
 openjdk version "1.7.0-jdk7u6-b20"
 OpenJDK Runtime Environment (build 1.7.0-jdk7u6-b20-20120719)
-OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)&lt;/pre&gt;
+OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)
 </code></p>
 
 <p>We could keep our current PATH and it will be <strong>Apple java bootstrap</strong> system, living into <strong>/usr/bin/java</strong> who make use of <strong>JAVA_HOME</strong> and launch the proper JVM. Simple but efficient .</p>
@@ -127,13 +127,13 @@ Usage: java_home [options...]</p>
 <p>Obtaining path of default JVM :
 <code>bash
 mbp-rico:~ henri$ /usr/libexec/java_home
-/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home&lt;/pre&gt;
+/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
 </code></p>
 
 <p>Obtaining path of default Java 7 JVM :
 <code>bash
 mbp-rico:~ henri$ /usr/libexec/java_home -v 1.7
-/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home&lt;/pre&gt;
+/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home
 </code></p>
 
 <p>Obtaining path of default Java 8 JVM :
@@ -145,7 +145,7 @@ mbp-rico:~ henri$ /usr/libexec/java_home -v 1.8
 <p>Obtaining path of default Java 1.6 32 bits JVM :
 <code>bash
 mbp-rico:~ henri$ /usr/libexec/java_home -v 1.6 -a i386
-/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home&lt;/pre&gt;
+/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
 </code></p>
 
 <p>Obtaining path of default Java 1.6 64 bits JVM :
