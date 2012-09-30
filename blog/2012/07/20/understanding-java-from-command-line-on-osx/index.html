@@ -1,0 +1,426 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Understanding java from command line on OSX - Rico's Blog</title>
+  <meta name="author" content="Henri Gomez">
+
+  
+  <meta name="description" content="Java on OSX OSX is a good platform for Java development but also running Java applications. Sadly XServe servers are no more available but in many &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://hgomez.github.com/blog/2012/07/20/understanding-java-from-command-line-on-osx/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Rico's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Rico's Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:hgomez.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Understanding Java From Command Line on OSX</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-20T20:57:06+02:00" pubdate data-updated="true">Jul 20<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><h1>Java on OSX</h1>
+
+<p>OSX is a good platform for Java development but also running Java applications. Sadly XServe servers are no more available but in many cases Mac Mini could to pretty good works as Java server applications.</p>
+
+<p>For a long time, OSX Java was maintained by Apple, from Sun Hotspot and was often a bit late vs Windows/Linux releases.</p>
+
+<p>With Lion, Apple announced that they won&#8217;t produce Java for their futures OS, starting with Mountain Lion (10.8) and Oracle will do the job as they did for major distributions.</p>
+
+<p>OpenJDK project included OSX support more than one year ago and there is now a very good coverage of Java for OSX.</p>
+
+<p>It take some time to see first official Java 7 from Oracle on OSX, for Lion only, but there was community alternatives like <a href="http://code.google.com/p/openjdk-osx-build/">openjdk-osx-build</a>, where you could find a large choice of OpenJDK for OSX (7, 8, 8 with Lambda, 8 with Jigsaw).</p>
+
+<p>If you install Java&#8217;s from <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Oracle</a> or <a href="http://code.google.com/p/openjdk-osx-build/downloads/list">openjdk-osx-build</a>, you may want to know how to select one of them for your application and even select a specific one for some of your applications.</p>
+
+<h1>Java Preferences</h1>
+
+<p>Apple provide a good tool to select default JVM, Java Preferences :</p>
+
+<p><a href="http://blog.hgomez.net/wp-content/uploads/2012/07/JavaPreferences.png"><img src="http://blog.hgomez.net/wp-content/uploads/2012/07/JavaPreferences.png" alt="" /></a></p>
+
+<p>In this screenshot you could see many JVM, from many sources, <strong>Apple, Oracle</strong> and <strong>openjdk-osx-build</strong> and default ordering Java (from up to bottom).</p>
+
+<p>Here you&#8217;ll see that default JVM will be Apple Java 1.6.0_33-b03-424 in 64bits, next choice will be Apple Java 1.6.0_33-b03-424 in 32bits. You will notice these JVM are marked as System, more on this later.</p>
+
+<p>Next you&#8217;ll find Apple Java 1.6.0_31 in 64 and 32 bits and then Java 1.7 (1.7.0-jdk7u6-b20-20120719) from openjdk-osx-build. By the end you&#8217;ll find latest official Oracle Java 7, aka 1.7.0_05.</p>
+
+<p>What does it means for you in a command line mode, console is just mandatory for any serious OSX geek ?</p>
+
+<p>Let see java used by default :</p>
+
+<p>[bash]
+mbp-rico:~ henri$ java -version
+java version &#8220;1.6.0_33&#8221;
+Java(TM) SE Runtime Environment (build 1.6.0_33-b03-424-11M3720)
+Java HotSpot(TM) 64-Bit Server VM (build 20.8-b03-424, mixed mode)
+[/bash]</p>
+
+<p>Default Java is Apple 1.6.0_33, 64bits as expected, so far so good.</p>
+
+<p>What should i do if I want to select instead Java 7 ?</p>
+
+<h2>Standard Unix way</h2>
+
+<p>You could just update your PATH environment variable to update search path :
+[bash]
+mbp-rico:~ henri$ export PATH=/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home/bin:$PATH
+mbp-rico:~ henri$ java -version
+openjdk version &#8220;1.7.0-jdk7u6-b20&#8221;
+OpenJDK Runtime Environment (build 1.7.0-jdk7u6-b20-20120719)
+OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)
+[/bash]</p>
+
+<p>It works but OSX provide smarter mechanism.</p>
+
+<h2>OSX way</h2>
+
+<p>Keeping in mind we&#8217;re discussing command line operation, updating default JVM via Java Preferences will not be retained, will define instead <strong>JAVA_HOME</strong> environment variable like this :</p>
+
+<p>[bash]
+mbp-rico:~ henri$ export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home/
+mbp-rico:~ henri$ java -version
+openjdk version &#8220;1.7.0-jdk7u6-b20&#8221;
+OpenJDK Runtime Environment (build 1.7.0-jdk7u6-b20-20120719)
+OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)</pre>
+[/bash]</p>
+
+<p>We could keep our current PATH and it will be <strong>Apple java bootstrap</strong> system, living into <strong>/usr/bin/java</strong> who make use of <strong>JAVA_HOME</strong> and launch the proper JVM. Simple but efficient .</p>
+
+<h2>java_home</h2>
+
+<p>As we see previously, Java Preferences define an order of preferred JVM on OSX, like alternatives does on many Linux systems, especially those using <a href="http://www.jpackage.org">JPackage</a> tooling. So there should be a way to get access to these preferences and here entering <strong>java_home</strong></p>
+
+<p>java_home is located in /usr/libexec and has many useful features :</p>
+
+<p>[bash]
+mbp-rico:~ henri$ /usr/libexec/java_home &#8211;help
+Usage: java_home [options&#8230;]</p>
+
+<pre><code>Returns the path to a Java home directory from the current user's settings.
+</code></pre>
+
+<p>Options:</p>
+
+<pre><code>[-v/--version   &lt;version&gt;]       Filter Java versions in the "JVMVersion" form 1.X(+ or *).
+[-a/--arch      &lt;architecture&gt;]  Filter JVMs matching architecture (i386, x86_64, etc).
+[-d/--datamodel &lt;datamodel&gt;]     Filter JVMs capable of -d32 or -d64
+[-t/--task      &lt;task&gt;]          Use the JVM list for a specific task (Applets, WebStart, BundledApp, JNI, or CommandLine)
+[-F/--failfast]                  Fail when filters return no JVMs, do not continue with default.
+[   --exec      &lt;command&gt; ...]   Execute the $JAVA_HOME/bin/&lt;command&gt; with the remaining arguments.
+[-R/--request]                   Request installation of a Java Runtime if not installed.
+[-X/--xml]                       Print full JVM list and additional data as XML plist.
+[-V/--verbose]                   Print full JVM list with architectures.
+[-h/--help]                      This usage information.
+</code></pre>
+
+<p>[/bash]</p>
+
+<p>Let&#8217;s play with <strong>java_home</strong> now.</p>
+
+<p>Obtaining path of default JVM :
+[bash]
+mbp-rico:~ henri$ /usr/libexec/java_home
+/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home</pre>
+[/bash]</p>
+
+<p>Obtaining path of default Java 7 JVM :
+[bash]
+mbp-rico:~ henri$ /usr/libexec/java_home -v 1.7
+/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home</pre>
+[/bash]</p>
+
+<p>Obtaining path of default Java 8 JVM :
+[bash]
+mbp-rico:~ henri$ /usr/libexec/java_home -v 1.8
+/Library/Java/JavaVirtualMachines/1.8.0.jdk/Contents/Home
+[/bash]</p>
+
+<p>Obtaining path of default Java 1.6 32 bits JVM :
+[bash]
+mbp-rico:~ henri$ /usr/libexec/java_home -v 1.6 -a i386
+/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home</pre>
+[/bash]</p>
+
+<p>Obtaining path of default Java 1.6 64 bits JVM :
+[bash]
+mbp-rico:~ henri$ /usr/libexec/java_home -v 1.6 -a x86_64
+/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+[/bash]</p>
+
+<p>Here you could see that 32 and 64bits JVM have the same path. This is because due to universal mode (i386/x86_64), <strong>Apple</strong> produce a dual mode JVM. This is not the case for <strong>Oracle Java 7</strong> where only 64bits JVM is available.</p>
+
+<p>Let&#8217;s combine <strong>java_home</strong> and <strong>JAVA_HOME</strong> :
+[bash]
+mbp-rico:~ henri$ export JAVA_HOME=<code>/usr/libexec/java_home -v 1.7</code>
+mbp-rico:~ henri$ java -version
+openjdk version &#8220;1.7.0-jdk7u6-b20&#8221;
+OpenJDK Runtime Environment (build 1.7.0-jdk7u6-b20-20120719)
+OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)
+[/bash]</p>
+
+<p>This is a very nice features if you want to specify a Java Level (6 or 7) following your<strong> Java Preferences </strong>for some of your server side application (let say <strong>Apache Tomcat</strong>) or command operation (like <strong>Apache Maven</strong>).</p>
+
+<p>Typically for my Apache Tomcat powered application like Jenkins, I usually set it in bin/setenv.sh :
+[bash]
+export JAVA_HOME=<code>/usr/libexec/java_home -v 1.7</code>
+CATALINA_OPTS=-Xms256m -Xmx512m -DJENKINS_HOME=$JENKINS_HOME -Dhudson.model.Hudson.logStartupPerformance=true -Duser.language=en -Djava.awt.headless=true
+[/bash]</p>
+
+<p>Do you want to get a list of all JVM on your system ?</p>
+
+<p>[bash]
+mbp-rico:~ henri$ /usr/libexec/java_home -V
+Matching Java Virtual Machines (33):</p>
+
+<pre><code>1.6.0_33-b03-424, x86_64:   "Java SE 6" /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+1.6.0_33-b03-424, i386: "Java SE 6" /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+1.6.0_31-b04-411, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_31-b04-411.jdk/Contents/Home
+1.6.0_31-b04-411, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_31-b04-411.jdk/Contents/Home
+1.7.0-jdk7u6-b20-20120719, x86_64:  "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home
+1.8.0-jdk8-b47-20120720, x86_64:    "OpenJDK 8" /Library/Java/JavaVirtualMachines/1.8.0.jdk/Contents/Home
+1.7.0-jdk7u4-b21-20120427, i386:    "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u4.jdk/Contents/Home
+1.7.0_05, x86_64:   "Java SE 7" /Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home
+1.6.0_33-b03-424, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_33-b03-424.jdk/Contents/Home
+1.6.0_33-b03-424, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_33-b03-424.jdk/Contents/Home
+1.8.0-jdk8-b45-20120713-jigsaw, x86_64: "OpenJDK 8" /Library/Java/JavaVirtualMachines/1.8.0-jigsaw.jdk/Contents/Home
+1.8.0-b48-20120720-lambda, x86_64:  "OpenJDK 8" /Library/Java/JavaVirtualMachines/1.8.0-lambda.jdk/Contents/Home
+1.7.0-jdk7u6-b20-20120719, i386:    "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home
+1.7.0-jdk7u4-b21-20120427, x86_64:  "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u4.jdk/Contents/Home
+1.7.0-jdk7u4-b21-20120421, x86_64:  "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u4-64.jdk/Contents/Home
+1.7.0, x86_64:  "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u.jdk/Contents/Home
+1.7.0, i386:    "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u.jdk/Contents/Home
+1.6.0_32-b05-420, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_32-b05-420.jdk/Contents/Home
+1.6.0_32-b05-420, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_32-b05-420.jdk/Contents/Home
+1.6.0_32-b05-417, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_32-b05-417.jdk/Contents/Home
+1.6.0_32-b05-417, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_32-b05-417.jdk/Contents/Home
+1.6.0_31-b04-413, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_31-b04-413.jdk/Contents/Home
+1.6.0_31-b04-413, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_31-b04-413.jdk/Contents/Home
+1.6.0_30-b12-409, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_30-b12-409.jdk/Contents/Home
+1.6.0_30-b12-409, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_30-b12-409.jdk/Contents/Home
+1.6.0_30-b12-404, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_30-b12-404.jdk/Contents/Home
+1.6.0_30-b12-404, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_30-b12-404.jdk/Contents/Home
+1.6.0_29-b11-397, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_29-b11-397.jdk/Contents/Home
+1.6.0_29-b11-397, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_29-b11-397.jdk/Contents/Home
+1.6.0_27-b07-395, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_27-b07-395.jdk/Contents/Home
+1.6.0_27-b07-395, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_27-b07-395.jdk/Contents/Home
+1.6.0_26-b03-383, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_26-b03-383.jdk/Contents/Home
+1.6.0_26-b03-383, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_26-b03-383.jdk/Contents/Home
+</code></pre>
+
+<p>/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+[/bash]</p>
+
+<h2>Note on JVM Locations</h2>
+
+<p>You may have noticed many differents paths for JVM :</p>
+
+<ul>
+<li><p>/System/Library/Java/JavaVirtualMachines is where Apple install System JVM. Here you could have only one JVM by family, ie 1.6, 1.7. These JVM will be available to all users on system.</p></li>
+<li><p>/Library/Java/JavaVirtualMachines is a slot location for guest JVMs, specially designed to host contributors JVM like <strong>Oracle</strong>, <strong>openjdk-osx-build </strong>or<strong> Apple Developper Preview JVMs</strong> Also, these JVM will be available to all users on system.</p></li>
+<li><p>/Users/bill/Library/Java/JavaVirtualMachines is a slot for contributor JVMs but only available to user bill.</p></li>
+</ul>
+
+
+<h2>To conclude</h2>
+
+<p>OSX is probably the platform with the more choice of Java to run and experiment, Java 6, Java 7, OpenJDK 7, 8, Lambda, Jigsaw.</p>
+
+<p>And with its <strong>/usr/libexec/java_home</strong> and <strong>JAVA_HOME</strong> environment variable, you could select any of them for your console or command mode operations very easily.</p>
+
+<p>Enjoy Java on OSX !</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Henri Gomez</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-20T20:57:06+02:00" pubdate data-updated="true">Jul 20<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/java/'>Java</a>, <a class='category' href='/blog/categories/os-x/'>OS/X</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hgomez.github.com/blog/2012/07/20/understanding-java-from-command-line-on-osx/" data-via="" data-counturl="http://hgomez.github.com/blog/2012/07/20/understanding-java-from-command-line-on-osx/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2012/06/13/building-universal-apache-tomcat-native-library-on-osx-updated/" title="Previous Post: Building Universal Apache Tomcat Native Library on OS/X - updated">&laquo; Building Universal Apache Tomcat Native Library on OS/X - updated</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/07/20/understanding-java-from-command-line-on-osx/">Understanding java from command line on OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/13/building-universal-apache-tomcat-native-library-on-osx-updated/">Building Universal Apache Tomcat Native Library on OS/X - updated</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/21/using-apache-tomcat-connector-mod_jk-on-osx/">Using Apache Tomcat Connector (mod_jk) on OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx/">Building Universal Apache Tomcat Connector (mod_jk) on OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/18/ssd-or-not-ssd/">SSD or not SSD ?</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Henri Gomez -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

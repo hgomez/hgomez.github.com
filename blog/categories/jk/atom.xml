@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: jk | Rico's Blog]]></title>
+  <link href="http://hgomez.github.com/blog/categories/jk/atom.xml" rel="self"/>
+  <link href="http://hgomez.github.com/"/>
+  <updated>2012-09-30T16:23:42+02:00</updated>
+  <id>http://hgomez.github.com/</id>
+  <author>
+    <name><![CDATA[Henri Gomez]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Using Apache Tomcat Connector (mod_jk) on OSX]]></title>
+    <link href="http://hgomez.github.com/blog/2012/03/21/using-apache-tomcat-connector-mod_jk-on-osx/"/>
+    <updated>2012-03-21T09:48:34+01:00</updated>
+    <id>http://hgomez.github.com/blog/2012/03/21/using-apache-tomcat-connector-mod_jk-on-osx</id>
+    <content type="html"><![CDATA[<p>You'll need first mod_jk installed, follow <a href="http://blog.hgomez.net/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx/">Building Guide</a>.</p>
+
+<p>Create /etc/apache2/other/jk.conf :</p>
+
+<p>[bash]</p>
+
+<h1>Load JK Module</h1>
+
+<p>LoadModule jk_module     libexec/apache2/mod_jk.so</p>
+
+<h1>JK workers.properties</h1>
+
+<p>JkWorkersFile /etc/apache2/other/workers.properties</p>
+
+<h1>JK shared memory location</h1>
+
+<p>JkShmFile     /var/log/apache2/mod_jk.shm</p>
+
+<h1>JK logs</h1>
+
+<p>JkLogFile     /var/log/apache2/mod_jk.log</p>
+
+<h1>JK log level [debug/error/info]</h1>
+
+<p>JkLogLevel    info</p>
+
+<h1>JK timestamp log format</h1>
+
+<p>JkLogStampFormat "[%a %b %d %H:%M:%S %Y] "
+[/bash]</p>
+
+<p>Create /etc/apache2/other/workers.properties</p>
+
+<p>[bash]
+worker.list=jenkins,watch,manage</p>
+
+<h1>Set properties for worker jenkins (ajp13)</h1>
+
+<p>worker.jenkins.type=ajp13
+worker.jenkins.host=localhost
+worker.jenkins.port=8009</p>
+
+<h1>status workers</h1>
+
+<p>worker.watch.type=status
+worker.watch.read_only=true
+worker.watch.mount=/user/status/jk
+worker.manage.type=status
+worker.manage.mount=/admin/status/jk
+[/bash]</p>
+
+<p>I choose to use VirtualName Hosting and so defined one into /etc/apache2/extra/httpd-vhosts.conf :</p>
+
+<p>[bash]
+NameVirtualHost *:80</p>
+
+<p><VirtualHost *:80></p>
+
+<pre><code>ServerName  mbpbuilder.hgomez.net
+ServerAlias mbpbuilder
+ServerAdmin webmaster@mbpbuilder.hgomez.net
+
+ErrorLog    "/var/log/apache2/mbpbuilder.org-error_log"
+CustomLog   "/var/log/apache2/mbpbuilder-access_log" common
+
+JkMount  /* jenkins
+</code></pre>
+
+<p></VirtualHost>
+[/bash]</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Building Universal Apache Tomcat Connector (mod_jk) on OSX]]></title>
+    <link href="http://hgomez.github.com/blog/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx/"/>
+    <updated>2012-03-21T09:31:18+01:00</updated>
+    <id>http://hgomez.github.com/blog/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx</id>
+    <content type="html"><![CDATA[<p>Build Universal Apache Tomcat Connector (mod_jk) for OSX follow tricks used for Apache Tomcat Native Library.</p>
+
+<p>[bash]
+CFLAGS='-arch i386 -arch x86_64' APXSLDFLAGS='-arch i386-arch x86_64'
+[/bash]</p>
+
+<p>Here is a small script to do it :</p>
+
+<p>[bash]</p>
+
+<h1>!/bin/sh</h1>
+
+<p>#</p>
+
+<p>JK_VERSION=1.2.37</p>
+
+<p>curl http://mir2.ovh.net/ftp.apache.org/dist/tomcat/tomcat-connectors/jk/tomcat-connectors-${JK_VERSION}-src.tar.gz -o tomcat-connectors-${JK_VERSION}-src.tar.gz
+tar xvzf tomcat-connectors-${JK_VERSION}-src.tar.gz
+cd tomcat-connectors-${JK_VERSION}-src/native</p>
+
+<p>./configure --with-apxs=/usr/sbin/apxs CFLAGS='-arch i386 -arch x86_64' APXSLDFLAGS='-arch i386-arch x86_64'
+make clean
+make
+[/bash]</p>
+
+<p>Installation is pretty simple :</p>
+
+<p>[bash]
+sudo cp apache-2.0/.libs/mod_jk.so /usr/libexec/apache2/
+[/bash]</p>
+
+<p>You could then restart your Apache HTTPd server to get new mod_jk used :</p>
+
+<p>[bash]
+sudo /usr/sbin/apachectl restart
+[/bash]</p>
+]]></content>
+  </entry>
+  
+</feed>

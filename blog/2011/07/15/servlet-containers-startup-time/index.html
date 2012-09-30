@@ -1,0 +1,252 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Servlet containers, startup time - Rico's Blog</title>
+  <meta name="author" content="Henri Gomez">
+
+  
+  <meta name="description" content="With the release of JBoss AS7, we see many comments around about the startup time of Application Servers.
+Even if this appears marginal in real life &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://hgomez.github.com/blog/2011/07/15/servlet-containers-startup-time/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Rico's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Rico's Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:hgomez.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Servlet Containers, Startup Time</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-15T02:11:03+02:00" pubdate data-updated="true">Jul 15<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>With the release of JBoss AS7, we see many comments around about the startup time of Application Servers.
+Even if this appears marginal in real life (an application server is expected to run 24/24 7/7), there is area where startup time is still important like for developpers. In developpment phase, when you have to start/stop your server dozens of times by day, you need fastest start time as possible.</p>
+
+<p>I conducted a very basic and simple test on my MacBook Pro, take various application servers and servlet containers and measure their startup time.</p>
+
+<p>And in this days of Java 7 fever, try these servers with OpenJDK 7 (OS/X version).</p>
+
+<h3>Results on MacBook Pro - Core2Duo 2.66Ghz</h3>
+
+<p><a href="http://blog.hgomez.net/wp-content/uploads/2011/07/Startup6.png"><img src="http://blog.hgomez.net/wp-content/uploads/2011/07/Startup6-1024x473.png" alt="Startup Time of App Servers (3rd try)" /></a></p>
+
+<p>all time in millisecondes</p>
+
+<h3>Remarks</h3>
+
+<ul>
+<li><p>JBoss AS 6 (minimal profile) startup time was about 27s. I didn&#8217;t include it in graph to keep a good scale for others engines</p></li>
+<li><p>JBoss AS6 seems to start well with OpenJDK 7 but was a bit long to stop, so I had to kill the process</p></li>
+<li><p>JBoss AS7 web-profile and non certified full edition came with no webapp, so a bit less works at startup since no webapp has to be deployed and managed. Injecting a basic webapp take an extra 30ms on next starts.</p></li>
+<li><p>All servers performed pretty the same under Apple JDK 1.6.0-26 and OpenJDK 7.</p></li>
+</ul>
+
+
+<h3>Conclusions</h3>
+
+<ul>
+<li><p>Jetty is still the fastest container to start around.</p></li>
+<li><p>Apache Tomcat team does a good job on Apache Tomcat 7, near twice faster than Apache Tomcat 6 in startup time and not too far than Jetty.</p></li>
+<li><p>JBoss AS7 startup speed improvements are tremendous, about 13 times faster than its predecessor JBoss AS6, congrats guys !</p></li>
+</ul>
+
+
+<p>Raw startup time data available <a href="http://blog.hgomez.net/wp-content/uploads/2011/07/appserver-startup2.txt">here</a></p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Henri Gomez</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-07-15T02:11:03+02:00" pubdate data-updated="true">Jul 15<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/openjdk/'>OpenJDK</a>, <a class='category' href='/blog/categories/tomcat/'>Tomcat</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hgomez.github.com/blog/2011/07/15/servlet-containers-startup-time/" data-via="" data-counturl="http://hgomez.github.com/blog/2011/07/15/servlet-containers-startup-time/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left" href="/blog/2011/07/13/building-universal-apache-tomcat-native-library-on-osx/" title="Previous Post: Building Universal Apache Tomcat Native Library on OS/X">&laquo; Building Universal Apache Tomcat Native Library on OS/X</a>
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/11/03/iozone-and-gnuplot-4-x/" title="Next Post: Iozone and gnuplot 4.x">Iozone and gnuplot 4.x &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/07/20/understanding-java-from-command-line-on-osx/">Understanding java from command line on OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/13/building-universal-apache-tomcat-native-library-on-osx-updated/">Building Universal Apache Tomcat Native Library on OS/X - updated</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/21/using-apache-tomcat-connector-mod_jk-on-osx/">Using Apache Tomcat Connector (mod_jk) on OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx/">Building Universal Apache Tomcat Connector (mod_jk) on OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/18/ssd-or-not-ssd/">SSD or not SSD ?</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Henri Gomez -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

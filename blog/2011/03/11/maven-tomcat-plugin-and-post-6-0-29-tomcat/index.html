@@ -1,0 +1,331 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Tomcat Maven Plugin and Apache Tomcat post 6.0.29  - Rico's Blog</title>
+  <meta name="author" content="Henri Gomez">
+
+  
+  <meta name="description" content="If you&#8217;re using the Tomcat Maven Plugin and want to use post 6.0.29  Apache Tomcat, ie latest 6.0.32, you should update your pom to handle a &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://hgomez.github.com/blog/2011/03/11/maven-tomcat-plugin-and-post-6-0-29-tomcat/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Rico's Blog" type="application/atom+xml">
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <h1><a href="/">Rico's Blog</a></h1>
+  
+    <h2>A blogging framework for hackers.</h2>
+  
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:hgomez.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      <h1 class="entry-title">Tomcat Maven Plugin and Apache Tomcat Post 6.0.29</h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-03-11T13:56:04+01:00" pubdate data-updated="true">Mar 11<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>If you&#8217;re using the <a href="http://mojo.codehaus.org/tomcat-maven-plugin/">Tomcat Maven Plugin</a> and want to use post 6.0.29  Apache Tomcat, ie latest 6.0.32, you should update your pom to handle a change in artifact.</p>
+
+<p>Up to 6.0.29, Eclipse JDT compiler was bundled as jasper-jdt :</p>
+
+<p>[xml]
+<dependency></p>
+
+<pre><code>          &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+          &lt;artifactId&gt;jasper-jdt&lt;/artifactId&gt;
+          &lt;version&gt;6.0.29&lt;/version&gt;
+        &lt;/dependency&gt;
+</code></pre>
+
+<p>[/xml]</p>
+
+<p>With <a href="http://tomcat.apache.org/tomcat-6.0-doc/changelog.html">6.0.30</a>, Apache Tomcat team started to bundle Eclipse JDT directly:</p>
+
+<p>[xml]
+<dependency>
+  <groupId>org.eclipse.jdt.core.compiler</groupId>
+  <artifactId>ecj</artifactId>
+  <version>3.5.1</version>
+</dependency>
+[/xml]</p>
+
+<p>As consequence, org.apache.tomcat/jasper-jdt artifact didn&#8217;t exist anymore after release 6.0.29.</p>
+
+<p>[caption id=&#8221;attachment_742&#8221; align=&#8221;alignnone&#8221; width=&#8221;743&#8221; caption=&#8221;Jasper JDT up to 6.0.29&#8221;]<a href="http://blog.hgomez.net/wp-content/uploads/2011/03/jasper-jdt.png"><img src="http://blog.hgomez.net/wp-content/uploads/2011/03/jasper-jdt.png" alt="Jasper JDT up to 6.0.29" /></a>[/caption]</p>
+
+<p>For Tomcat Maven Plugin, you should update the <a href="http://mojo.codehaus.org/tomcat-maven-plugin/examples/adjust-embedded-tomcat-version.html">suggested pom</a> like this :</p>
+
+<p>[xml]</p>
+
+<pre><code>&lt;build&gt;
+    &lt;pluginManagement&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+                &lt;artifactId&gt;tomcat-maven-plugin&lt;/artifactId&gt;
+                &lt;version&gt;1.2-SNAPSHOT&lt;/version&gt;
+                &lt;dependencies&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;catalina&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;catalina-ha&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;tribes&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;el-api&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;jasper&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;jasper-el&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.eclipse.jdt.core.compiler&lt;/groupId&gt;
+                        &lt;artifactId&gt;ecj&lt;/artifactId&gt;
+                        &lt;version&gt;3.5.1&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;jsp-api&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;servlet-api&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;coyote&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;dbcp&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                &lt;/dependencies&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/pluginManagement&gt;
+</code></pre>
+
+<p>[/xml]</p>
+
+<h3>Notice: An updated version of Tomcat Maven Plugin 1.2-SNAPSHOT has been released, this hack is no more necessary</h3>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Henri Gomez</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-03-11T13:56:04+01:00" pubdate data-updated="true">Mar 11<span>th</span>, 2011</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/maven/'>Maven</a>, <a class='category' href='/blog/categories/tomcat/'>Tomcat</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hgomez.github.com/blog/2011/03/11/maven-tomcat-plugin-and-post-6-0-29-tomcat/" data-via="" data-counturl="http://hgomez.github.com/blog/2011/03/11/maven-tomcat-plugin-and-post-6-0-29-tomcat/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+      
+        <a class="basic-alignment right" href="/blog/2011/04/16/openjdk-7-on-osx-first-swing-app/" title="Next Post: OpenJDK 7 on OS/X and IntelliJ IDEA EAP">OpenJDK 7 on OS/X and IntelliJ IDEA EAP &raquo;</a>
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/07/20/understanding-java-from-command-line-on-osx/">Understanding java from command line on OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/13/building-universal-apache-tomcat-native-library-on-osx-updated/">Building Universal Apache Tomcat Native Library on OS/X - updated</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/21/using-apache-tomcat-connector-mod_jk-on-osx/">Using Apache Tomcat Connector (mod_jk) on OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx/">Building Universal Apache Tomcat Connector (mod_jk) on OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/18/ssd-or-not-ssd/">SSD or not SSD ?</a>
+      </li>
+    
+  </ul>
+</section>
+
+
+
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Henri Gomez -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

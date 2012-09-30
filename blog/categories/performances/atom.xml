@@ -1,0 +1,601 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Performances | Rico's Blog]]></title>
+  <link href="http://hgomez.github.com/blog/categories/performances/atom.xml" rel="self"/>
+  <link href="http://hgomez.github.com/"/>
+  <updated>2012-09-30T16:23:42+02:00</updated>
+  <id>http://hgomez.github.com/</id>
+  <author>
+    <name><![CDATA[Henri Gomez]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Iozone and gnuplot 4.x]]></title>
+    <link href="http://hgomez.github.com/blog/2011/11/03/iozone-and-gnuplot-4-x/"/>
+    <updated>2011-11-03T20:16:40+01:00</updated>
+    <id>http://hgomez.github.com/blog/2011/11/03/iozone-and-gnuplot-4-x</id>
+    <content type="html"><![CDATA[<p><a href="http://www.iozone.org/">Iozone </a> is a great tool to mesure performance of filesystem.
+You could find 10 examples <a href="http://www.thegeekstuff.com/2011/05/iozone-examples/">here</a>.</p>
+
+<p>In it latest version, 3.97, it came with reporting tools, <strong>report.pl</strong> and <strong>gengnuplot.sh</strong>, who use gnuplot to render images.</p>
+
+<p><a href="http://blog.hgomez.net/wp-content/uploads/2011/11/2d-recrewrite.png"><img src="http://blog.hgomez.net/wp-content/uploads/2011/11/2d-recrewrite.png" alt="" /></a></p>
+
+<p><a href="http://blog.hgomez.net/wp-content/uploads/2011/11/recrewrite.png"><img src="http://blog.hgomez.net/wp-content/uploads/2011/11/recrewrite.png" alt="" /></a></p>
+
+<p>Due to changes in GnuPlot 4.x, <strong>report.pl</strong> and <strong>gnu3d.dem</strong> need to be updated to works.
+Also you may get only <strong>8 metrics</strong> in reports instead of <strong>15</strong> expected in latest release of <strong>report.pl</strong></p>
+
+<h2>gnu3d.dem</h2>
+
+<p>[perl]
+#</p>
+
+<h1>$Id: 3D plot of performance</h1>
+
+<p>#</p>
+
+<h1>Processes files that were created by Generate_Graphs</h1>
+
+<h1>and displays the results. Also, saves a postscript copy.</h1>
+
+<p>#</p>
+
+<h1>Don Capps</h1>
+
+<p>set terminal x11
+set title "Iozone performance"
+set grid lt 2 lw 1
+set surface
+set parametric
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel "File size in 2<sup>n</sup> KBytes"
+set ylabel "Record size in 2<sup>n</sup> Kbytes"
+set zlabel "Kbytes/sec"</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot 'write/iozone_gen_out.gnuplot' title "Write performance"
+pause -1 "Hit return to continue"
+set terminal postscript color
+set output "write/write.ps"
+splot 'write/iozone_gen_out.gnuplot' title "Write performance"</p>
+
+<p>set terminal x11
+set title "Iozone performance"
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel "File size in 2<sup>n</sup> KBytes"
+set ylabel "Record size in 2<sup>n</sup> Kbytes"
+set zlabel "Kbytes/sec"</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot 'rewrite/iozone_gen_out.gnuplot' using 1:2:3 title "ReWrite performance" with lines
+pause -1 "Hit return to continue"
+set terminal postscript color
+set output "rewrite/rewrite.ps"
+splot 'rewrite/iozone_gen_out.gnuplot' using 1:2:3 title "ReWrite performance" with lines</p>
+
+<p>set terminal x11
+set title "Iozone performance"
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel "File size in 2<sup>n</sup> KBytes"
+set ylabel "Record size in 2<sup>n</sup> Kbytes"
+set zlabel "Kbytes/sec"</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot 'read/iozone_gen_out.gnuplot' using 1:2:3 title "Read performance" with lines
+pause -1 "Hit return to continue"
+set terminal postscript color
+set output "read/read.ps"
+splot 'read/iozone_gen_out.gnuplot' using 1:2:3 title "Read performance" with lines</p>
+
+<p>set terminal x11
+set title "Iozone performance"
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel "File size in 2<sup>n</sup> KBytes"
+set ylabel "Record size in 2<sup>n</sup> Kbytes"
+set zlabel "Kbytes/sec"</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot 'reread/iozone_gen_out.gnuplot' using 1:2:3 title "Reread performance" with lines
+pause -1 "Hit return to continue"
+set terminal postscript color
+set output "reread/reread.ps"
+splot 'reread/iozone_gen_out.gnuplot' using 1:2:3 title "Reread performance" with lines</p>
+
+<p>set terminal x11
+set title "Iozone performance"
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel "File size in 2<sup>n</sup> KBytes"
+set ylabel "Record size in 2<sup>n</sup> Kbytes"
+set zlabel "Kbytes/sec"</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot 'randread/iozone_gen_out.gnuplot' using 1:2:3 title "Random read performance" with lines
+pause -1 "Hit return to continue"
+set terminal postscript color
+set output "randread/randread.ps"
+splot 'randread/iozone_gen_out.gnuplot' using 1:2:3 title "Random read performance" with lines</p>
+
+<p>set terminal x11
+set title "Iozone performance"
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel "File size in 2<sup>n</sup> KBytes"
+set ylabel "Record size in 2<sup>n</sup> Kbytes"
+set zlabel "Kbytes/sec"</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot 'randwrite/iozone_gen_out.gnuplot' using 1:2:3 title "Random write performance" with lines
+pause -1 "Hit return to continue"
+set terminal postscript color
+set output "randwrite/randwrite.ps"
+splot 'randwrite/iozone_gen_out.gnuplot' using 1:2:3 title "Random write performance" with lines</p>
+
+<p>set terminal x11
+set title "Iozone performance"
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel "File size in 2<sup>n</sup> KBytes"
+set ylabel "Record size in 2<sup>n</sup> Kbytes"
+set zlabel "Kbytes/sec"</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot 'bkwdread/iozone_gen_out.gnuplot' using 1:2:3 title "Read Backwards performance" with lines
+pause -1 "Hit return to continue"
+set terminal postscript color
+set output "bkwdread/bkwdread.ps"
+splot 'bkwdread/iozone_gen_out.gnuplot' using 1:2:3 title "Read Backwards performance" with lines</p>
+
+<p>set terminal x11
+set title "Iozone performance"
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel "File size in 2<sup>n</sup> KBytes"
+set ylabel "Record size in 2<sup>n</sup> Kbytes"
+set zlabel "Kbytes/sec"</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot 'recrewrite/iozone_gen_out.gnuplot' using 1:2:3 title "Record rewrite performance" with lines
+pause -1 "Hit return to continue"
+set terminal postscript color
+set output "recrewrite/recrewrite.ps"
+splot 'recrewrite/iozone_gen_out.gnuplot' using 1:2:3 title "Record rewrite performance" with lines</p>
+
+<p>set terminal x11
+set title "Iozone performance"
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel "File size in 2<sup>n</sup> KBytes"
+set ylabel "Record size in 2<sup>n</sup> Kbytes"
+set zlabel "Kbytes/sec"</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot 'strideread/iozone_gen_out.gnuplot' using 1:2:3 title "Stride read performance" with lines
+pause -1 "Hit return to continue"
+set terminal postscript color
+set output "strideread/strideread.ps"
+splot 'strideread/iozone_gen_out.gnuplot' using 1:2:3 title "Stride read performance" with lines</p>
+
+<p>set terminal x11
+set title "Iozone performance"
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel "File size in 2<sup>n</sup> KBytes"
+set ylabel "Record size in 2<sup>n</sup> Kbytes"
+set zlabel "Kbytes/sec"</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot 'fwrite/iozone_gen_out.gnuplot' using 1:2:3 title "Fwrite performance" with lines
+pause -1 "Hit return to continue"
+set terminal postscript color
+set output "fwrite/fwrite.ps"
+splot 'fwrite/iozone_gen_out.gnuplot' using 1:2:3 title "Fwrite performance" with lines</p>
+
+<p>set terminal x11
+set title "Iozone performance"
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel "File size in 2<sup>n</sup> KBytes"
+set ylabel "Record size in 2<sup>n</sup> Kbytes"
+set zlabel "Kbytes/sec"</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot 'frewrite/iozone_gen_out.gnuplot' using 1:2:3 title "Frewrite performance" with lines
+pause -1 "Hit return to continue"
+set terminal postscript color
+set output "frewrite/frewrite.ps"
+splot 'frewrite/iozone_gen_out.gnuplot' using 1:2:3 title "Frewrite performance" with lines</p>
+
+<p>set terminal x11
+set title "Iozone performance"
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel "File size in 2<sup>n</sup> KBytes"
+set ylabel "Record size in 2<sup>n</sup> Kbytes"
+set zlabel "Kbytes/sec"</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot 'fread/iozone_gen_out.gnuplot' using 1:2:3 title "Fread performance" with lines
+pause -1 "Hit return to continue"
+set terminal postscript color
+set output "fread/fread.ps"
+splot 'fread/iozone_gen_out.gnuplot' using 1:2:3 title "Fread performance" with lines</p>
+
+<p>set terminal x11
+set title "Iozone performance"
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel "File size in 2<sup>n</sup> KBytes"
+set ylabel "Record size in 2<sup>n</sup> Kbytes"
+set zlabel "Kbytes/sec"</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot 'freread/iozone_gen_out.gnuplot' using 1:2:3 title "Freread performance" with lines
+pause -1 "Hit return to exit"
+set terminal postscript color
+set output "freread/freread.ps"
+splot 'freread/iozone_gen_out.gnuplot' using 1:2:3 title "Freread performance" with lines
+[/perl]</p>
+
+<h2>report.pl</h2>
+
+<p>[perl]</p>
+
+<h1>!/usr/bin/perl</h1>
+
+<p>#</p>
+
+<h1>arguments: one of more report files</h1>
+
+<p>#</p>
+
+<h1>Christian Mautner <christian * mautner . ca>, 2005-10-31</h1>
+
+<p>#</p>
+
+<h1>This script is based loosely on the Generate_Graph set</h1>
+
+<h1>of scripts that come with iozone, but is a complete re-write</h1>
+
+<p>#</p>
+
+<h1>The main reason to write this was the need to compare the behaviour of</h1>
+
+<h1>two or more different setups, for tuning filesystems or</h1>
+
+<h1>comparing different pieces of hardware.</h1>
+
+<p>#</p>
+
+<h1>This script is in the public domain, too short and too trivial</h1>
+
+<h1>to deserve a copyright.</h1>
+
+<p>#</p>
+
+<h1>Simply run iozone like, for example, ./iozone -a -g 4G > config1.out (if your machine has 4GB)</h1>
+
+<h1>and then run perl report.pl config1.out</h1>
+
+<h1>or get another report from another box into config2.out and run</h1>
+
+<h1>perl report.pl config1.out config2.out</h1>
+
+<h1>the look in the report_* directory for .png</h1>
+
+<p>#</p>
+
+<h1>If you don't like png or the graphic size, search for "set terminal" in this file and put whatever gnuplot</h1>
+
+<h1>terminal you want. Note I've also noticed that gnuplot switched the set terminal png syntax</h1>
+
+<h1>a while back, you might need "set terminal png small size 900,700"</h1>
+
+<p>#</p>
+
+<p>@Reports=@ARGV;</p>
+
+<p>die "usage: $0 &lt;iozone.out> [&lt;iozone2.out>...]\n" if not @Reports or grep (m|<sup>-|,</sup> @Reports);</p>
+
+<p>die "report files must be in current directory" if grep (m|/|, @Reports);</p>
+
+<p>%columns=(</p>
+
+<pre><code>     'write'     =&gt;3,
+     'read'      =&gt;5,
+     'rewrite'   =&gt;4,
+     'reread'    =&gt;6,
+     'randread'  =&gt;7,
+     'randwrite' =&gt;8,
+     'bkwdread'  =&gt;9,
+     'recrewrite'=&gt;10,
+     'strideread'=&gt;11,
+     'fwrite'    =&gt;12,
+     'frewrite'  =&gt;13,
+     'fread'     =&gt;14,
+     'freread'   =&gt;15,
+     );
+</code></pre>
+
+<p>#</p>
+
+<h1>create output directory. the name is the concatenation</h1>
+
+<h1>of all report file names (minus the file extension, plus</h1>
+
+<h1>prefix report_)</h1>
+
+<p>#
+$outdir="report<em>".join("</em>",map{/([<sup>.]+)(..*)?/</sup> &amp;&amp; $1}(@Reports));</p>
+
+<p>print STDERR "Output directory: $outdir ";</p>
+
+<p>if ( -d $outdir )
+{</p>
+
+<pre><code>print STDERR "(removing old directory) "; 
+system "rm -rf $outdir";
+</code></pre>
+
+<p>}</p>
+
+<p>mkdir $outdir or die "cannot make directory $outdir";</p>
+
+<p>print STDERR "done.\nPreparing data files...";</p>
+
+<p>foreach $report (@Reports)
+{</p>
+
+<pre><code>open(I, $report) or die "cannot open $report for reading";
+$report=~/^([^\.]+)/;
+$datafile="$1.dat";
+push @datafiles, $datafile;
+open(O, "&gt;$outdir/$datafile") or die "cannot open $outdir/$datafile for writing";
+open(O2, "&gt;$outdir/2d-$datafile") or die "cannot open $outdir/$datafile for writing";
+while(&lt;I&gt;)
+{
+    next unless ( /^[\s\d]+$/ );
+    @split = split();
+    # We may have only 7 metrics (no block entries). Replaced == 15 with &gt;=8
+    next unless ( @split &gt;= 8 );
+    print O;
+    print O2 if $split[1] == 16384 or $split[0] == $split[1];
+}
+close I, O, O2;
+</code></pre>
+
+<p>}</p>
+
+<p>print STDERR "done.\nGenerating graphs:";</p>
+
+<p>foreach $column (keys %columns)
+{</p>
+
+<pre><code>print STDERR " $column";
+
+open(G, "&gt;$outdir/$column.do") or die "cannot open $outdir/$column.do for writing";
+print G qq{
+</code></pre>
+
+<p>set title "Iozone performance: $column"
+set grid lt 2 lw 1
+set surface
+set parametric
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel "File size in KBytes"
+set ylabel "Record size in Kbytes"
+set zlabel "Kbytes/sec"</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3</p>
+
+<h1>set terminal png small picsize 900 700</h1>
+
+<p>set terminal png small size 900 700
+set output "$column.png"
+};</p>
+
+<pre><code>print G "splot ". join(", ", map{qq{"$_" using 1:2:$columns{$column} title "$_"}}(@datafiles));
+
+print G "\n";
+
+close G;
+
+open(G, "&gt;$outdir/2d-$column.do") or die "cannot open $outdir/$column.do for writing";
+print G qq{
+</code></pre>
+
+<p>set title "Iozone performance: $column"</p>
+
+<h1>set terminal png small picsize 450 350</h1>
+
+<p>set terminal png small size 450 350
+set logscale x
+set xlabel "File size in KBytes"
+set ylabel "Kbytes/sec"
+set output "2d-$column.png"
+};</p>
+
+<pre><code>print G "plot ". join(", ", map{qq{"2d-$_" using 1:$columns{$column} title "$_" with lines}}(@datafiles));
+
+print G "\n";
+
+close G;
+
+if ( system("cd $outdir &amp;&amp; gnuplot $column.do &amp;&amp; gnuplot 2d-$column.do") )
+{
+    print STDERR "(failed) ";
+}
+else
+{
+    print STDERR "(ok) ";
+}
+</code></pre>
+
+<p>}</p>
+
+<p>print STDERR "done.\n";
+[/perl]</p>
+]]></content>
+  </entry>
+  
+</feed>

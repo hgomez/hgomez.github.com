@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: OpenJDK | Rico's Blog]]></title>
+  <link href="http://hgomez.github.com/blog/categories/openjdk/atom.xml" rel="self"/>
+  <link href="http://hgomez.github.com/"/>
+  <updated>2012-09-30T16:23:42+02:00</updated>
+  <id>http://hgomez.github.com/</id>
+  <author>
+    <name><![CDATA[Henri Gomez]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Servlet containers, startup time]]></title>
+    <link href="http://hgomez.github.com/blog/2011/07/15/servlet-containers-startup-time/"/>
+    <updated>2011-07-15T02:11:03+02:00</updated>
+    <id>http://hgomez.github.com/blog/2011/07/15/servlet-containers-startup-time</id>
+    <content type="html"><![CDATA[<p>With the release of JBoss AS7, we see many comments around about the startup time of Application Servers.
+Even if this appears marginal in real life (an application server is expected to run 24/24 7/7), there is area where startup time is still important like for developpers. In developpment phase, when you have to start/stop your server dozens of times by day, you need fastest start time as possible.</p>
+
+<p>I conducted a very basic and simple test on my MacBook Pro, take various application servers and servlet containers and measure their startup time.</p>
+
+<p>And in this days of Java 7 fever, try these servers with OpenJDK 7 (OS/X version).</p>
+
+<h3>Results on MacBook Pro - Core2Duo 2.66Ghz</h3>
+
+<p><a href="http://blog.hgomez.net/wp-content/uploads/2011/07/Startup6.png"><img src="http://blog.hgomez.net/wp-content/uploads/2011/07/Startup6-1024x473.png" alt="Startup Time of App Servers (3rd try)" /></a></p>
+
+<p>all time in millisecondes</p>
+
+<h3>Remarks</h3>
+
+<ul>
+<li><p>JBoss AS 6 (minimal profile) startup time was about 27s. I didn't include it in graph to keep a good scale for others engines</p></li>
+<li><p>JBoss AS6 seems to start well with OpenJDK 7 but was a bit long to stop, so I had to kill the process</p></li>
+<li><p>JBoss AS7 web-profile and non certified full edition came with no webapp, so a bit less works at startup since no webapp has to be deployed and managed. Injecting a basic webapp take an extra 30ms on next starts.</p></li>
+<li><p>All servers performed pretty the same under Apple JDK 1.6.0-26 and OpenJDK 7.</p></li>
+</ul>
+
+
+<h3>Conclusions</h3>
+
+<ul>
+<li><p>Jetty is still the fastest container to start around.</p></li>
+<li><p>Apache Tomcat team does a good job on Apache Tomcat 7, near twice faster than Apache Tomcat 6 in startup time and not too far than Jetty.</p></li>
+<li><p>JBoss AS7 startup speed improvements are tremendous, about 13 times faster than its predecessor JBoss AS6, congrats guys !</p></li>
+</ul>
+
+
+<p>Raw startup time data available <a href="http://blog.hgomez.net/wp-content/uploads/2011/07/appserver-startup2.txt">here</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Apple JDK’s / OpenJDK's – Core2Duo vs Core i7]]></title>
+    <link href="http://hgomez.github.com/blog/2011/04/18/apple-jdke28099s-openjdks-e28093-core2duo-vs-core-i7/"/>
+    <updated>2011-04-18T21:39:20+02:00</updated>
+    <id>http://hgomez.github.com/blog/2011/04/18/apple-jdke28099s-openjdks-e28093-core2duo-vs-core-i7</id>
+    <content type="html"><![CDATA[<p>Previously I did benchmark of Apple VMs and OpenJDK 6 and I wanted to see how all of the JVMs available today on our Mac on two systems, an old Core2Duo and a newer Core i7. And also see how they perform 32 / 64 bits kernel mode.</p>
+
+<p>So I redo full dacapo bench suite to include OpenJDK 6, and we have now 5 VMs (3 Java 6 and 2 Java 7) :</p>
+
+<ul>
+<li><p>Apple Java 1.6.0_22 - Java HotSpot(TM) 64-Bit Server VM (build 17.1-b03-314, mixed mode)</p></li>
+<li><p>Apple Java 1.6.0_24 - Java HotSpot(TM) 64-Bit Server VM (build 19.1-b02-348, mixed mode)</p></li>
+<li><p>OpenJDK 7 bsd-port - OpenJDK 64-Bit Server VM (build 21.0-b07, mixed mode)</p></li>
+<li><p>OpenJDK 7 macosx-port - OpenJDK 64-Bit Server VM (build 21.0-b07, mixed mode)</p></li>
+<li><p>OpenJDK 6 macports - OpenJDK 64-Bit Server VM (build 17.0-b16, mixed mode)</p></li>
+</ul>
+
+
+<h3>Results on MacBook Pro - Core2Duo 2.66Ghz - 32bits kernel</h3>
+
+<p>[table id=6 /]</p>
+
+<p><a href="http://blog.hgomez.net/wp-content/uploads/2011/04/BenchJVMs-MBP.png"><img src="http://blog.hgomez.net/wp-content/uploads/2011/04/BenchJVMs-MBP-1024x555.png" alt="" /></a></p>
+
+<h3>Results on iMac - Core i7 2.8Ghz -  64bits kernel</h3>
+
+<p>[table id=5 /]</p>
+
+<p><a href="http://blog.hgomez.net/wp-content/uploads/2011/04/BenchIMac.png"><img src="http://blog.hgomez.net/wp-content/uploads/2011/04/BenchIMac-1024x549.png" alt="" /></a></p>
+
+<h2>Conclusion</h2>
+
+<p>As seen if <a href="http://blog.hgomez.net/2011/04/16/apple-jdks-openjdk-back-to-benchs/">previous article</a>,  latest Apple JVM, 1.6.0-24 perform better than the old 1.6.0-22, and still behind OpenJDK 7 and even OpenJDK 6.  OpenJDK 7 bsd-port is still faster (by a small factor) than OpenJDK 7 from macosx-port (built with LLVM), in both simple threaded (Core2Duo, 2 cores) and large threaded (i7 4 cores with hyperthreading).</p>
+
+<p>This benchmark show how good is <a href="http://ark.intel.com/Product.aspx?id=41316">Intel Core i7</a> comparing to previous generation <a href="http://ark.intel.com/Product.aspx?id=37130&amp;code=T9550">Intel Core2Duo</a>, roughly twice as fast.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Apple JDK's / OpenJDK - back to benchs]]></title>
+    <link href="http://hgomez.github.com/blog/2011/04/16/apple-jdks-openjdk-back-to-benchs/"/>
+    <updated>2011-04-16T16:52:06+02:00</updated>
+    <id>http://hgomez.github.com/blog/2011/04/16/apple-jdks-openjdk-back-to-benchs</id>
+    <content type="html"><![CDATA[<p>It's good to see works in progress for Aqua/Cocoa - AWT ports but what about JVM performances ?</p>
+
+<h2>Test vms</h2>
+
+<p>I selected 4 VMs to be tested</p>
+
+<p><code>
+Apple Java 1.6.0_22 - java version "1.6.0_22"
+Java(TM) SE Runtime Environment (build 1.6.0_22-b04-314-10M3406a)
+Java HotSpot(TM) 64-Bit Server VM (build 17.1-b03-314, mixed mode)
+</code></p>
+
+<p><code>
+Apple Java 1.6.0_24 - java version "1.6.0_24"
+Java(TM) SE Runtime Environment (build 1.6.0_24-b07-348-10M3406a)
+Java HotSpot(TM) 64-Bit Server VM (build 19.1-b02-348, mixed mode)
+</code></p>
+
+<p><code>
+OpenJDK 7 bsd-port - openjdk version "1.7.0-internal"
+OpenJDK Runtime Environment (build 1.7.0-internal-henri_2011_04_11_08_24-b00)
+OpenJDK 64-Bit Server VM (build 21.0-b07, mixed mode)
+</code></p>
+
+<p><code>
+OpenJDK 7 macosx-port - openjdk version "1.7.0-internal"
+OpenJDK Runtime Environment (build 1.7.0-internal-b00)
+OpenJDK 64-Bit Server VM (build 21.0-b07, mixed mode)
+</code></p>
+
+<h2>Test system</h2>
+
+<p>My test system is an Apple iMac (iMac11,1 )  with Intel i7 2.80Ghz and 8Gb DDR3 1067Mhz, running under SnowLeopard 10.6.7 64bits.
+I wanted to test 64bits VMs on a 64bits machine and this time use a stronger processor with more threads (ie: 4 cores with hyperthreading).</p>
+
+<h3>DaCapo Benchmarks</h3>
+
+<p>I keep the <a href="http://www.dacapobench.org/">DaCapo 9.12-bach</a>.</p>
+
+<p>Bench tests launched with -n X, ie (java -jar dacapo-9.12-bach.jar -n 10 pmd)</p>
+
+<p>[table id=4 /]</p>
+
+<p><a href="http://blog.hgomez.net/wp-content/uploads/2011/04/Benchs4.png"><img src="http://blog.hgomez.net/wp-content/uploads/2011/04/Benchs4-1024x576.png" alt="" /></a></p>
+
+<h2>Conclusion</h2>
+
+<p>Latest Apple JVM, 1.6.0-24 perform better than the old 1.6.0-22 in all of the tests and is near OpenJDK 7 results.</p>
+
+<p>OpenJDK 7 from the bsd-port perform a little better than the macosx-port. The main difference in build is bsd-port is using stock gcc whereas macos-port use llvm-gcc.</p>
+
+<h3>bsd-port using stock-gcc during OpenJDK build</h3>
+
+<p>[bash]
+Compiling /Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-bsdport-x86_64/workspace/hotspot/src/share/vm/adlc/arena.cpp
+rm -f ../generated/adfiles/arena.o
+/Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-bsdport-x86_64/workspace/ALT_COMPILER_PATH/g++ -D_ALLBSD_SOURCE -D_GNU_SOURCE -DAMD64 -I/Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-bsdport-x86_64/workspace/hotspot/src/share/vm/prims -I/Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-bsdport-x86_64/workspace/hotspot/src/share/vm -I/Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-bsdport-x86_64/workspace/hotspot/src/cpu/x86/vm -I/Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-bsdport-x86_64/workspace/hotspot/src/os_cpu/bsd_x86/vm -I/Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-bsdport-x86_64/workspace/hotspot/src/os/bsd/vm -I/Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-bsdport-x86_64/workspace/hotspot/src/os/posix/vm -I/Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-bsdport-x86_64/workspace/hotspot/src/share/vm/adlc -I../generated -DASSERT -DTARGET_OS_FAMILY_bsd -DTARGET_ARCH_x86 -DTARGET_ARCH_MODEL_x86_64 -DTARGET_OS_ARCH_bsd_x86 -DTARGET_OS_ARCH_MODEL_bsd_x86_64 -DTARGET_COMPILER_gcc -DCOMPILER2 -DCOMPILER1  -fno-rtti -fno-exceptions -pthread -fcheck-new -m64 -pipe -Werror -g -c -o ../generated/adfiles/arena.o /Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-bsdport-x86_64/workspace/hotspot/src/share/vm/adlc/arena.cpp
+[/bash]</p>
+
+<h3>macosx-port using llvm-gcc during OpenJDK build</h3>
+
+<p>[bash]
+Compiling /Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-macosx-universal/workspace/hotspot/src/share/vm/adlc/arena.cpp
+rm -f ../generated/adfiles/arena.o
+llvm-g++ -D_ALLBSD_SOURCE -D_GNU_SOURCE -DIA32 -I/Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-macosx-universal/workspace/hotspot/src/share/vm/prims -I/Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-macosx-universal/workspace/hotspot/src/share/vm -I/Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-macosx-universal/workspace/hotspot/src/cpu/x86/vm -I/Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-macosx-universal/workspace/hotspot/src/os_cpu/bsd_x86/vm -I/Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-macosx-universal/workspace/hotspot/src/os/bsd/vm -I/Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-macosx-universal/workspace/hotspot/src/os/posix/vm -I/Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-macosx-universal/workspace/hotspot/src/share/vm/adlc -I../generated -DASSERT -DTARGET_OS_FAMILY_bsd -DTARGET_ARCH_x86 -DTARGET_ARCH_MODEL_x86_32 -DTARGET_OS_ARCH_bsd_x86 -DTARGET_OS_ARCH_MODEL_bsd_x86_32 -DTARGET_COMPILER_gcc -DCOMPILER2 -DCOMPILER1  -fno-rtti -fno-exceptions -pthread -fcheck-new -m32 -march=i586 -mstackrealign -pipe -Werror -g -c -o ../generated/adfiles/arena.o /Users/henri/Documents/jenkins/data/jobs/openjdk-1.7-macosx-universal/workspace/hotspot/src/share/vm/adlc/arena.cpp
+[/bash]</p>
+
+<p>Performances gain in OpenJDK7 VM vs latest Apple 6 VM is smaller than previously (see previous articles on Apple JDK vs OpenJDK 6), switching to OpenJDK 7 will not be only for pure speed but for functionalities.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[OpenJDK 7 on OS/X and IntelliJ IDEA EAP]]></title>
+    <link href="http://hgomez.github.com/blog/2011/04/16/openjdk-7-on-osx-first-swing-app/"/>
+    <updated>2011-04-16T16:16:27+02:00</updated>
+    <id>http://hgomez.github.com/blog/2011/04/16/openjdk-7-on-osx-first-swing-app</id>
+    <content type="html"><![CDATA[<p>During the last weeks, Apple started to contribute it's Aqua/Cocoa port to OpenJDK 7 on the macosx-port branch. It's still works it progress but it was nice to see some SWING apps like IntelliJ IDEA works on the preliminary release.</p>
+
+<p>I used IntelliJ IDEA EAP (10.5) and tweaked it's startup shell.sh to define AWT_TOOLKIT=CToolkit and add -Dswing.defaultlaf=com.apple.laf.AquaLookAndFeel since Aqua Look and Feel is not default for now.</p>
+
+<p>[bash]
+export CLASSPATH</p>
+
+<p>LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
+export LD_LIBRARY_PATHAWT_TOOLKIT</p>
+
+<h1>AWT/Cocoa port for OpenJDK 7 macosx-port</h1>
+
+<p>export=CToolkit
+JVM_ARGS="-Dswing.defaultlaf=com.apple.laf.AquaLookAndFeel $JVM_ARGS"</p>
+
+<p>cd "$IDEA_BIN_HOME"
+while true ; do
+  $IDEA_JDK/bin/java $JVM_ARGS -Djb.restart.code=88 $IDEA_MAIN_CLASS_NAME $*
+  test $? -ne 88 &amp;&amp; break
+done</p>
+
+<p>[/bash]</p>
+
+<p>Then defined OpenJDK 7 from macosx port (available <a href="http://openjdk-osx-build.googlecode.com/files/OpenJDK-OSX-1.7-universal-20110416.dmg">here</a>) as default JVM and started IntelliJ by calling its shell script :</p>
+
+<p>[bash]
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home
+/Applications/IdeaX-IU-106.396.app/bin/idea.sh
+[/bash]</p>
+
+<p>And I could see a Swing based application running on OpenJDK 7 and OS/X.</p>
+
+<p><a href="http://blog.hgomez.net/wp-content/uploads/2011/04/IntelliJ-OpenJDK7-UI.png"><img src="http://blog.hgomez.net/wp-content/uploads/2011/04/IntelliJ-OpenJDK7-UI-1024x745.png" alt="" /></a></p>
+
+<p>IntelliJ IDEA is so the second major IDE to be compatible with OpenJDK 7 and OS/X - Cocoa, first one was Eclipse thanks to it's SWT/Cocoa bridge.
+I tested with both NetBeans 7 RC1 and RC2 but it didn't works. I hope it will be fixed in NetBeans 7 final release.</p>
+]]></content>
+  </entry>
+  
+</feed>

@@ -9,7 +9,7 @@
   <meta name="author" content="Henri Gomez">
 
   
-  <meta name="description" content=" Blog Archives Recent Posts ">
+  <meta name="description" content="Java on OSX OSX is a good platform for Java development but also running Java applications. Sadly XServe servers are no more available but in many &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -65,7 +65,1547 @@
       <div class="blog-index">
   
   
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/07/20/understanding-java-from-command-line-on-osx/">Understanding Java From Command Line on OSX</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-07-20T20:57:06+02:00" pubdate data-updated="true">Jul 20<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><h1>Java on OSX</h1>
+
+<p>OSX is a good platform for Java development but also running Java applications. Sadly XServe servers are no more available but in many cases Mac Mini could to pretty good works as Java server applications.</p>
+
+<p>For a long time, OSX Java was maintained by Apple, from Sun Hotspot and was often a bit late vs Windows/Linux releases.</p>
+
+<p>With Lion, Apple announced that they won&#8217;t produce Java for their futures OS, starting with Mountain Lion (10.8) and Oracle will do the job as they did for major distributions.</p>
+
+<p>OpenJDK project included OSX support more than one year ago and there is now a very good coverage of Java for OSX.</p>
+
+<p>It take some time to see first official Java 7 from Oracle on OSX, for Lion only, but there was community alternatives like <a href="http://code.google.com/p/openjdk-osx-build/">openjdk-osx-build</a>, where you could find a large choice of OpenJDK for OSX (7, 8, 8 with Lambda, 8 with Jigsaw).</p>
+
+<p>If you install Java&#8217;s from <a href="http://www.oracle.com/technetwork/java/javase/downloads/index.html">Oracle</a> or <a href="http://code.google.com/p/openjdk-osx-build/downloads/list">openjdk-osx-build</a>, you may want to know how to select one of them for your application and even select a specific one for some of your applications.</p>
+
+<h1>Java Preferences</h1>
+
+<p>Apple provide a good tool to select default JVM, Java Preferences :</p>
+
+<p><a href="http://blog.hgomez.net/wp-content/uploads/2012/07/JavaPreferences.png"><img src="http://blog.hgomez.net/wp-content/uploads/2012/07/JavaPreferences.png" alt="" /></a></p>
+
+<p>In this screenshot you could see many JVM, from many sources, <strong>Apple, Oracle</strong> and <strong>openjdk-osx-build</strong> and default ordering Java (from up to bottom).</p>
+
+<p>Here you&#8217;ll see that default JVM will be Apple Java 1.6.0_33-b03-424 in 64bits, next choice will be Apple Java 1.6.0_33-b03-424 in 32bits. You will notice these JVM are marked as System, more on this later.</p>
+
+<p>Next you&#8217;ll find Apple Java 1.6.0_31 in 64 and 32 bits and then Java 1.7 (1.7.0-jdk7u6-b20-20120719) from openjdk-osx-build. By the end you&#8217;ll find latest official Oracle Java 7, aka 1.7.0_05.</p>
+
+<p>What does it means for you in a command line mode, console is just mandatory for any serious OSX geek ?</p>
+
+<p>Let see java used by default :</p>
+
+<p>[bash]
+mbp-rico:~ henri$ java -version
+java version &#8220;1.6.0_33&#8221;
+Java(TM) SE Runtime Environment (build 1.6.0_33-b03-424-11M3720)
+Java HotSpot(TM) 64-Bit Server VM (build 20.8-b03-424, mixed mode)
+[/bash]</p>
+
+<p>Default Java is Apple 1.6.0_33, 64bits as expected, so far so good.</p>
+
+<p>What should i do if I want to select instead Java 7 ?</p>
+
+<h2>Standard Unix way</h2>
+
+<p>You could just update your PATH environment variable to update search path :
+[bash]
+mbp-rico:~ henri$ export PATH=/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home/bin:$PATH
+mbp-rico:~ henri$ java -version
+openjdk version &#8220;1.7.0-jdk7u6-b20&#8221;
+OpenJDK Runtime Environment (build 1.7.0-jdk7u6-b20-20120719)
+OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)
+[/bash]</p>
+
+<p>It works but OSX provide smarter mechanism.</p>
+
+<h2>OSX way</h2>
+
+<p>Keeping in mind we&#8217;re discussing command line operation, updating default JVM via Java Preferences will not be retained, will define instead <strong>JAVA_HOME</strong> environment variable like this :</p>
+
+<p>[bash]
+mbp-rico:~ henri$ export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home/
+mbp-rico:~ henri$ java -version
+openjdk version &#8220;1.7.0-jdk7u6-b20&#8221;
+OpenJDK Runtime Environment (build 1.7.0-jdk7u6-b20-20120719)
+OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)</pre>
+[/bash]</p>
+
+<p>We could keep our current PATH and it will be <strong>Apple java bootstrap</strong> system, living into <strong>/usr/bin/java</strong> who make use of <strong>JAVA_HOME</strong> and launch the proper JVM. Simple but efficient .</p>
+
+<h2>java_home</h2>
+
+<p>As we see previously, Java Preferences define an order of preferred JVM on OSX, like alternatives does on many Linux systems, especially those using <a href="http://www.jpackage.org">JPackage</a> tooling. So there should be a way to get access to these preferences and here entering <strong>java_home</strong></p>
+
+<p>java_home is located in /usr/libexec and has many useful features :</p>
+
+<p>[bash]
+mbp-rico:~ henri$ /usr/libexec/java_home &#8211;help
+Usage: java_home [options&#8230;]</p>
+
+<pre><code>Returns the path to a Java home directory from the current user's settings.
+</code></pre>
+
+<p>Options:</p>
+
+<pre><code>[-v/--version   &lt;version&gt;]       Filter Java versions in the "JVMVersion" form 1.X(+ or *).
+[-a/--arch      &lt;architecture&gt;]  Filter JVMs matching architecture (i386, x86_64, etc).
+[-d/--datamodel &lt;datamodel&gt;]     Filter JVMs capable of -d32 or -d64
+[-t/--task      &lt;task&gt;]          Use the JVM list for a specific task (Applets, WebStart, BundledApp, JNI, or CommandLine)
+[-F/--failfast]                  Fail when filters return no JVMs, do not continue with default.
+[   --exec      &lt;command&gt; ...]   Execute the $JAVA_HOME/bin/&lt;command&gt; with the remaining arguments.
+[-R/--request]                   Request installation of a Java Runtime if not installed.
+[-X/--xml]                       Print full JVM list and additional data as XML plist.
+[-V/--verbose]                   Print full JVM list with architectures.
+[-h/--help]                      This usage information.
+</code></pre>
+
+<p>[/bash]</p>
+
+<p>Let&#8217;s play with <strong>java_home</strong> now.</p>
+
+<p>Obtaining path of default JVM :
+[bash]
+mbp-rico:~ henri$ /usr/libexec/java_home
+/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home</pre>
+[/bash]</p>
+
+<p>Obtaining path of default Java 7 JVM :
+[bash]
+mbp-rico:~ henri$ /usr/libexec/java_home -v 1.7
+/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home</pre>
+[/bash]</p>
+
+<p>Obtaining path of default Java 8 JVM :
+[bash]
+mbp-rico:~ henri$ /usr/libexec/java_home -v 1.8
+/Library/Java/JavaVirtualMachines/1.8.0.jdk/Contents/Home
+[/bash]</p>
+
+<p>Obtaining path of default Java 1.6 32 bits JVM :
+[bash]
+mbp-rico:~ henri$ /usr/libexec/java_home -v 1.6 -a i386
+/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home</pre>
+[/bash]</p>
+
+<p>Obtaining path of default Java 1.6 64 bits JVM :
+[bash]
+mbp-rico:~ henri$ /usr/libexec/java_home -v 1.6 -a x86_64
+/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+[/bash]</p>
+
+<p>Here you could see that 32 and 64bits JVM have the same path. This is because due to universal mode (i386/x86_64), <strong>Apple</strong> produce a dual mode JVM. This is not the case for <strong>Oracle Java 7</strong> where only 64bits JVM is available.</p>
+
+<p>Let&#8217;s combine <strong>java_home</strong> and <strong>JAVA_HOME</strong> :
+[bash]
+mbp-rico:~ henri$ export JAVA_HOME=<code>/usr/libexec/java_home -v 1.7</code>
+mbp-rico:~ henri$ java -version
+openjdk version &#8220;1.7.0-jdk7u6-b20&#8221;
+OpenJDK Runtime Environment (build 1.7.0-jdk7u6-b20-20120719)
+OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)
+[/bash]</p>
+
+<p>This is a very nice features if you want to specify a Java Level (6 or 7) following your<strong> Java Preferences </strong>for some of your server side application (let say <strong>Apache Tomcat</strong>) or command operation (like <strong>Apache Maven</strong>).</p>
+
+<p>Typically for my Apache Tomcat powered application like Jenkins, I usually set it in bin/setenv.sh :
+[bash]
+export JAVA_HOME=<code>/usr/libexec/java_home -v 1.7</code>
+CATALINA_OPTS=-Xms256m -Xmx512m -DJENKINS_HOME=$JENKINS_HOME -Dhudson.model.Hudson.logStartupPerformance=true -Duser.language=en -Djava.awt.headless=true
+[/bash]</p>
+
+<p>Do you want to get a list of all JVM on your system ?</p>
+
+<p>[bash]
+mbp-rico:~ henri$ /usr/libexec/java_home -V
+Matching Java Virtual Machines (33):</p>
+
+<pre><code>1.6.0_33-b03-424, x86_64:   "Java SE 6" /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+1.6.0_33-b03-424, i386: "Java SE 6" /System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+1.6.0_31-b04-411, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_31-b04-411.jdk/Contents/Home
+1.6.0_31-b04-411, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_31-b04-411.jdk/Contents/Home
+1.7.0-jdk7u6-b20-20120719, x86_64:  "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home
+1.8.0-jdk8-b47-20120720, x86_64:    "OpenJDK 8" /Library/Java/JavaVirtualMachines/1.8.0.jdk/Contents/Home
+1.7.0-jdk7u4-b21-20120427, i386:    "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u4.jdk/Contents/Home
+1.7.0_05, x86_64:   "Java SE 7" /Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home
+1.6.0_33-b03-424, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_33-b03-424.jdk/Contents/Home
+1.6.0_33-b03-424, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_33-b03-424.jdk/Contents/Home
+1.8.0-jdk8-b45-20120713-jigsaw, x86_64: "OpenJDK 8" /Library/Java/JavaVirtualMachines/1.8.0-jigsaw.jdk/Contents/Home
+1.8.0-b48-20120720-lambda, x86_64:  "OpenJDK 8" /Library/Java/JavaVirtualMachines/1.8.0-lambda.jdk/Contents/Home
+1.7.0-jdk7u6-b20-20120719, i386:    "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home
+1.7.0-jdk7u4-b21-20120427, x86_64:  "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u4.jdk/Contents/Home
+1.7.0-jdk7u4-b21-20120421, x86_64:  "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u4-64.jdk/Contents/Home
+1.7.0, x86_64:  "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u.jdk/Contents/Home
+1.7.0, i386:    "OpenJDK 7" /Library/Java/JavaVirtualMachines/1.7.0u.jdk/Contents/Home
+1.6.0_32-b05-420, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_32-b05-420.jdk/Contents/Home
+1.6.0_32-b05-420, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_32-b05-420.jdk/Contents/Home
+1.6.0_32-b05-417, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_32-b05-417.jdk/Contents/Home
+1.6.0_32-b05-417, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_32-b05-417.jdk/Contents/Home
+1.6.0_31-b04-413, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_31-b04-413.jdk/Contents/Home
+1.6.0_31-b04-413, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_31-b04-413.jdk/Contents/Home
+1.6.0_30-b12-409, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_30-b12-409.jdk/Contents/Home
+1.6.0_30-b12-409, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_30-b12-409.jdk/Contents/Home
+1.6.0_30-b12-404, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_30-b12-404.jdk/Contents/Home
+1.6.0_30-b12-404, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_30-b12-404.jdk/Contents/Home
+1.6.0_29-b11-397, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_29-b11-397.jdk/Contents/Home
+1.6.0_29-b11-397, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_29-b11-397.jdk/Contents/Home
+1.6.0_27-b07-395, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_27-b07-395.jdk/Contents/Home
+1.6.0_27-b07-395, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_27-b07-395.jdk/Contents/Home
+1.6.0_26-b03-383, x86_64:   "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_26-b03-383.jdk/Contents/Home
+1.6.0_26-b03-383, i386: "Java SE 6" /Library/Java/JavaVirtualMachines/1.6.0_26-b03-383.jdk/Contents/Home
+</code></pre>
+
+<p>/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+[/bash]</p>
+
+<h2>Note on JVM Locations</h2>
+
+<p>You may have noticed many differents paths for JVM :</p>
+
+<ul>
+<li><p>/System/Library/Java/JavaVirtualMachines is where Apple install System JVM. Here you could have only one JVM by family, ie 1.6, 1.7. These JVM will be available to all users on system.</p></li>
+<li><p>/Library/Java/JavaVirtualMachines is a slot location for guest JVMs, specially designed to host contributors JVM like <strong>Oracle</strong>, <strong>openjdk-osx-build </strong>or<strong> Apple Developper Preview JVMs</strong> Also, these JVM will be available to all users on system.</p></li>
+<li><p>/Users/bill/Library/Java/JavaVirtualMachines is a slot for contributor JVMs but only available to user bill.</p></li>
+</ul>
+
+
+<h2>To conclude</h2>
+
+<p>OSX is probably the platform with the more choice of Java to run and experiment, Java 6, Java 7, OpenJDK 7, 8, Lambda, Jigsaw.</p>
+
+<p>And with its <strong>/usr/libexec/java_home</strong> and <strong>JAVA_HOME</strong> environment variable, you could select any of them for your console or command mode operations very easily.</p>
+
+<p>Enjoy Java on OSX !</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/06/13/building-universal-apache-tomcat-native-library-on-osx-updated/">Building Universal Apache Tomcat Native Library on OS/X - Updated</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-06-13T10:28:13+02:00" pubdate data-updated="true">Jun 13<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Updated build process for tomcat-connector, 1.1.24, no more APXS variable or configure parameters required</p>
+
+<p>[bash]
+TCN_RELEASE=1.1.24
+curl http://mir2.ovh.net/ftp.apache.org/dist//tomcat/tomcat-connectors/native/$TCN_RELEASE/source/tomcat-native-$TCN_RELEASE-src.tar.gz -o tomcat-native-$TCN_RELEASE-src.tar.gz
+tar xvzf tomcat-native-$TCN_RELEASE-src.tar.gz
+cd tomcat-native-$TCN_RELEASE-src/jni/native</p>
+
+<p>CFLAGS=&#8217;-arch i386 -arch x86_64&#8217; APXSLDFLAGS=&#8217;-arch i386 -arch x86_64&#8217; ./configure &#8211;with-apr=/usr &#8211;with-ssl=/usr &#8211;with-java-home=/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+make clean
+make</p>
+
+<p>sudo cp .libs/libtcnative-1.0.1.24.dylib /usr/lib/java
+sudo rm -f  /usr/lib/java/libtcnative-1.dylib
+sudo ln -s /usr/lib/java/libtcnative-1.0.1.24.dylib /usr/lib/java/libtcnative-1.dylib
+[/bash]</p>
+
+<h3>A note about Lion</h3>
+
+<p>If you get Java on Lion using the java command on terminal or via the Java Developer Package for Mac OS X 10.7, Java headers are not on the usual location and you could find them under <strong>/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers</strong></p>
+
+<p>You should then update the <strong>configure</strong> command line like this :
+[bash]
+CFLAGS=&#8217;-arch i386 -arch x86_64&#8217; ./configure &#8211;with-apr=/usr &#8211;with-ssl=/usr &#8211;with-java-home=/System/Library/Frameworks/JavaVM.framework/Versions/A/
+[/bash]</p>
+
+<p>[bash]
+TCN_RELEASE=1.1.24
+curl http://mir2.ovh.net/ftp.apache.org/dist//tomcat/tomcat-connectors/native/$TCN_RELEASE/source/tomcat-native-$TCN_RELEASE-src.tar.gz -o tomcat-native-$TCN_RELEASE-src.tar.gz
+tar xvzf tomcat-native-$TCN_RELEASE-src.tar.gz
+cd tomcat-native-$TCN_RELEASE-src/jni/native</p>
+
+<p>CFLAGS=&#8217;-arch i386 -arch x86_64&#8217; ./configure &#8211;with-apr=/usr &#8211;with-ssl=/usr &#8211;with-java-home=/System/Library/Frameworks/JavaVM.framework/Versions/A/
+make clean
+make</p>
+
+<p>sudo cp .libs/libtcnative-1.0.dylib /usr/lib/java
+sudo rm -f  /usr/lib/java/libtcnative-1.dylib
+sudo ln -s /usr/lib/java/libtcnative-1.0.dylib /usr/lib/java/libtcnative-1.dylib
+[/bash]</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/21/using-apache-tomcat-connector-mod_jk-on-osx/">Using Apache Tomcat Connector (Mod_jk) on OSX</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-21T09:48:34+01:00" pubdate data-updated="true">Mar 21<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>You&#8217;ll need first mod_jk installed, follow <a href="http://blog.hgomez.net/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx/">Building Guide</a>.</p>
+
+<p>Create /etc/apache2/other/jk.conf :</p>
+
+<p>[bash]</p>
+
+<h1>Load JK Module</h1>
+
+<p>LoadModule jk_module     libexec/apache2/mod_jk.so</p>
+
+<h1>JK workers.properties</h1>
+
+<p>JkWorkersFile /etc/apache2/other/workers.properties</p>
+
+<h1>JK shared memory location</h1>
+
+<p>JkShmFile     /var/log/apache2/mod_jk.shm</p>
+
+<h1>JK logs</h1>
+
+<p>JkLogFile     /var/log/apache2/mod_jk.log</p>
+
+<h1>JK log level [debug/error/info]</h1>
+
+<p>JkLogLevel    info</p>
+
+<h1>JK timestamp log format</h1>
+
+<p>JkLogStampFormat &#8220;[%a %b %d %H:%M:%S %Y] &#8221;
+[/bash]</p>
+
+<p>Create /etc/apache2/other/workers.properties</p>
+
+<p>[bash]
+worker.list=jenkins,watch,manage</p>
+
+<h1>Set properties for worker jenkins (ajp13)</h1>
+
+<p>worker.jenkins.type=ajp13
+worker.jenkins.host=localhost
+worker.jenkins.port=8009</p>
+
+<h1>status workers</h1>
+
+<p>worker.watch.type=status
+worker.watch.read_only=true
+worker.watch.mount=/user/status/jk
+worker.manage.type=status
+worker.manage.mount=/admin/status/jk
+[/bash]</p>
+
+<p>I choose to use VirtualName Hosting and so defined one into /etc/apache2/extra/httpd-vhosts.conf :</p>
+
+<p>[bash]
+NameVirtualHost *:80</p>
+
+<p><VirtualHost *:80></p>
+
+<pre><code>ServerName  mbpbuilder.hgomez.net
+ServerAlias mbpbuilder
+ServerAdmin webmaster@mbpbuilder.hgomez.net
+
+ErrorLog    "/var/log/apache2/mbpbuilder.org-error_log"
+CustomLog   "/var/log/apache2/mbpbuilder-access_log" common
+
+JkMount  /* jenkins
+</code></pre>
+
+<p></VirtualHost>
+[/bash]</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx/">Building Universal Apache Tomcat Connector (Mod_jk) on OSX</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-21T09:31:18+01:00" pubdate data-updated="true">Mar 21<span>st</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Build Universal Apache Tomcat Connector (mod_jk) for OSX follow tricks used for Apache Tomcat Native Library.</p>
+
+<p>[bash]
+CFLAGS=&#8217;-arch i386 -arch x86_64&#8217; APXSLDFLAGS=&#8217;-arch i386-arch x86_64&#8217;
+[/bash]</p>
+
+<p>Here is a small script to do it :</p>
+
+<p>[bash]</p>
+
+<h1>!/bin/sh</h1>
+
+<p>#</p>
+
+<p>JK_VERSION=1.2.37</p>
+
+<p>curl http://mir2.ovh.net/ftp.apache.org/dist/tomcat/tomcat-connectors/jk/tomcat-connectors-${JK_VERSION}-src.tar.gz -o tomcat-connectors-${JK_VERSION}-src.tar.gz
+tar xvzf tomcat-connectors-${JK_VERSION}-src.tar.gz
+cd tomcat-connectors-${JK_VERSION}-src/native</p>
+
+<p>./configure &#8211;with-apxs=/usr/sbin/apxs CFLAGS=&#8217;-arch i386 -arch x86_64&#8217; APXSLDFLAGS=&#8217;-arch i386-arch x86_64&#8217;
+make clean
+make
+[/bash]</p>
+
+<p>Installation is pretty simple :</p>
+
+<p>[bash]
+sudo cp apache-2.0/.libs/mod_jk.so /usr/libexec/apache2/
+[/bash]</p>
+
+<p>You could then restart your Apache HTTPd server to get new mod_jk used :</p>
+
+<p>[bash]
+sudo /usr/sbin/apachectl restart
+[/bash]</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/03/18/ssd-or-not-ssd/">SSD or Not SSD ?</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-03-18T10:58:01+01:00" pubdate data-updated="true">Mar 18<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>My MacBookPro is quite old now :</p>
+
+<ul>
+<li><p>MacBook Pro 5.1 (Late 2008)</p></li>
+<li><p>Core2Duo 2.66Ghz</p></li>
+</ul>
+
+
+<p>Under Lion, MBP appears to be sometime laggy even if I already updated it :</p>
+
+<ul>
+<li><p>Replaced original 4Gb RAM to 8Gb DDR3 (GSkill PC8500 SQ (1066 MHz), 7-7-7-20)</p></li>
+<li><p>Replaced original Hitachi 320GB/5400 RPM by a 500Gb WesternDigital Black Black 7200RPM (WD5000BEKT-75KA9T0)</p></li>
+</ul>
+
+
+<p>I run <a href="http://www.primatelabs.ca/geekbench/">GeekBench 2.2.7</a> and give me a bench result of <strong>3752</strong> :
+[bash]
+Benchmark Summary
+  Integer Score              3123 |||||||||
+  Floating Point Score       5493 ||||||||||||||||
+  Memory Score               2629 |||||||
+  Stream Score               2110 ||||||</p>
+
+<p>  Geekbench Score            3752 |||||||||||</p>
+
+<p>System Information
+  Operating System      Mac OS X 10.7.3 (Build 11D50)
+  Model                 MacBook Pro (Late 2008)
+  Motherboard           Apple Inc. Mac-F42D86A9 Proto
+  Processor             Intel Core 2 Duo T9550 @ 2.66 GHz</p>
+
+<pre><code>                    1 Processor, 2 Cores, 2 Threads
+</code></pre>
+
+<p>  Processor ID          GenuineIntel Family 6 Model 23 Stepping 10
+  L1 Instruction Cache  32.0 KB x 2
+  L1 Data Cache         32.0 KB x 2
+  L2 Cache              6.00 MB
+  L3 Cache              0.00 B
+  Memory                8.00 GB 1067 MHz DDR3
+  BIOS                  Apple Inc.    MBP51.88Z.007E.B06.1202061253
+[/bash]</p>
+
+<p>IOs seems to be the limiting factor, especially when I&#8217;m using VirtualBox, I feel a slow IO performances.</p>
+
+<h2>Time to bench IOs</h2>
+
+<p>There is no tools like <strong><strong>HD Tune </strong></strong>on OSX, so I wrote a very simple shell script to measure raw IO performances.</p>
+
+<p>[bash]</p>
+
+<h1>!/bin/sh</h1>
+
+<p>COUNT=2048</p>
+
+<p>echo &#8220;testing pseudo-IO performances - 1st Pass&#8221;
+dd if=/dev/zero of=/dev/null bs=1m count=$COUNT</p>
+
+<p>echo &#8220;testing IO write performances - 1st Pass&#8221;
+dd if=/dev/zero of=PERFTEST bs=1m count=$COUNT</p>
+
+<p>echo &#8220;testing IO read performances - 1st Pass&#8221;
+dd if=PERFTEST of=/dev/null bs=1m count=$COUNT</p>
+
+<p>echo &#8220;testing IO read performances - 2nd Pass&#8221;
+dd if=PERFTEST of=/dev/null bs=1m count=$COUNT</p>
+
+<p>echo &#8220;testing IO write performances - 2nd Pass&#8221;
+dd if=/dev/zero of=PERFTEST bs=1m count=$COUNT
+[/bash]</p>
+
+<p>Results :</p>
+
+<p>[bash]
+testing pseudo-IO performances - 1st Pass
+2048+0 records in
+2048+0 records out
+2147483648 bytes transferred in 0.225590 secs (9519410157 bytes/sec)
+testing IO write performances - 1st Pass
+2048+0 records in
+2048+0 records out
+2147483648 bytes transferred in 29.882202 secs (71864973 bytes/sec)
+testing IO read performances - 1st Pass
+2048+0 records in
+2048+0 records out
+2147483648 bytes transferred in 0.677308 secs (3170615711 bytes/sec)
+testing IO read performances - 2nd Pass
+2048+0 records in
+2048+0 records out
+2147483648 bytes transferred in 0.675835 secs (3177527036 bytes/sec)
+testing IO write performances - 2nd Pass
+2048+0 records in
+2048+0 records out
+2147483648 bytes transferred in 33.203725 secs (64675986 bytes/sec)
+[/bash]</p>
+
+<p>Note, I run this performance tests from a directory excluded from Spotlight indexing !</p>
+
+<p><a href="http://blog.hgomez.net/wp-content/uploads/2012/03/SpotLight-Exclude.png"><img src="http://blog.hgomez.net/wp-content/uploads/2012/03/SpotLight-Exclude.png" alt="" /></a></p>
+
+<ul>
+<li><p>Pseudo IO performance is justing virtual IO (/dev/zero and /dev/null), so it provide max raw IO performance : <strong>9078 MB/s</strong></p></li>
+<li><p>Write IO performance is between <strong>61</strong> and <strong>68 MB/s</strong></p></li>
+<li><p>Read IO performance is very high with <strong>3023 MB/s</strong></p></li>
+</ul>
+
+
+<p>I replayed script raising COUNT from <strong>2048</strong> to <strong>20480</strong> to reduce OSX ram buffer impact in Read IO performance but still get about <strong>2000 MB/s</strong></p>
+
+<h3>iStat Menu disk activity - Write Performance</h3>
+
+<p><a href="http://blog.hgomez.net/wp-content/uploads/2012/03/WD-Perfs.png"><img src="http://blog.hgomez.net/wp-content/uploads/2012/03/WD-Perfs.png" alt="" /></a></p>
+
+<h2>Conclusions</h2>
+
+<ul>
+<li><p>WD Black Edition perform pretty well on raw sequential Read Operations</p></li>
+<li><p>With its average <strong>63 MB/s</strong> raw sequential Write Operations, WD is about 7 time slower than faster SSD like <strong>OCZ Vertex 3</strong></p></li>
+</ul>
+
+
+<p>Is it time to update MBP to SSD ? Probably and my candidates are :</p>
+
+<ul>
+<li><p>Crucial M4 128GB. This SSD is reported very stable and reliable. Bonus, its firmware could be updated from Mac.</p></li>
+<li><p>OCZ Vertex 3 120GB. This SSD is top performer in benchmarks but Googling it reports many reliability problems.</p></li>
+</ul>
+
+
+<p>I&#8217;d like to get feedback from you, performing same performance testing on your Mac hardware (MBP/ SSD configurations very welcomed).</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/02/20/devops-logo-2nd-try/">DevOps Logo 2nd Try</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-20T15:34:55+01:00" pubdate data-updated="true">Feb 20<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>Here is the second try of logos for DevOps, still provided by Sabrina (@saabpii).
+She carefully tracked comments here and on Twitter :</p>
+
+<p><a href="http://blog.hgomez.net/wp-content/uploads/2012/02/logo_devops_v2.jpg"><img src="http://blog.hgomez.net/wp-content/uploads/2012/02/logo_devops_v2.jpg" alt="" /></a></p>
+
+<p>Please vote for your preferred one.</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/02/08/devops-logos/">DevOps Logos</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-02-08T09:08:27+01:00" pubdate data-updated="true">Feb 8<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I asked some times ago Sabrina Perrin (@saabpii) a great graphic designer I worked with for years, if she could try to works on some DevOps logo.</p>
+
+<p>As expected she has been very motivated and inspired.</p>
+
+<p>Here are the results :</p>
+
+<p>[caption id=&#8221;attachment_964&#8221; align=&#8221;alignnone&#8221; width=&#8221;1181&#8221; caption=&#8221;some DevOps Logo&#8221;]<a href="http://blog.hgomez.net/wp-content/uploads/2012/02/logo_devops2.jpg"><img src="http://blog.hgomez.net/wp-content/uploads/2012/02/logo_devops2.jpg" alt="" /></a>[/caption]</p>
+
+<p>Now I need you to comments and votes for them.</p>
+
+<p>All of this artwork is free to use, just mention Sabrina somewhere on your sites/blogs/presentations.</p>
+
+<p>Thanks again Sabrina !</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2012/01/28/uninstalling-macfuse-on-lion/">Uninstalling MacFuse on Lion</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-01-28T10:13:42+01:00" pubdate data-updated="true">Jan 28<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>If you installed MacFuse on Lion (10.7) and tried to uninstall you may encountered the following error :</p>
+
+<p>[bash]
+sudo /Library/Filesystems/fusefs.fs/Support/uninstall-macfuse-core.sh
+MacFUSE Uninstaller: Can not find the Archive.bom for MacFUSE Core package.
+[/bash]</p>
+
+<p>Uninstaller didn&#8217;t check for Lion (uname -r reporting 11.x).
+So fix is easy, just edit uninstaller script <strong>/Library/Filesystems/fusefs.fs/Support/uninstall-macfuse-core.sh</strong> and add 11<em>) in case next to 10</em>)</p>
+
+<p>[bash]
+&#8230;</p>
+
+<p>OS_RELEASE=<code>/usr/bin/uname -r</code>
+case &#8220;$OS_RELEASE&#8221; in
+  8*)</p>
+
+<pre><code>log "Incorrect uninstall. Use the Tiger version please."
+exit 1
+;;
+</code></pre>
+
+<p>  9*)</p>
+
+<pre><code>PACKAGE_RECEIPT="$INSTALL_VOLUME/Library/Receipts/MacFUSE Core.pkg"
+OUTER_PACKAGE_RECEIPT="$INSTALL_VOLUME/Library/Receipts/MacFUSE.pkg"
+BOMFILE="$PACKAGE_RECEIPT/Contents/Archive.bom"
+;;
+</code></pre>
+
+<p>  10<em>|11</em>)</p>
+
+<pre><code> PACKAGE_RECEIPT=""
+ BOMFILE="$INSTALL_VOLUME/var/db/receipts/com.google.macfuse.core.bom"
+ ;;
+</code></pre>
+
+<p>esac
+[/bash]</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/12/28/batch-rpm-signing/">Batch Rpm Signing</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-28T18:05:42+01:00" pubdate data-updated="true">Dec 28<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;m using <a href="http://jenkins-ci.org/">Jenkins</a> to build RPMs with free-style scripts.</p>
+
+<p>Decent RPM packager should sign his RPMs so they could be checked by yum/zypper tools.</p>
+
+<p>Here you could be in trouble since rpm signing require a password to be passed in command line :</p>
+
+<p>[bash]
+rpm &#8211;addsign -D &#8221;<em>signature gpg&#8221; -D &#8221;</em>gpg_name packagers@myforge.org&#8221; RPMS/noarch/myjenkins-1.0.0-1.noarch.rpm<br />
+Enter pass phrase:<br />
+[/bash]</p>
+
+<p>It&#8217;s quite problematic for a RPM build factory.</p>
+
+<p>After digging around Internet, best solution appears to be using <a href="http://expect.sourceforge.net/">expect</a> and I developped a simple script for such purpose with following constraints :</p>
+
+<ul>
+<li><p>packager gpg name should be parametized (to avoid injecting it in ~/.rpmmacros)</p></li>
+<li><p>gpg passphrase should be provided to command line (could be read from a secret file)</p></li>
+</ul>
+
+
+<p>[bash]</p>
+
+<h1>!/usr/bin/expect -f</h1>
+
+<p>#</p>
+
+<h1>rpmsign-batch.expect : expect powered rpm signing command</h1>
+
+<p>#</p>
+
+<p>proc usage {} {</p>
+
+<pre><code>    send_user "Usage: rpmsign-batch.expect gpgname passphrase rpmfile\n\n"
+    exit
+</code></pre>
+
+<p>}</p>
+
+<p>if {[llength $argv]!=3} usage</p>
+
+<p>set gpgname [lrange $argv 0 0]
+set passphrase [lrange $argv 1 1]
+set rpmfile [lrange $argv 2 2]</p>
+
+<p>send_user &#8220;passphrase=$passphrase gpgname=$gpgname\n&#8221;</p>
+
+<p>spawn rpm &#8211;addsign -D &#8221;<em>signature gpg&#8221; -D &#8221;</em>gpg_name $gpgname&#8221; $rpmfile
+expect -exact &#8220;Enter pass phrase: &#8221;
+send &#8211; &#8220;$passphrase\r&#8221;
+expect eof
+[/bash]</p>
+
+<p>You could then use it to sign rpms from your freestyle jobs like :</p>
+
+<p>[bash]</p>
+
+<h1>Password provided in clear in job (weird)</h1>
+
+<p>rpmsign-batch.expect packagers@myforge.org mypassphrase RPMS/noarch/myjenkins-1.0.0-1.noarch.rpm</p>
+
+<h1>Password grabbed from a secret file (better)</h1>
+
+<p>PASSPHRASE=<code>cat /my/secret-passphrase-file</code>
+rpmsign-batch.expect packagers@myforge.org $PASSPHRASE RPMS/noarch/myjenkins-1.0.0-1.noarch.rpm
+[/bash]</p>
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
+      
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/11/03/iozone-and-gnuplot-4-x/">Iozone and Gnuplot 4.x</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-03T20:16:40+01:00" pubdate data-updated="true">Nov 3<span>rd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.iozone.org/">Iozone </a> is a great tool to mesure performance of filesystem.
+You could find 10 examples <a href="http://www.thegeekstuff.com/2011/05/iozone-examples/">here</a>.</p>
+
+<p>In it latest version, 3.97, it came with reporting tools, <strong>report.pl</strong> and <strong>gengnuplot.sh</strong>, who use gnuplot to render images.</p>
+
+<p><a href="http://blog.hgomez.net/wp-content/uploads/2011/11/2d-recrewrite.png"><img src="http://blog.hgomez.net/wp-content/uploads/2011/11/2d-recrewrite.png" alt="" /></a></p>
+
+<p><a href="http://blog.hgomez.net/wp-content/uploads/2011/11/recrewrite.png"><img src="http://blog.hgomez.net/wp-content/uploads/2011/11/recrewrite.png" alt="" /></a></p>
+
+<p>Due to changes in GnuPlot 4.x, <strong>report.pl</strong> and <strong>gnu3d.dem</strong> need to be updated to works.
+Also you may get only <strong>8 metrics</strong> in reports instead of <strong>15</strong> expected in latest release of <strong>report.pl</strong></p>
+
+<h2>gnu3d.dem</h2>
+
+<p>[perl]
+#</p>
+
+<h1>$Id: 3D plot of performance</h1>
+
+<p>#</p>
+
+<h1>Processes files that were created by Generate_Graphs</h1>
+
+<h1>and displays the results. Also, saves a postscript copy.</h1>
+
+<p>#</p>
+
+<h1>Don Capps</h1>
+
+<p>set terminal x11
+set title &#8220;Iozone performance&#8221;
+set grid lt 2 lw 1
+set surface
+set parametric
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel &#8220;File size in 2<sup>n</sup> KBytes&#8221;
+set ylabel &#8220;Record size in 2<sup>n</sup> Kbytes&#8221;
+set zlabel &#8220;Kbytes/sec&#8221;</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot &#8216;write/iozone_gen_out.gnuplot&#8217; title &#8220;Write performance&#8221;
+pause -1 &#8220;Hit return to continue&#8221;
+set terminal postscript color
+set output &#8220;write/write.ps&#8221;
+splot &#8216;write/iozone_gen_out.gnuplot&#8217; title &#8220;Write performance&#8221;</p>
+
+<p>set terminal x11
+set title &#8220;Iozone performance&#8221;
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel &#8220;File size in 2<sup>n</sup> KBytes&#8221;
+set ylabel &#8220;Record size in 2<sup>n</sup> Kbytes&#8221;
+set zlabel &#8220;Kbytes/sec&#8221;</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot &#8216;rewrite/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;ReWrite performance&#8221; with lines
+pause -1 &#8220;Hit return to continue&#8221;
+set terminal postscript color
+set output &#8220;rewrite/rewrite.ps&#8221;
+splot &#8216;rewrite/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;ReWrite performance&#8221; with lines</p>
+
+<p>set terminal x11
+set title &#8220;Iozone performance&#8221;
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel &#8220;File size in 2<sup>n</sup> KBytes&#8221;
+set ylabel &#8220;Record size in 2<sup>n</sup> Kbytes&#8221;
+set zlabel &#8220;Kbytes/sec&#8221;</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot &#8216;read/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Read performance&#8221; with lines
+pause -1 &#8220;Hit return to continue&#8221;
+set terminal postscript color
+set output &#8220;read/read.ps&#8221;
+splot &#8216;read/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Read performance&#8221; with lines</p>
+
+<p>set terminal x11
+set title &#8220;Iozone performance&#8221;
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel &#8220;File size in 2<sup>n</sup> KBytes&#8221;
+set ylabel &#8220;Record size in 2<sup>n</sup> Kbytes&#8221;
+set zlabel &#8220;Kbytes/sec&#8221;</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot &#8216;reread/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Reread performance&#8221; with lines
+pause -1 &#8220;Hit return to continue&#8221;
+set terminal postscript color
+set output &#8220;reread/reread.ps&#8221;
+splot &#8216;reread/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Reread performance&#8221; with lines</p>
+
+<p>set terminal x11
+set title &#8220;Iozone performance&#8221;
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel &#8220;File size in 2<sup>n</sup> KBytes&#8221;
+set ylabel &#8220;Record size in 2<sup>n</sup> Kbytes&#8221;
+set zlabel &#8220;Kbytes/sec&#8221;</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot &#8216;randread/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Random read performance&#8221; with lines
+pause -1 &#8220;Hit return to continue&#8221;
+set terminal postscript color
+set output &#8220;randread/randread.ps&#8221;
+splot &#8216;randread/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Random read performance&#8221; with lines</p>
+
+<p>set terminal x11
+set title &#8220;Iozone performance&#8221;
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel &#8220;File size in 2<sup>n</sup> KBytes&#8221;
+set ylabel &#8220;Record size in 2<sup>n</sup> Kbytes&#8221;
+set zlabel &#8220;Kbytes/sec&#8221;</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot &#8216;randwrite/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Random write performance&#8221; with lines
+pause -1 &#8220;Hit return to continue&#8221;
+set terminal postscript color
+set output &#8220;randwrite/randwrite.ps&#8221;
+splot &#8216;randwrite/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Random write performance&#8221; with lines</p>
+
+<p>set terminal x11
+set title &#8220;Iozone performance&#8221;
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel &#8220;File size in 2<sup>n</sup> KBytes&#8221;
+set ylabel &#8220;Record size in 2<sup>n</sup> Kbytes&#8221;
+set zlabel &#8220;Kbytes/sec&#8221;</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot &#8216;bkwdread/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Read Backwards performance&#8221; with lines
+pause -1 &#8220;Hit return to continue&#8221;
+set terminal postscript color
+set output &#8220;bkwdread/bkwdread.ps&#8221;
+splot &#8216;bkwdread/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Read Backwards performance&#8221; with lines</p>
+
+<p>set terminal x11
+set title &#8220;Iozone performance&#8221;
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel &#8220;File size in 2<sup>n</sup> KBytes&#8221;
+set ylabel &#8220;Record size in 2<sup>n</sup> Kbytes&#8221;
+set zlabel &#8220;Kbytes/sec&#8221;</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot &#8216;recrewrite/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Record rewrite performance&#8221; with lines
+pause -1 &#8220;Hit return to continue&#8221;
+set terminal postscript color
+set output &#8220;recrewrite/recrewrite.ps&#8221;
+splot &#8216;recrewrite/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Record rewrite performance&#8221; with lines</p>
+
+<p>set terminal x11
+set title &#8220;Iozone performance&#8221;
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel &#8220;File size in 2<sup>n</sup> KBytes&#8221;
+set ylabel &#8220;Record size in 2<sup>n</sup> Kbytes&#8221;
+set zlabel &#8220;Kbytes/sec&#8221;</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot &#8216;strideread/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Stride read performance&#8221; with lines
+pause -1 &#8220;Hit return to continue&#8221;
+set terminal postscript color
+set output &#8220;strideread/strideread.ps&#8221;
+splot &#8216;strideread/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Stride read performance&#8221; with lines</p>
+
+<p>set terminal x11
+set title &#8220;Iozone performance&#8221;
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel &#8220;File size in 2<sup>n</sup> KBytes&#8221;
+set ylabel &#8220;Record size in 2<sup>n</sup> Kbytes&#8221;
+set zlabel &#8220;Kbytes/sec&#8221;</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot &#8216;fwrite/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Fwrite performance&#8221; with lines
+pause -1 &#8220;Hit return to continue&#8221;
+set terminal postscript color
+set output &#8220;fwrite/fwrite.ps&#8221;
+splot &#8216;fwrite/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Fwrite performance&#8221; with lines</p>
+
+<p>set terminal x11
+set title &#8220;Iozone performance&#8221;
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel &#8220;File size in 2<sup>n</sup> KBytes&#8221;
+set ylabel &#8220;Record size in 2<sup>n</sup> Kbytes&#8221;
+set zlabel &#8220;Kbytes/sec&#8221;</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot &#8216;frewrite/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Frewrite performance&#8221; with lines
+pause -1 &#8220;Hit return to continue&#8221;
+set terminal postscript color
+set output &#8220;frewrite/frewrite.ps&#8221;
+splot &#8216;frewrite/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Frewrite performance&#8221; with lines</p>
+
+<p>set terminal x11
+set title &#8220;Iozone performance&#8221;
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel &#8220;File size in 2<sup>n</sup> KBytes&#8221;
+set ylabel &#8220;Record size in 2<sup>n</sup> Kbytes&#8221;
+set zlabel &#8220;Kbytes/sec&#8221;</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot &#8216;fread/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Fread performance&#8221; with lines
+pause -1 &#8220;Hit return to continue&#8221;
+set terminal postscript color
+set output &#8220;fread/fread.ps&#8221;
+splot &#8216;fread/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Fread performance&#8221; with lines</p>
+
+<p>set terminal x11
+set title &#8220;Iozone performance&#8221;
+set grid lt 2 lw 1
+set surface
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel &#8220;File size in 2<sup>n</sup> KBytes&#8221;
+set ylabel &#8220;Record size in 2<sup>n</sup> Kbytes&#8221;
+set zlabel &#8220;Kbytes/sec&#8221;</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3
+splot &#8216;freread/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Freread performance&#8221; with lines
+pause -1 &#8220;Hit return to exit&#8221;
+set terminal postscript color
+set output &#8220;freread/freread.ps&#8221;
+splot &#8216;freread/iozone_gen_out.gnuplot&#8217; using 1:2:3 title &#8220;Freread performance&#8221; with lines
+[/perl]</p>
+
+<h2>report.pl</h2>
+
+<p>[perl]</p>
+
+<h1>!/usr/bin/perl</h1>
+
+<p>#</p>
+
+<h1>arguments: one of more report files</h1>
+
+<p>#</p>
+
+<h1>Christian Mautner <christian * mautner . ca>, 2005-10-31</h1>
+
+<p>#</p>
+
+<h1>This script is based loosely on the Generate_Graph set</h1>
+
+<h1>of scripts that come with iozone, but is a complete re-write</h1>
+
+<p>#</p>
+
+<h1>The main reason to write this was the need to compare the behaviour of</h1>
+
+<h1>two or more different setups, for tuning filesystems or</h1>
+
+<h1>comparing different pieces of hardware.</h1>
+
+<p>#</p>
+
+<h1>This script is in the public domain, too short and too trivial</h1>
+
+<h1>to deserve a copyright.</h1>
+
+<p>#</p>
+
+<h1>Simply run iozone like, for example, ./iozone -a -g 4G > config1.out (if your machine has 4GB)</h1>
+
+<h1>and then run perl report.pl config1.out</h1>
+
+<h1>or get another report from another box into config2.out and run</h1>
+
+<h1>perl report.pl config1.out config2.out</h1>
+
+<h1>the look in the report_* directory for .png</h1>
+
+<p>#</p>
+
+<h1>If you don&#8217;t like png or the graphic size, search for &#8220;set terminal&#8221; in this file and put whatever gnuplot</h1>
+
+<h1>terminal you want. Note I&#8217;ve also noticed that gnuplot switched the set terminal png syntax</h1>
+
+<h1>a while back, you might need &#8220;set terminal png small size 900,700&#8221;</h1>
+
+<p>#</p>
+
+<p>@Reports=@ARGV;</p>
+
+<p>die &#8220;usage: $0 &lt;iozone.out> [&lt;iozone2.out>&#8230;]\n&#8221; if not @Reports or grep (m|<sup>-|,</sup> @Reports);</p>
+
+<p>die &#8220;report files must be in current directory&#8221; if grep (m|/|, @Reports);</p>
+
+<p>%columns=(</p>
+
+<pre><code>     'write'     =&gt;3,
+     'read'      =&gt;5,
+     'rewrite'   =&gt;4,
+     'reread'    =&gt;6,
+     'randread'  =&gt;7,
+     'randwrite' =&gt;8,
+     'bkwdread'  =&gt;9,
+     'recrewrite'=&gt;10,
+     'strideread'=&gt;11,
+     'fwrite'    =&gt;12,
+     'frewrite'  =&gt;13,
+     'fread'     =&gt;14,
+     'freread'   =&gt;15,
+     );
+</code></pre>
+
+<p>#</p>
+
+<h1>create output directory. the name is the concatenation</h1>
+
+<h1>of all report file names (minus the file extension, plus</h1>
+
+<h1>prefix report_)</h1>
+
+<p>#
+$outdir=&#8221;report<em>&#8220;.join(&#8221;</em>&#8220;,map{/([<sup>.]+)(..*)?/</sup> &amp;&amp; $1}(@Reports));</p>
+
+<p>print STDERR &#8220;Output directory: $outdir &#8220;;</p>
+
+<p>if ( -d $outdir )
+{</p>
+
+<pre><code>print STDERR "(removing old directory) "; 
+system "rm -rf $outdir";
+</code></pre>
+
+<p>}</p>
+
+<p>mkdir $outdir or die &#8220;cannot make directory $outdir&#8221;;</p>
+
+<p>print STDERR &#8220;done.\nPreparing data files&#8230;&#8221;;</p>
+
+<p>foreach $report (@Reports)
+{</p>
+
+<pre><code>open(I, $report) or die "cannot open $report for reading";
+$report=~/^([^\.]+)/;
+$datafile="$1.dat";
+push @datafiles, $datafile;
+open(O, "&gt;$outdir/$datafile") or die "cannot open $outdir/$datafile for writing";
+open(O2, "&gt;$outdir/2d-$datafile") or die "cannot open $outdir/$datafile for writing";
+while(&lt;I&gt;)
+{
+    next unless ( /^[\s\d]+$/ );
+    @split = split();
+    # We may have only 7 metrics (no block entries). Replaced == 15 with &gt;=8
+    next unless ( @split &gt;= 8 );
+    print O;
+    print O2 if $split[1] == 16384 or $split[0] == $split[1];
+}
+close I, O, O2;
+</code></pre>
+
+<p>}</p>
+
+<p>print STDERR &#8220;done.\nGenerating graphs:&#8221;;</p>
+
+<p>foreach $column (keys %columns)
+{</p>
+
+<pre><code>print STDERR " $column";
+
+open(G, "&gt;$outdir/$column.do") or die "cannot open $outdir/$column.do for writing";
+print G qq{
+</code></pre>
+
+<p>set title &#8220;Iozone performance: $column&#8221;
+set grid lt 2 lw 1
+set surface
+set parametric
+set xtics
+set ytics
+set logscale x 2
+set logscale y 2
+set autoscale z</p>
+
+<h1>set xrange [2.<strong>5:2.</strong>24]</h1>
+
+<p>set xlabel &#8220;File size in KBytes&#8221;
+set ylabel &#8220;Record size in Kbytes&#8221;
+set zlabel &#8220;Kbytes/sec&#8221;</p>
+
+<h1>set data style lines</h1>
+
+<p>set style data lines
+set dgrid3d 80,80,3</p>
+
+<h1>set terminal png small picsize 900 700</h1>
+
+<p>set terminal png small size 900 700
+set output &#8220;$column.png&#8221;
+};</p>
+
+<pre><code>print G "splot ". join(", ", map{qq{"$_" using 1:2:$columns{$column} title "$_"}}(@datafiles));
+
+print G "\n";
+
+close G;
+
+open(G, "&gt;$outdir/2d-$column.do") or die "cannot open $outdir/$column.do for writing";
+print G qq{
+</code></pre>
+
+<p>set title &#8220;Iozone performance: $column&#8221;</p>
+
+<h1>set terminal png small picsize 450 350</h1>
+
+<p>set terminal png small size 450 350
+set logscale x
+set xlabel &#8220;File size in KBytes&#8221;
+set ylabel &#8220;Kbytes/sec&#8221;
+set output &#8220;2d-$column.png&#8221;
+};</p>
+
+<pre><code>print G "plot ". join(", ", map{qq{"2d-$_" using 1:$columns{$column} title "$_" with lines}}(@datafiles));
+
+print G "\n";
+
+close G;
+
+if ( system("cd $outdir &amp;&amp; gnuplot $column.do &amp;&amp; gnuplot 2d-$column.do") )
+{
+    print STDERR "(failed) ";
+}
+else
+{
+    print STDERR "(ok) ";
+}
+</code></pre>
+
+<p>}</p>
+
+<p>print STDERR &#8220;done.\n&#8221;;
+[/perl]</p>
+</div>
+  
+  
+
+
+    </article>
+  
   <div class="pagination">
+    
+      <a class="prev" href="/blog/page/2/">&larr; Older</a>
     
     <a href="/blog/archives">Blog Archives</a>
     
@@ -76,6 +1616,26 @@
     <section>
   <h1>Recent Posts</h1>
   <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/07/20/understanding-java-from-command-line-on-osx/">Understanding java from command line on OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/13/building-universal-apache-tomcat-native-library-on-osx-updated/">Building Universal Apache Tomcat Native Library on OS/X - updated</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/21/using-apache-tomcat-connector-mod_jk-on-osx/">Using Apache Tomcat Connector (mod_jk) on OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx/">Building Universal Apache Tomcat Connector (mod_jk) on OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/18/ssd-or-not-ssd/">SSD or not SSD ?</a>
+      </li>
     
   </ul>
 </section>

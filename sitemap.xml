@@ -1,11 +1,89 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <urlset xmlns='http://www.sitemaps.org/schemas/sitemap/0.9'>
     <url>
+        <loc>
+            http://hgomez.github.com/blog/2011/03/11/maven-tomcat-plugin-and-post-6-0-29-tomcat/
+        </loc>
+        <lastmod>2012-09-30T16:23:22+02:00</lastmod>
+    </url>
+    <url>
+        <loc>http://hgomez.github.com/blog/2011/04/16/openjdk-7-on-osx-first-swing-app/</loc>
+        <lastmod>2012-09-30T16:23:22+02:00</lastmod>
+    </url>
+    <url>
+        <loc>http://hgomez.github.com/blog/2011/04/16/apple-jdks-openjdk-back-to-benchs/</loc>
+        <lastmod>2012-09-30T16:23:22+02:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://hgomez.github.com/blog/2011/04/18/apple-jdke28099s-openjdks-e28093-core2duo-vs-core-i7/
+        </loc>
+        <lastmod>2012-09-30T16:23:22+02:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://hgomez.github.com/blog/2011/07/13/building-universal-apache-tomcat-native-library-on-osx/
+        </loc>
+        <lastmod>2012-09-30T16:23:22+02:00</lastmod>
+    </url>
+    <url>
+        <loc>http://hgomez.github.com/blog/2011/07/15/servlet-containers-startup-time/</loc>
+        <lastmod>2012-09-30T16:23:22+02:00</lastmod>
+    </url>
+    <url>
+        <loc>http://hgomez.github.com/blog/2011/11/03/iozone-and-gnuplot-4-x/</loc>
+        <lastmod>2012-09-30T16:23:22+02:00</lastmod>
+    </url>
+    <url>
+        <loc>http://hgomez.github.com/blog/2011/12/28/batch-rpm-signing/</loc>
+        <lastmod>2012-09-30T16:23:22+02:00</lastmod>
+    </url>
+    <url>
+        <loc>http://hgomez.github.com/blog/2012/01/28/uninstalling-macfuse-on-lion/</loc>
+        <lastmod>2012-09-30T16:23:17+02:00</lastmod>
+    </url>
+    <url>
+        <loc>http://hgomez.github.com/blog/2012/02/08/devops-logos/</loc>
+        <lastmod>2012-09-30T16:23:17+02:00</lastmod>
+    </url>
+    <url>
+        <loc>http://hgomez.github.com/blog/2012/02/20/devops-logo-2nd-try/</loc>
+        <lastmod>2012-09-30T16:23:17+02:00</lastmod>
+    </url>
+    <url>
+        <loc>http://hgomez.github.com/blog/2012/03/18/ssd-or-not-ssd/</loc>
+        <lastmod>2012-09-30T16:23:17+02:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://hgomez.github.com/blog/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx/
+        </loc>
+        <lastmod>2012-09-30T16:23:17+02:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://hgomez.github.com/blog/2012/03/21/using-apache-tomcat-connector-mod_jk-on-osx/
+        </loc>
+        <lastmod>2012-09-30T16:23:17+02:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://hgomez.github.com/blog/2012/06/13/building-universal-apache-tomcat-native-library-on-osx-updated/
+        </loc>
+        <lastmod>2012-09-30T16:23:17+02:00</lastmod>
+    </url>
+    <url>
+        <loc>
+            http://hgomez.github.com/blog/2012/07/20/understanding-java-from-command-line-on-osx/
+        </loc>
+        <lastmod>2012-09-30T16:23:17+02:00</lastmod>
+    </url>
+    <url>
         <loc>http://hgomez.github.com/blog/archives/</loc>
-        <lastmod>2012-09-30T14:40:28+02:00</lastmod>
+        <lastmod>2012-09-30T16:23:22+02:00</lastmod>
     </url>
     <url>
         <loc>http://hgomez.github.com/</loc>
-        <lastmod>2012-09-30T14:40:28+02:00</lastmod>
+        <lastmod>2012-09-30T16:23:22+02:00</lastmod>
     </url>
 </urlset>

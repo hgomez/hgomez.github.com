@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+
+  <title><![CDATA[Category: Tomcat | Rico's Blog]]></title>
+  <link href="http://hgomez.github.com/blog/categories/tomcat/atom.xml" rel="self"/>
+  <link href="http://hgomez.github.com/"/>
+  <updated>2012-09-30T16:23:42+02:00</updated>
+  <id>http://hgomez.github.com/</id>
+  <author>
+    <name><![CDATA[Henri Gomez]]></name>
+    
+  </author>
+  <generator uri="http://octopress.org/">Octopress</generator>
+
+  
+  <entry>
+    <title type="html"><![CDATA[Building Universal Apache Tomcat Native Library on OS/X - updated]]></title>
+    <link href="http://hgomez.github.com/blog/2012/06/13/building-universal-apache-tomcat-native-library-on-osx-updated/"/>
+    <updated>2012-06-13T10:28:13+02:00</updated>
+    <id>http://hgomez.github.com/blog/2012/06/13/building-universal-apache-tomcat-native-library-on-osx-updated</id>
+    <content type="html"><![CDATA[<p>Updated build process for tomcat-connector, 1.1.24, no more APXS variable or configure parameters required</p>
+
+<p>[bash]
+TCN_RELEASE=1.1.24
+curl http://mir2.ovh.net/ftp.apache.org/dist//tomcat/tomcat-connectors/native/$TCN_RELEASE/source/tomcat-native-$TCN_RELEASE-src.tar.gz -o tomcat-native-$TCN_RELEASE-src.tar.gz
+tar xvzf tomcat-native-$TCN_RELEASE-src.tar.gz
+cd tomcat-native-$TCN_RELEASE-src/jni/native</p>
+
+<p>CFLAGS='-arch i386 -arch x86_64' APXSLDFLAGS='-arch i386 -arch x86_64' ./configure --with-apr=/usr --with-ssl=/usr --with-java-home=/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
+make clean
+make</p>
+
+<p>sudo cp .libs/libtcnative-1.0.1.24.dylib /usr/lib/java
+sudo rm -f  /usr/lib/java/libtcnative-1.dylib
+sudo ln -s /usr/lib/java/libtcnative-1.0.1.24.dylib /usr/lib/java/libtcnative-1.dylib
+[/bash]</p>
+
+<h3>A note about Lion</h3>
+
+<p>If you get Java on Lion using the java command on terminal or via the Java Developer Package for Mac OS X 10.7, Java headers are not on the usual location and you could find them under <strong>/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers</strong></p>
+
+<p>You should then update the <strong>configure</strong> command line like this :
+[bash]
+CFLAGS='-arch i386 -arch x86_64' ./configure --with-apr=/usr --with-ssl=/usr --with-java-home=/System/Library/Frameworks/JavaVM.framework/Versions/A/
+[/bash]</p>
+
+<p>[bash]
+TCN_RELEASE=1.1.24
+curl http://mir2.ovh.net/ftp.apache.org/dist//tomcat/tomcat-connectors/native/$TCN_RELEASE/source/tomcat-native-$TCN_RELEASE-src.tar.gz -o tomcat-native-$TCN_RELEASE-src.tar.gz
+tar xvzf tomcat-native-$TCN_RELEASE-src.tar.gz
+cd tomcat-native-$TCN_RELEASE-src/jni/native</p>
+
+<p>CFLAGS='-arch i386 -arch x86_64' ./configure --with-apr=/usr --with-ssl=/usr --with-java-home=/System/Library/Frameworks/JavaVM.framework/Versions/A/
+make clean
+make</p>
+
+<p>sudo cp .libs/libtcnative-1.0.dylib /usr/lib/java
+sudo rm -f  /usr/lib/java/libtcnative-1.dylib
+sudo ln -s /usr/lib/java/libtcnative-1.0.dylib /usr/lib/java/libtcnative-1.dylib
+[/bash]</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Building Universal Apache Tomcat Connector (mod_jk) on OSX]]></title>
+    <link href="http://hgomez.github.com/blog/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx/"/>
+    <updated>2012-03-21T09:31:18+01:00</updated>
+    <id>http://hgomez.github.com/blog/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx</id>
+    <content type="html"><![CDATA[<p>Build Universal Apache Tomcat Connector (mod_jk) for OSX follow tricks used for Apache Tomcat Native Library.</p>
+
+<p>[bash]
+CFLAGS='-arch i386 -arch x86_64' APXSLDFLAGS='-arch i386-arch x86_64'
+[/bash]</p>
+
+<p>Here is a small script to do it :</p>
+
+<p>[bash]</p>
+
+<h1>!/bin/sh</h1>
+
+<p>#</p>
+
+<p>JK_VERSION=1.2.37</p>
+
+<p>curl http://mir2.ovh.net/ftp.apache.org/dist/tomcat/tomcat-connectors/jk/tomcat-connectors-${JK_VERSION}-src.tar.gz -o tomcat-connectors-${JK_VERSION}-src.tar.gz
+tar xvzf tomcat-connectors-${JK_VERSION}-src.tar.gz
+cd tomcat-connectors-${JK_VERSION}-src/native</p>
+
+<p>./configure --with-apxs=/usr/sbin/apxs CFLAGS='-arch i386 -arch x86_64' APXSLDFLAGS='-arch i386-arch x86_64'
+make clean
+make
+[/bash]</p>
+
+<p>Installation is pretty simple :</p>
+
+<p>[bash]
+sudo cp apache-2.0/.libs/mod_jk.so /usr/libexec/apache2/
+[/bash]</p>
+
+<p>You could then restart your Apache HTTPd server to get new mod_jk used :</p>
+
+<p>[bash]
+sudo /usr/sbin/apachectl restart
+[/bash]</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Servlet containers, startup time]]></title>
+    <link href="http://hgomez.github.com/blog/2011/07/15/servlet-containers-startup-time/"/>
+    <updated>2011-07-15T02:11:03+02:00</updated>
+    <id>http://hgomez.github.com/blog/2011/07/15/servlet-containers-startup-time</id>
+    <content type="html"><![CDATA[<p>With the release of JBoss AS7, we see many comments around about the startup time of Application Servers.
+Even if this appears marginal in real life (an application server is expected to run 24/24 7/7), there is area where startup time is still important like for developpers. In developpment phase, when you have to start/stop your server dozens of times by day, you need fastest start time as possible.</p>
+
+<p>I conducted a very basic and simple test on my MacBook Pro, take various application servers and servlet containers and measure their startup time.</p>
+
+<p>And in this days of Java 7 fever, try these servers with OpenJDK 7 (OS/X version).</p>
+
+<h3>Results on MacBook Pro - Core2Duo 2.66Ghz</h3>
+
+<p><a href="http://blog.hgomez.net/wp-content/uploads/2011/07/Startup6.png"><img src="http://blog.hgomez.net/wp-content/uploads/2011/07/Startup6-1024x473.png" alt="Startup Time of App Servers (3rd try)" /></a></p>
+
+<p>all time in millisecondes</p>
+
+<h3>Remarks</h3>
+
+<ul>
+<li><p>JBoss AS 6 (minimal profile) startup time was about 27s. I didn't include it in graph to keep a good scale for others engines</p></li>
+<li><p>JBoss AS6 seems to start well with OpenJDK 7 but was a bit long to stop, so I had to kill the process</p></li>
+<li><p>JBoss AS7 web-profile and non certified full edition came with no webapp, so a bit less works at startup since no webapp has to be deployed and managed. Injecting a basic webapp take an extra 30ms on next starts.</p></li>
+<li><p>All servers performed pretty the same under Apple JDK 1.6.0-26 and OpenJDK 7.</p></li>
+</ul>
+
+
+<h3>Conclusions</h3>
+
+<ul>
+<li><p>Jetty is still the fastest container to start around.</p></li>
+<li><p>Apache Tomcat team does a good job on Apache Tomcat 7, near twice faster than Apache Tomcat 6 in startup time and not too far than Jetty.</p></li>
+<li><p>JBoss AS7 startup speed improvements are tremendous, about 13 times faster than its predecessor JBoss AS6, congrats guys !</p></li>
+</ul>
+
+
+<p>Raw startup time data available <a href="http://blog.hgomez.net/wp-content/uploads/2011/07/appserver-startup2.txt">here</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Building Universal Apache Tomcat Native Library on OS/X]]></title>
+    <link href="http://hgomez.github.com/blog/2011/07/13/building-universal-apache-tomcat-native-library-on-osx/"/>
+    <updated>2011-07-13T17:41:08+02:00</updated>
+    <id>http://hgomez.github.com/blog/2011/07/13/building-universal-apache-tomcat-native-library-on-osx</id>
+    <content type="html"><![CDATA[<p>I recently notice that my Apache Tomcat running on OS/X 10.6.8 couldn't use Apache Tomcat Native Library.</p>
+
+<p>[bash]
+INFO: The APR based Apache Tomcat Native library which allows optimal
+performance in production environments was not found on the
+java.library.path:
+.:/Library/Java/Extensions:/System/Library/Java/Extensions:/usr/lib/java
+Jul 13, 2011 11:02:30 AM org.apache.coyote.http11.Http11Protocol init
+[/bash]</p>
+
+<p>After digging around and with the help of ASFer Mladen Turk, I figure my previous build was stick to 64bits mode only and I switched my JVM to 32bits mode using -d32.</p>
+
+<p>The fix was then easy, just had to rebuild tomcat-native and asking OS/X gcc to produce both 32/64 bits model library using the following CLFAGS/APXSLDFLAGS.</p>
+
+<p>[bash]
+CFLAGS='-arch i386 -arch x86_64' APXSLDFLAGS='-arch i386-arch x86_64'
+[/bash]</p>
+
+<p>Here is a small script I'm using now to produce Apache Tomcat Native Library on OS/X.</p>
+
+<p>[bash]
+curl http://mir2.ovh.net/ftp.apache.org/dist/tomcat/tomcat-connectors/native/1.1.23/source/tomcat-native-1.1.23-src.tar.gz -o tomcat-native-1.1.23-src.tar.gz
+tar xvzf tomcat-native-1.1.23-src.tar.gz
+cd tomcat-native-1.1.23-src/jni/native</p>
+
+<p>CFLAGS='-arch i386 -arch x86_64' APXSLDFLAGS='-arch i386 -arch x86_64' ./configure --with-apr=/usr --with-ssl=/usr --with-java-home=/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home --with-apxs=/usr/sbin/apxs
+make clean
+make</p>
+
+<p>sudo cp .libs/libtcnative-1.0.1.23.dylib /usr/lib/java
+sudo rm -f  /usr/lib/java/libtcnative-1.dylib
+sudo ln -s /usr/lib/java/libtcnative-1.0.1.23.dylib /usr/lib/java/libtcnative-1.dylib
+[/bash]</p>
+
+<h3>A note about Lion</h3>
+
+<p>If you get Java on Lion using the java command on terminal or via the Java Developer Package for Mac OS X 10.7, Java headers are not on the usual location and you could find them under <strong>/System/Library/Frameworks/JavaVM.framework/Versions/A/Headers</strong></p>
+
+<p>You should then update the <strong>configure</strong> command line like this :
+[bash]
+CFLAGS='-arch i386 -arch x86_64' APXSLDFLAGS='-arch i386 -arch x86_64' ./configure --with-apr=/usr --with-apxs=/usr/sbin/apxs --with-ssl=/usr --with-java-home=/System/Library/Frameworks/JavaVM.framework/Versions/A/
+[/bash]</p>
+
+<p>Lion came with Xcode 4.1 and there is also an impact on linker side, libtcnative is now produced as <strong>libtcnative-1.0.dylib</strong></p>
+
+<p>Commands became so :</p>
+
+<p>[bash]
+curl http://mir2.ovh.net/ftp.apache.org/dist//tomcat/tomcat-connectors/native/1.1.23/source/tomcat-native-1.1.23-src.tar.gz -o tomcat-native-1.1.23-src.tar.gz
+tar xvzf tomcat-native-1.1.23-src.tar.gz
+cd tomcat-native-1.1.23-src/jni/native</p>
+
+<p>CFLAGS='-arch i386 -arch x86_64' APXSLDFLAGS='-arch i386 -arch x86_64' ./configure --with-apr=/usr --with-apxs=/usr/sbin/apxs --with-ssl=/usr --with-java-home=/System/Library/Frameworks/JavaVM.framework/Versions/A/
+make clean
+make</p>
+
+<p>sudo cp .libs/libtcnative-1.0.dylib /usr/lib/java
+sudo rm -f  /usr/lib/java/libtcnative-1.dylib
+sudo ln -s /usr/lib/java/libtcnative-1.0.dylib /usr/lib/java/libtcnative-1.dylib
+[/bash]</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Tomcat Maven Plugin and Apache Tomcat post 6.0.29 ]]></title>
+    <link href="http://hgomez.github.com/blog/2011/03/11/maven-tomcat-plugin-and-post-6-0-29-tomcat/"/>
+    <updated>2011-03-11T13:56:04+01:00</updated>
+    <id>http://hgomez.github.com/blog/2011/03/11/maven-tomcat-plugin-and-post-6-0-29-tomcat</id>
+    <content type="html"><![CDATA[<p>If you're using the <a href="http://mojo.codehaus.org/tomcat-maven-plugin/">Tomcat Maven Plugin</a> and want to use post 6.0.29  Apache Tomcat, ie latest 6.0.32, you should update your pom to handle a change in artifact.</p>
+
+<p>Up to 6.0.29, Eclipse JDT compiler was bundled as jasper-jdt :</p>
+
+<p>[xml]
+<dependency></p>
+
+<pre><code>          &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+          &lt;artifactId&gt;jasper-jdt&lt;/artifactId&gt;
+          &lt;version&gt;6.0.29&lt;/version&gt;
+        &lt;/dependency&gt;
+</code></pre>
+
+<p>[/xml]</p>
+
+<p>With <a href="http://tomcat.apache.org/tomcat-6.0-doc/changelog.html">6.0.30</a>, Apache Tomcat team started to bundle Eclipse JDT directly:</p>
+
+<p>[xml]
+<dependency>
+  <groupId>org.eclipse.jdt.core.compiler</groupId>
+  <artifactId>ecj</artifactId>
+  <version>3.5.1</version>
+</dependency>
+[/xml]</p>
+
+<p>As consequence, org.apache.tomcat/jasper-jdt artifact didn't exist anymore after release 6.0.29.</p>
+
+<p>[caption id="attachment_742" align="alignnone" width="743" caption="Jasper JDT up to 6.0.29"]<a href="http://blog.hgomez.net/wp-content/uploads/2011/03/jasper-jdt.png"><img src="http://blog.hgomez.net/wp-content/uploads/2011/03/jasper-jdt.png" alt="Jasper JDT up to 6.0.29" /></a>[/caption]</p>
+
+<p>For Tomcat Maven Plugin, you should update the <a href="http://mojo.codehaus.org/tomcat-maven-plugin/examples/adjust-embedded-tomcat-version.html">suggested pom</a> like this :</p>
+
+<p>[xml]</p>
+
+<pre><code>&lt;build&gt;
+    &lt;pluginManagement&gt;
+        &lt;plugins&gt;
+            &lt;plugin&gt;
+                &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
+                &lt;artifactId&gt;tomcat-maven-plugin&lt;/artifactId&gt;
+                &lt;version&gt;1.2-SNAPSHOT&lt;/version&gt;
+                &lt;dependencies&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;catalina&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;catalina-ha&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;tribes&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;el-api&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;jasper&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;jasper-el&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.eclipse.jdt.core.compiler&lt;/groupId&gt;
+                        &lt;artifactId&gt;ecj&lt;/artifactId&gt;
+                        &lt;version&gt;3.5.1&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;jsp-api&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;servlet-api&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;coyote&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                    &lt;dependency&gt;
+                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
+                        &lt;artifactId&gt;dbcp&lt;/artifactId&gt;
+                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
+                        &lt;scope&gt;runtime&lt;/scope&gt;
+                    &lt;/dependency&gt;
+                &lt;/dependencies&gt;
+            &lt;/plugin&gt;
+        &lt;/plugins&gt;
+    &lt;/pluginManagement&gt;
+</code></pre>
+
+<p>[/xml]</p>
+
+<h3>Notice: An updated version of Tomcat Maven Plugin 1.2-SNAPSHOT has been released, this hack is no more necessary</h3>
+]]></content>
+  </entry>
+  
+</feed>
