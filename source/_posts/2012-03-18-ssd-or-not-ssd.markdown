@@ -145,8 +145,7 @@ Note, I run this performance tests from a directory excluded from Spotlight inde
 
 
 
-
-[![](http://blog.hgomez.net/wp-content/uploads/2012/03/SpotLight-Exclude.png)](http://blog.hgomez.net/wp-content/uploads/2012/03/SpotLight-Exclude.png)
+{% img center /images/SpotLight-Exclude.png  [SpotLight Exclude [SpotLight Exclude]] %}
 
 
 
@@ -176,7 +175,7 @@ I replayed script raising COUNT from **2048** to **20480** to reduce OSX ram buf
 
 
 
-[![](http://blog.hgomez.net/wp-content/uploads/2012/03/WD-Perfs.png)](http://blog.hgomez.net/wp-content/uploads/2012/03/WD-Perfs.png)
+{% img center /images/WD-Perfs.png  [WD Perfs [WD Perfs]] %}
 
 
 ## Conclusions
