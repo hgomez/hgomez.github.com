@@ -4,7 +4,7 @@
   <title><![CDATA[Category: OpenJDK | Rico's Blog]]></title>
   <link href="http://hgomez.github.com/blog/categories/openjdk/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2012-09-30T18:48:24+02:00</updated>
+  <updated>2012-09-30T18:51:02+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -50,7 +50,7 @@ Even if this appears marginal in real life (an application server is expected to
 </ul>
 
 
-<p>Raw startup time data available <a href="http://blog.hgomez.net/wp-content/uploads/2011/07/appserver-startup2.txt">here</a></p>
+<p>Raw startup time data available <a href="https://gist.github.com/3807564">here</a></p>
 ]]></content>
   </entry>
   
