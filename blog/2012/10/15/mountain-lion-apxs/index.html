@@ -159,7 +159,7 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>apxs get its configurations from  <strong>/usr/share/httpd/build/config_vars.mk</strong> who reference <strong>/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain</strong></p>
+<p>apxs get its configurations from <strong>/usr/share/httpd/build/config_vars.mk</strong> who reference <strong>/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain</strong>.</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 <span class='line-number'>2</span>
@@ -168,7 +168,9 @@
 </span></code></pre></td></tr></table></div></figure>
 
 
-<p>If you installed XCode to standard location, you&#8217;ll find toolchain at <strong>/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain</strong> so until Apple fix apxs, you should create a symlink between real and expected location :</p>
+<p>If you installed XCode to standard location, you&#8217;ll find toolchain at <strong>/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain</strong>.</p>
+
+<p>So until Apple fix apxs, you should create a symlink between real and expected location :</p>
 
 <figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
 </pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo ln -s /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain
