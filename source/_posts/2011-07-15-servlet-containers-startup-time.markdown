@@ -67,5 +67,5 @@ all time in millisecondes
 * JBoss AS7 startup speed improvements are tremendous, about 13 times faster than its predecessor JBoss AS6, congrats guys !
 
 
-Raw startup time data available [here](http://blog.hgomez.net/wp-content/uploads/2011/07/appserver-startup2.txt)
+Raw startup time data available [here](https://gist.github.com/3807564)
 

@@ -43,12 +43,12 @@ What does it means for you in a command line mode, console is just mandatory for
 
 Let see java used by default :
 
-``` bash
+{% codeblock lang:bash %}
 mbp-rico:~ henri$ java -version
 java version "1.6.0_33"
 Java(TM) SE Runtime Environment (build 1.6.0_33-b03-424-11M3720)
 Java HotSpot(TM) 64-Bit Server VM (build 20.8-b03-424, mixed mode)
-```
+{% endcodeblock %}
 
 Default Java is Apple 1.6.0_33, 64bits as expected, so far so good.
 
@@ -61,13 +61,13 @@ What should i do if I want to select instead Java 7 ?
 
 
 You could just update your PATH environment variable to update search path :
-``` bash
+{% codeblock lang:bash %}
 mbp-rico:~ henri$ export PATH=/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home/bin:$PATH
 mbp-rico:~ henri$ java -version
 openjdk version "1.7.0-jdk7u6-b20"
 OpenJDK Runtime Environment (build 1.7.0-jdk7u6-b20-20120719)
 OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)
-```
+{% endcodeblock %}
 
 It works but OSX provide smarter mechanism.
 
@@ -84,7 +84,7 @@ mbp-rico:~ henri$ export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0u6.jdk
 mbp-rico:~ henri$ java -version
 openjdk version "1.7.0-jdk7u6-b20"
 OpenJDK Runtime Environment (build 1.7.0-jdk7u6-b20-20120719)
-OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)</pre>
+OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)
 ```
 
 We could keep our current PATH and it will be **Apple java bootstrap** system, living into **/usr/bin/java** who make use of **JAVA_HOME** and launch the proper JVM. Simple but efficient .
@@ -121,13 +121,13 @@ Let's play with **java_home** now.
 Obtaining path of default JVM :
 ``` bash
 mbp-rico:~ henri$ /usr/libexec/java_home 
-/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home</pre>
+/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
 ```
 
 Obtaining path of default Java 7 JVM :
 ``` bash
 mbp-rico:~ henri$ /usr/libexec/java_home -v 1.7
-/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home</pre>
+/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home
 ```
 
 Obtaining path of default Java 8 JVM :
@@ -139,7 +139,7 @@ mbp-rico:~ henri$ /usr/libexec/java_home -v 1.8
 Obtaining path of default Java 1.6 32 bits JVM :
 ``` bash
 mbp-rico:~ henri$ /usr/libexec/java_home -v 1.6 -a i386
-/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home</pre>
+/System/Library/Java/JavaVirtualMachines/1.6.0.jdk/Contents/Home
 ```
 
 Obtaining path of default Java 1.6 64 bits JVM :
