@@ -4,7 +4,7 @@
   <title><![CDATA[Rico's Blog]]></title>
   <link href="http://hgomez.github.com/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2012-10-01T14:47:04+02:00</updated>
+  <updated>2012-10-15T11:43:46+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -12,6 +12,157 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mountain Lion and apxs]]></title>
+    <link href="http://hgomez.github.com/blog/2012/10/15/mountain-lion-apxs/"/>
+    <updated>2012-10-15T13:06:15+02:00</updated>
+    <id>http://hgomez.github.com/blog/2012/10/15/mountain-lion-apxs</id>
+    <content type="html"><![CDATA[<p>Mountain Lion came with a version of apxs where C compiler and pre-processor are defined to a location not in phase with XCode 4.5.</p>
+
+<p>If you try to build any apxs related modules or Tomcat Native Library, it will fail like this :</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>checking build system type... x86_64-apple-darwin12.2.0
+</span><span class='line'>checking host system type... x86_64-apple-darwin12.2.0
+</span><span class='line'>checking target system type... x86_64-apple-darwin12.2.0
+</span><span class='line'>checking <span class="k">for </span>a BSD-compatible install... /usr/bin/install -c
+</span><span class='line'>checking <span class="k">for </span>working mkdir -p... yes
+</span><span class='line'>Tomcat Native Version: 1.1.24
+</span><span class='line'>checking <span class="k">for </span>chosen layout... tcnative
+</span><span class='line'>checking <span class="k">for </span>APR... yes
+</span><span class='line'>  setting CC to <span class="s2">&quot;/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc&quot;</span>
+</span><span class='line'>  setting CPP to <span class="s2">&quot;/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc -E&quot;</span>
+</span><span class='line'>checking <span class="k">for </span>JDK location <span class="o">(</span>please <span class="nb">wait</span><span class="o">)</span>... /System/Library/Frameworks/JavaVM.framework/Versions/A/
+</span><span class='line'>checking Java platform... checking Java platform...
+</span><span class='line'>checking <span class="k">for </span>sablevm... NONE
+</span><span class='line'>  adding <span class="s2">&quot;-I/System/Library/Frameworks/JavaVM.framework/Versions/A//Headers&quot;</span> to TCNATIVE_PRIV_INCLUDES
+</span><span class='line'>checking os_type directory... jni_md.h found in /System/Library/Frameworks/JavaVM.framework/Versions/A//Headers
+</span><span class='line'>checking <span class="k">for </span>gcc... /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc
+</span><span class='line'>checking whether the C compiler works... no
+</span><span class='line'>configure: error: in <span class="sb">`</span>/Users/henri/tomcat-native-1.1.24-src/jni/native<span class="s1">&#39;:</span>
+</span><span class='line'><span class="s1">configure: error: C compiler cannot create executables</span>
+</span><span class='line'><span class="s1">See `config.log&#39;</span> <span class="k">for </span>more details
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>apxs get its configurations from  <strong>/usr/share/httpd/build/config_vars.mk</strong> who reference <strong>/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">CC</span> <span class="o">=</span> /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc
+</span><span class='line'><span class="nv">CPP</span> <span class="o">=</span> /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc -E
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you installed XCode to standard location, you&#8217;ll find toolchain at <strong>/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain</strong> so until Apple fix apxs, you should create a symlink between real and expected location :</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo ln -s /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Configure will now works as expected :</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mbp-rico:native henri<span class="nv">$ CFLAGS</span><span class="o">=</span><span class="s1">&#39;-arch i386 -arch x86_64&#39;</span> ./configure --with-apr<span class="o">=</span>/usr --with-ssl<span class="o">=</span>/usr --with-java-home<span class="o">=</span>/System/Library/Frameworks/JavaVM.framework/Versions/A/
+</span><span class='line'>checking build system type... x86_64-apple-darwin12.2.0
+</span><span class='line'>checking host system type... x86_64-apple-darwin12.2.0
+</span><span class='line'>checking target system type... x86_64-apple-darwin12.2.0
+</span><span class='line'>checking <span class="k">for </span>a BSD-compatible install... /usr/bin/install -c
+</span><span class='line'>checking <span class="k">for </span>working mkdir -p... yes
+</span><span class='line'>Tomcat Native Version: 1.1.24
+</span><span class='line'>checking <span class="k">for </span>chosen layout... tcnative
+</span><span class='line'>checking <span class="k">for </span>APR... yes
+</span><span class='line'>  setting CC to <span class="s2">&quot;/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc&quot;</span>
+</span><span class='line'>  setting CPP to <span class="s2">&quot;/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc -E&quot;</span>
+</span><span class='line'>checking <span class="k">for </span>JDK location <span class="o">(</span>please <span class="nb">wait</span><span class="o">)</span>... /System/Library/Frameworks/JavaVM.framework/Versions/A/
+</span><span class='line'>checking Java platform... checking Java platform...
+</span><span class='line'>checking <span class="k">for </span>sablevm... NONE
+</span><span class='line'>  adding <span class="s2">&quot;-I/System/Library/Frameworks/JavaVM.framework/Versions/A//Headers&quot;</span> to TCNATIVE_PRIV_INCLUDES
+</span><span class='line'>checking os_type directory... jni_md.h found in /System/Library/Frameworks/JavaVM.framework/Versions/A//Headers
+</span><span class='line'>checking <span class="k">for </span>gcc... /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc
+</span><span class='line'>checking whether the C compiler works... yes
+</span><span class='line'>checking <span class="k">for </span>C compiler default output file name... a.out
+</span><span class='line'>checking <span class="k">for </span>suffix of executables...
+</span><span class='line'>checking whether we are cross compiling... no
+</span><span class='line'>checking <span class="k">for </span>suffix of object files... o
+</span><span class='line'>checking whether we are using the GNU C compiler... yes
+</span><span class='line'>checking whether /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc accepts -g... yes
+</span><span class='line'>checking <span class="k">for</span> /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc option to accept ISO C89... none needed
+</span><span class='line'>checking <span class="k">for </span>OpenSSL library... using openssl from /usr/lib and /usr/include
+</span><span class='line'>checking OpenSSL library version... ok
+</span><span class='line'>checking <span class="k">for </span>OpenSSL DSA support... yes
+</span><span class='line'>  setting TCNATIVE_LDFLAGS to <span class="s2">&quot;-lssl -lcrypto&quot;</span>
+</span><span class='line'>  adding <span class="s2">&quot;-DHAVE_OPENSSL&quot;</span> to CFLAGS
+</span><span class='line'>  setting TCNATIVE_LIBS to <span class="s2">&quot;&quot;</span>
+</span><span class='line'>  setting TCNATIVE_LIBS to <span class="s2">&quot; -L/usr/lib -R/usr/lib -lapr-1 -lpthread&quot;</span>
+</span><span class='line'>configure: creating ./config.status
+</span><span class='line'>config.status: creating tcnative.pc
+</span><span class='line'>config.status: creating Makefile
+</span><span class='line'>config.status: executing default commands
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>Thanks <a href="http://apple.stackexchange.com/questions/58186/how-to-compile-mod-wsgi-mod-fastcgi-etc-on-mountain-lion-by-fixing-apxserror">stack-exchange</a> for covering this issue</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Understanding java from command line on OSX]]></title>
@@ -2487,15 +2638,6 @@ DMG_MOUNT_DIR=$BUILD_DIR/mount</p>
 <p>Next steps is to find storage on the net so we could provide DMG regularly. Even better, an OS/X box (under SnowLeopard) available on the net, will help us provide continuous DMG.</p>
 
 <p>Plus on est de fous, &#8230;.</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[OpenJDK 1.7 for OS/X continuous build with Hudson]]></title>
-    <link href="http://hgomez.github.com/blog/2010/11/21/openjdk-1-7-for-osx-continuous-build-with-hudson/"/>
-    <updated>2010-11-21T03:06:22+01:00</updated>
-    <id>http://hgomez.github.com/blog/2010/11/21/openjdk-1-7-for-osx-continuous-build-with-hudson</id>
-    <content type="html"><![CDATA[
 ]]></content>
   </entry>
   

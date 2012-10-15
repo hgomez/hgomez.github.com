@@ -9,8 +9,8 @@
   <meta name="author" content="Henri Gomez">
 
   
-  <meta name="description" content="With the release of JBoss AS7, we see many comments around about the startup time of Application Servers.
-Even if this appears marginal in real life &hellip;">
+  <meta name="description" content="Iozone is a great tool to mesure performance of filesystem.
+You could find 10 examples here. In it latest version, 3.97, it came with reporting tools &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -85,6 +85,957 @@ Even if this appears marginal in real life &hellip;">
     <div id="content">
       <div class="blog-index">
   
+  
+  
+    <article>
+      
+  <header>
+    
+      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
+        <h1 class="entry-title"><a href="/blog/2011/11/03/iozone-and-gnuplot-4-x/">Iozone and Gnuplot 4.x</a></h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-11-03T20:16:40+01:00" pubdate data-updated="true">Nov 3<span>rd</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p><a href="http://www.iozone.org/">Iozone </a> is a great tool to mesure performance of filesystem.
+You could find 10 examples <a href="http://www.thegeekstuff.com/2011/05/iozone-examples/">here</a>.</p>
+
+<p>In it latest version, 3.97, it came with reporting tools, <strong>report.pl</strong> and <strong>gengnuplot.sh</strong>, who use gnuplot to render images.</p>
+
+<p><img class="center" src="/images/2d-recrewrite.png">
+<img class="center" src="/images/recrewrite.png"></p>
+
+<p>Due to changes in GnuPlot 4.x, <strong>report.pl</strong> and <strong>gnu3d.dem</strong> need to be updated to works.
+Also you may get only <strong>8 metrics</strong> in reports instead of <strong>15</strong> expected in latest release of <strong>report.pl</strong></p>
+
+<h2>gnu3d.dem</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+<span class='line-number'>153</span>
+<span class='line-number'>154</span>
+<span class='line-number'>155</span>
+<span class='line-number'>156</span>
+<span class='line-number'>157</span>
+<span class='line-number'>158</span>
+<span class='line-number'>159</span>
+<span class='line-number'>160</span>
+<span class='line-number'>161</span>
+<span class='line-number'>162</span>
+<span class='line-number'>163</span>
+<span class='line-number'>164</span>
+<span class='line-number'>165</span>
+<span class='line-number'>166</span>
+<span class='line-number'>167</span>
+<span class='line-number'>168</span>
+<span class='line-number'>169</span>
+<span class='line-number'>170</span>
+<span class='line-number'>171</span>
+<span class='line-number'>172</span>
+<span class='line-number'>173</span>
+<span class='line-number'>174</span>
+<span class='line-number'>175</span>
+<span class='line-number'>176</span>
+<span class='line-number'>177</span>
+<span class='line-number'>178</span>
+<span class='line-number'>179</span>
+<span class='line-number'>180</span>
+<span class='line-number'>181</span>
+<span class='line-number'>182</span>
+<span class='line-number'>183</span>
+<span class='line-number'>184</span>
+<span class='line-number'>185</span>
+<span class='line-number'>186</span>
+<span class='line-number'>187</span>
+<span class='line-number'>188</span>
+<span class='line-number'>189</span>
+<span class='line-number'>190</span>
+<span class='line-number'>191</span>
+<span class='line-number'>192</span>
+<span class='line-number'>193</span>
+<span class='line-number'>194</span>
+<span class='line-number'>195</span>
+<span class='line-number'>196</span>
+<span class='line-number'>197</span>
+<span class='line-number'>198</span>
+<span class='line-number'>199</span>
+<span class='line-number'>200</span>
+<span class='line-number'>201</span>
+<span class='line-number'>202</span>
+<span class='line-number'>203</span>
+<span class='line-number'>204</span>
+<span class='line-number'>205</span>
+<span class='line-number'>206</span>
+<span class='line-number'>207</span>
+<span class='line-number'>208</span>
+<span class='line-number'>209</span>
+<span class='line-number'>210</span>
+<span class='line-number'>211</span>
+<span class='line-number'>212</span>
+<span class='line-number'>213</span>
+<span class='line-number'>214</span>
+<span class='line-number'>215</span>
+<span class='line-number'>216</span>
+<span class='line-number'>217</span>
+<span class='line-number'>218</span>
+<span class='line-number'>219</span>
+<span class='line-number'>220</span>
+<span class='line-number'>221</span>
+<span class='line-number'>222</span>
+<span class='line-number'>223</span>
+<span class='line-number'>224</span>
+<span class='line-number'>225</span>
+<span class='line-number'>226</span>
+<span class='line-number'>227</span>
+<span class='line-number'>228</span>
+<span class='line-number'>229</span>
+<span class='line-number'>230</span>
+<span class='line-number'>231</span>
+<span class='line-number'>232</span>
+<span class='line-number'>233</span>
+<span class='line-number'>234</span>
+<span class='line-number'>235</span>
+<span class='line-number'>236</span>
+<span class='line-number'>237</span>
+<span class='line-number'>238</span>
+<span class='line-number'>239</span>
+<span class='line-number'>240</span>
+<span class='line-number'>241</span>
+<span class='line-number'>242</span>
+<span class='line-number'>243</span>
+<span class='line-number'>244</span>
+<span class='line-number'>245</span>
+<span class='line-number'>246</span>
+<span class='line-number'>247</span>
+<span class='line-number'>248</span>
+<span class='line-number'>249</span>
+<span class='line-number'>250</span>
+<span class='line-number'>251</span>
+<span class='line-number'>252</span>
+<span class='line-number'>253</span>
+<span class='line-number'>254</span>
+<span class='line-number'>255</span>
+<span class='line-number'>256</span>
+<span class='line-number'>257</span>
+<span class='line-number'>258</span>
+<span class='line-number'>259</span>
+<span class='line-number'>260</span>
+<span class='line-number'>261</span>
+<span class='line-number'>262</span>
+<span class='line-number'>263</span>
+<span class='line-number'>264</span>
+<span class='line-number'>265</span>
+<span class='line-number'>266</span>
+<span class='line-number'>267</span>
+<span class='line-number'>268</span>
+<span class='line-number'>269</span>
+<span class='line-number'>270</span>
+<span class='line-number'>271</span>
+<span class='line-number'>272</span>
+<span class='line-number'>273</span>
+<span class='line-number'>274</span>
+<span class='line-number'>275</span>
+<span class='line-number'>276</span>
+<span class='line-number'>277</span>
+<span class='line-number'>278</span>
+<span class='line-number'>279</span>
+<span class='line-number'>280</span>
+<span class='line-number'>281</span>
+<span class='line-number'>282</span>
+<span class='line-number'>283</span>
+<span class='line-number'>284</span>
+<span class='line-number'>285</span>
+<span class='line-number'>286</span>
+<span class='line-number'>287</span>
+<span class='line-number'>288</span>
+<span class='line-number'>289</span>
+<span class='line-number'>290</span>
+<span class='line-number'>291</span>
+<span class='line-number'>292</span>
+<span class='line-number'>293</span>
+<span class='line-number'>294</span>
+<span class='line-number'>295</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># $Id: 3D plot of performance</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># Processes files that were created by Generate_Graphs</span>
+</span><span class='line'><span class="c1"># and displays the results. Also, saves a postscript copy.</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># Don Capps</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">x11</span>
+</span><span class='line'><span class="n">set</span> <span class="n">title</span> <span class="s">&quot;Iozone performance&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">grid</span> <span class="ow">lt</span> <span class="mi">2</span> <span class="n">lw</span> <span class="mi">1</span>
+</span><span class='line'><span class="n">set</span> <span class="n">surface</span>
+</span><span class='line'><span class="n">set</span> <span class="n">parametric</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xtics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ytics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">x</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">y</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">autoscale</span> <span class="n">z</span>
+</span><span class='line'><span class="c1">#set xrange [2.**5:2.**24]</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xlabel</span> <span class="s">&quot;File size in 2^n KBytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ylabel</span> <span class="s">&quot;Record size in 2^n Kbytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">zlabel</span> <span class="s">&quot;Kbytes/sec&quot;</span>
+</span><span class='line'><span class="c1">#set data style lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">style</span> <span class="n">data</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">dgrid3d</span> <span class="mi">80</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">3</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;write/iozone_gen_out.gnuplot&#39;</span> <span class="n">title</span> <span class="s">&quot;Write performance&quot;</span>
+</span><span class='line'><span class="n">pause</span> <span class="o">-</span><span class="mi">1</span> <span class="s">&quot;Hit return to continue&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">postscript</span> <span class="n">color</span>
+</span><span class='line'><span class="n">set</span> <span class="n">output</span> <span class="s">&quot;write/write.ps&quot;</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;write/iozone_gen_out.gnuplot&#39;</span> <span class="n">title</span> <span class="s">&quot;Write performance&quot;</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">x11</span>
+</span><span class='line'><span class="n">set</span> <span class="n">title</span> <span class="s">&quot;Iozone performance&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">grid</span> <span class="ow">lt</span> <span class="mi">2</span> <span class="n">lw</span> <span class="mi">1</span>
+</span><span class='line'><span class="n">set</span> <span class="n">surface</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xtics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ytics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">x</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">y</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">autoscale</span> <span class="n">z</span>
+</span><span class='line'><span class="c1">#set xrange [2.**5:2.**24]</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xlabel</span> <span class="s">&quot;File size in 2^n KBytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ylabel</span> <span class="s">&quot;Record size in 2^n Kbytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">zlabel</span> <span class="s">&quot;Kbytes/sec&quot;</span>
+</span><span class='line'><span class="c1">#set data style lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">style</span> <span class="n">data</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">dgrid3d</span> <span class="mi">80</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">3</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;rewrite/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;ReWrite performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">pause</span> <span class="o">-</span><span class="mi">1</span> <span class="s">&quot;Hit return to continue&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">postscript</span> <span class="n">color</span>
+</span><span class='line'><span class="n">set</span> <span class="n">output</span> <span class="s">&quot;rewrite/rewrite.ps&quot;</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;rewrite/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;ReWrite performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">x11</span>
+</span><span class='line'><span class="n">set</span> <span class="n">title</span> <span class="s">&quot;Iozone performance&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">grid</span> <span class="ow">lt</span> <span class="mi">2</span> <span class="n">lw</span> <span class="mi">1</span>
+</span><span class='line'><span class="n">set</span> <span class="n">surface</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xtics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ytics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">x</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">y</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">autoscale</span> <span class="n">z</span>
+</span><span class='line'><span class="c1">#set xrange [2.**5:2.**24]</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xlabel</span> <span class="s">&quot;File size in 2^n KBytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ylabel</span> <span class="s">&quot;Record size in 2^n Kbytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">zlabel</span> <span class="s">&quot;Kbytes/sec&quot;</span>
+</span><span class='line'><span class="c1">#set data style lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">style</span> <span class="n">data</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">dgrid3d</span> <span class="mi">80</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">3</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;read/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Read performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">pause</span> <span class="o">-</span><span class="mi">1</span> <span class="s">&quot;Hit return to continue&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">postscript</span> <span class="n">color</span>
+</span><span class='line'><span class="n">set</span> <span class="n">output</span> <span class="s">&quot;read/read.ps&quot;</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;read/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Read performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">x11</span>
+</span><span class='line'><span class="n">set</span> <span class="n">title</span> <span class="s">&quot;Iozone performance&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">grid</span> <span class="ow">lt</span> <span class="mi">2</span> <span class="n">lw</span> <span class="mi">1</span>
+</span><span class='line'><span class="n">set</span> <span class="n">surface</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xtics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ytics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">x</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">y</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">autoscale</span> <span class="n">z</span>
+</span><span class='line'><span class="c1">#set xrange [2.**5:2.**24]</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xlabel</span> <span class="s">&quot;File size in 2^n KBytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ylabel</span> <span class="s">&quot;Record size in 2^n Kbytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">zlabel</span> <span class="s">&quot;Kbytes/sec&quot;</span>
+</span><span class='line'><span class="c1">#set data style lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">style</span> <span class="n">data</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">dgrid3d</span> <span class="mi">80</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">3</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;reread/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Reread performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">pause</span> <span class="o">-</span><span class="mi">1</span> <span class="s">&quot;Hit return to continue&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">postscript</span> <span class="n">color</span>
+</span><span class='line'><span class="n">set</span> <span class="n">output</span> <span class="s">&quot;reread/reread.ps&quot;</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;reread/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Reread performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">x11</span>
+</span><span class='line'><span class="n">set</span> <span class="n">title</span> <span class="s">&quot;Iozone performance&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">grid</span> <span class="ow">lt</span> <span class="mi">2</span> <span class="n">lw</span> <span class="mi">1</span>
+</span><span class='line'><span class="n">set</span> <span class="n">surface</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xtics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ytics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">x</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">y</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">autoscale</span> <span class="n">z</span>
+</span><span class='line'><span class="c1">#set xrange [2.**5:2.**24]</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xlabel</span> <span class="s">&quot;File size in 2^n KBytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ylabel</span> <span class="s">&quot;Record size in 2^n Kbytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">zlabel</span> <span class="s">&quot;Kbytes/sec&quot;</span>
+</span><span class='line'><span class="c1">#set data style lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">style</span> <span class="n">data</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">dgrid3d</span> <span class="mi">80</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">3</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;randread/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Random read performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">pause</span> <span class="o">-</span><span class="mi">1</span> <span class="s">&quot;Hit return to continue&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">postscript</span> <span class="n">color</span>
+</span><span class='line'><span class="n">set</span> <span class="n">output</span> <span class="s">&quot;randread/randread.ps&quot;</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;randread/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Random read performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">x11</span>
+</span><span class='line'><span class="n">set</span> <span class="n">title</span> <span class="s">&quot;Iozone performance&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">grid</span> <span class="ow">lt</span> <span class="mi">2</span> <span class="n">lw</span> <span class="mi">1</span>
+</span><span class='line'><span class="n">set</span> <span class="n">surface</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xtics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ytics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">x</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">y</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">autoscale</span> <span class="n">z</span>
+</span><span class='line'><span class="c1">#set xrange [2.**5:2.**24]</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xlabel</span> <span class="s">&quot;File size in 2^n KBytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ylabel</span> <span class="s">&quot;Record size in 2^n Kbytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">zlabel</span> <span class="s">&quot;Kbytes/sec&quot;</span>
+</span><span class='line'><span class="c1">#set data style lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">style</span> <span class="n">data</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">dgrid3d</span> <span class="mi">80</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">3</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;randwrite/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Random write performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">pause</span> <span class="o">-</span><span class="mi">1</span> <span class="s">&quot;Hit return to continue&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">postscript</span> <span class="n">color</span>
+</span><span class='line'><span class="n">set</span> <span class="n">output</span> <span class="s">&quot;randwrite/randwrite.ps&quot;</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;randwrite/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Random write performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">x11</span>
+</span><span class='line'><span class="n">set</span> <span class="n">title</span> <span class="s">&quot;Iozone performance&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">grid</span> <span class="ow">lt</span> <span class="mi">2</span> <span class="n">lw</span> <span class="mi">1</span>
+</span><span class='line'><span class="n">set</span> <span class="n">surface</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xtics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ytics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">x</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">y</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">autoscale</span> <span class="n">z</span>
+</span><span class='line'><span class="c1">#set xrange [2.**5:2.**24]</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xlabel</span> <span class="s">&quot;File size in 2^n KBytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ylabel</span> <span class="s">&quot;Record size in 2^n Kbytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">zlabel</span> <span class="s">&quot;Kbytes/sec&quot;</span>
+</span><span class='line'><span class="c1">#set data style lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">style</span> <span class="n">data</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">dgrid3d</span> <span class="mi">80</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">3</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;bkwdread/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Read Backwards performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">pause</span> <span class="o">-</span><span class="mi">1</span> <span class="s">&quot;Hit return to continue&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">postscript</span> <span class="n">color</span>
+</span><span class='line'><span class="n">set</span> <span class="n">output</span> <span class="s">&quot;bkwdread/bkwdread.ps&quot;</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;bkwdread/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Read Backwards performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">x11</span>
+</span><span class='line'><span class="n">set</span> <span class="n">title</span> <span class="s">&quot;Iozone performance&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">grid</span> <span class="ow">lt</span> <span class="mi">2</span> <span class="n">lw</span> <span class="mi">1</span>
+</span><span class='line'><span class="n">set</span> <span class="n">surface</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xtics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ytics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">x</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">y</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">autoscale</span> <span class="n">z</span>
+</span><span class='line'><span class="c1">#set xrange [2.**5:2.**24]</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xlabel</span> <span class="s">&quot;File size in 2^n KBytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ylabel</span> <span class="s">&quot;Record size in 2^n Kbytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">zlabel</span> <span class="s">&quot;Kbytes/sec&quot;</span>
+</span><span class='line'><span class="c1">#set data style lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">style</span> <span class="n">data</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">dgrid3d</span> <span class="mi">80</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">3</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;recrewrite/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Record rewrite performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">pause</span> <span class="o">-</span><span class="mi">1</span> <span class="s">&quot;Hit return to continue&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">postscript</span> <span class="n">color</span>
+</span><span class='line'><span class="n">set</span> <span class="n">output</span> <span class="s">&quot;recrewrite/recrewrite.ps&quot;</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;recrewrite/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Record rewrite performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">x11</span>
+</span><span class='line'><span class="n">set</span> <span class="n">title</span> <span class="s">&quot;Iozone performance&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">grid</span> <span class="ow">lt</span> <span class="mi">2</span> <span class="n">lw</span> <span class="mi">1</span>
+</span><span class='line'><span class="n">set</span> <span class="n">surface</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xtics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ytics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">x</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">y</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">autoscale</span> <span class="n">z</span>
+</span><span class='line'><span class="c1">#set xrange [2.**5:2.**24]</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xlabel</span> <span class="s">&quot;File size in 2^n KBytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ylabel</span> <span class="s">&quot;Record size in 2^n Kbytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">zlabel</span> <span class="s">&quot;Kbytes/sec&quot;</span>
+</span><span class='line'><span class="c1">#set data style lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">style</span> <span class="n">data</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">dgrid3d</span> <span class="mi">80</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">3</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;strideread/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Stride read performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">pause</span> <span class="o">-</span><span class="mi">1</span> <span class="s">&quot;Hit return to continue&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">postscript</span> <span class="n">color</span>
+</span><span class='line'><span class="n">set</span> <span class="n">output</span> <span class="s">&quot;strideread/strideread.ps&quot;</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;strideread/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Stride read performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">x11</span>
+</span><span class='line'><span class="n">set</span> <span class="n">title</span> <span class="s">&quot;Iozone performance&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">grid</span> <span class="ow">lt</span> <span class="mi">2</span> <span class="n">lw</span> <span class="mi">1</span>
+</span><span class='line'><span class="n">set</span> <span class="n">surface</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xtics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ytics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">x</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">y</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">autoscale</span> <span class="n">z</span>
+</span><span class='line'><span class="c1">#set xrange [2.**5:2.**24]</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xlabel</span> <span class="s">&quot;File size in 2^n KBytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ylabel</span> <span class="s">&quot;Record size in 2^n Kbytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">zlabel</span> <span class="s">&quot;Kbytes/sec&quot;</span>
+</span><span class='line'><span class="c1">#set data style lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">style</span> <span class="n">data</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">dgrid3d</span> <span class="mi">80</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">3</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;fwrite/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Fwrite performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">pause</span> <span class="o">-</span><span class="mi">1</span> <span class="s">&quot;Hit return to continue&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">postscript</span> <span class="n">color</span>
+</span><span class='line'><span class="n">set</span> <span class="n">output</span> <span class="s">&quot;fwrite/fwrite.ps&quot;</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;fwrite/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Fwrite performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">x11</span>
+</span><span class='line'><span class="n">set</span> <span class="n">title</span> <span class="s">&quot;Iozone performance&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">grid</span> <span class="ow">lt</span> <span class="mi">2</span> <span class="n">lw</span> <span class="mi">1</span>
+</span><span class='line'><span class="n">set</span> <span class="n">surface</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xtics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ytics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">x</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">y</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">autoscale</span> <span class="n">z</span>
+</span><span class='line'><span class="c1">#set xrange [2.**5:2.**24]</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xlabel</span> <span class="s">&quot;File size in 2^n KBytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ylabel</span> <span class="s">&quot;Record size in 2^n Kbytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">zlabel</span> <span class="s">&quot;Kbytes/sec&quot;</span>
+</span><span class='line'><span class="c1">#set data style lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">style</span> <span class="n">data</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">dgrid3d</span> <span class="mi">80</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">3</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;frewrite/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Frewrite performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">pause</span> <span class="o">-</span><span class="mi">1</span> <span class="s">&quot;Hit return to continue&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">postscript</span> <span class="n">color</span>
+</span><span class='line'><span class="n">set</span> <span class="n">output</span> <span class="s">&quot;frewrite/frewrite.ps&quot;</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;frewrite/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Frewrite performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">x11</span>
+</span><span class='line'><span class="n">set</span> <span class="n">title</span> <span class="s">&quot;Iozone performance&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">grid</span> <span class="ow">lt</span> <span class="mi">2</span> <span class="n">lw</span> <span class="mi">1</span>
+</span><span class='line'><span class="n">set</span> <span class="n">surface</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xtics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ytics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">x</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">y</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">autoscale</span> <span class="n">z</span>
+</span><span class='line'><span class="c1">#set xrange [2.**5:2.**24]</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xlabel</span> <span class="s">&quot;File size in 2^n KBytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ylabel</span> <span class="s">&quot;Record size in 2^n Kbytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">zlabel</span> <span class="s">&quot;Kbytes/sec&quot;</span>
+</span><span class='line'><span class="c1">#set data style lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">style</span> <span class="n">data</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">dgrid3d</span> <span class="mi">80</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">3</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;fread/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Fread performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">pause</span> <span class="o">-</span><span class="mi">1</span> <span class="s">&quot;Hit return to continue&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">postscript</span> <span class="n">color</span>
+</span><span class='line'><span class="n">set</span> <span class="n">output</span> <span class="s">&quot;fread/fread.ps&quot;</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;fread/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Fread performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">x11</span>
+</span><span class='line'><span class="n">set</span> <span class="n">title</span> <span class="s">&quot;Iozone performance&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">grid</span> <span class="ow">lt</span> <span class="mi">2</span> <span class="n">lw</span> <span class="mi">1</span>
+</span><span class='line'><span class="n">set</span> <span class="n">surface</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xtics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ytics</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">x</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">logscale</span> <span class="n">y</span> <span class="mi">2</span>
+</span><span class='line'><span class="n">set</span> <span class="n">autoscale</span> <span class="n">z</span>
+</span><span class='line'><span class="c1">#set xrange [2.**5:2.**24]</span>
+</span><span class='line'><span class="n">set</span> <span class="n">xlabel</span> <span class="s">&quot;File size in 2^n KBytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">ylabel</span> <span class="s">&quot;Record size in 2^n Kbytes&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">zlabel</span> <span class="s">&quot;Kbytes/sec&quot;</span>
+</span><span class='line'><span class="c1">#set data style lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">style</span> <span class="n">data</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">set</span> <span class="n">dgrid3d</span> <span class="mi">80</span><span class="p">,</span><span class="mi">80</span><span class="p">,</span><span class="mi">3</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;freread/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Freread performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span><span class='line'><span class="n">pause</span> <span class="o">-</span><span class="mi">1</span> <span class="s">&quot;Hit return to exit&quot;</span>
+</span><span class='line'><span class="n">set</span> <span class="n">terminal</span> <span class="n">postscript</span> <span class="n">color</span>
+</span><span class='line'><span class="n">set</span> <span class="n">output</span> <span class="s">&quot;freread/freread.ps&quot;</span>
+</span><span class='line'><span class="n">splot</span> <span class="s">&#39;freread/iozone_gen_out.gnuplot&#39;</span> <span class="n">using</span> <span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">:</span><span class="mi">3</span> <span class="n">title</span> <span class="s">&quot;Freread performance&quot;</span> <span class="n">with</span> <span class="n">lines</span>
+</span></code></pre></td></tr></table></div></figure>
+
+
+<h2>report.pl</h2>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+<span class='line-number'>37</span>
+<span class='line-number'>38</span>
+<span class='line-number'>39</span>
+<span class='line-number'>40</span>
+<span class='line-number'>41</span>
+<span class='line-number'>42</span>
+<span class='line-number'>43</span>
+<span class='line-number'>44</span>
+<span class='line-number'>45</span>
+<span class='line-number'>46</span>
+<span class='line-number'>47</span>
+<span class='line-number'>48</span>
+<span class='line-number'>49</span>
+<span class='line-number'>50</span>
+<span class='line-number'>51</span>
+<span class='line-number'>52</span>
+<span class='line-number'>53</span>
+<span class='line-number'>54</span>
+<span class='line-number'>55</span>
+<span class='line-number'>56</span>
+<span class='line-number'>57</span>
+<span class='line-number'>58</span>
+<span class='line-number'>59</span>
+<span class='line-number'>60</span>
+<span class='line-number'>61</span>
+<span class='line-number'>62</span>
+<span class='line-number'>63</span>
+<span class='line-number'>64</span>
+<span class='line-number'>65</span>
+<span class='line-number'>66</span>
+<span class='line-number'>67</span>
+<span class='line-number'>68</span>
+<span class='line-number'>69</span>
+<span class='line-number'>70</span>
+<span class='line-number'>71</span>
+<span class='line-number'>72</span>
+<span class='line-number'>73</span>
+<span class='line-number'>74</span>
+<span class='line-number'>75</span>
+<span class='line-number'>76</span>
+<span class='line-number'>77</span>
+<span class='line-number'>78</span>
+<span class='line-number'>79</span>
+<span class='line-number'>80</span>
+<span class='line-number'>81</span>
+<span class='line-number'>82</span>
+<span class='line-number'>83</span>
+<span class='line-number'>84</span>
+<span class='line-number'>85</span>
+<span class='line-number'>86</span>
+<span class='line-number'>87</span>
+<span class='line-number'>88</span>
+<span class='line-number'>89</span>
+<span class='line-number'>90</span>
+<span class='line-number'>91</span>
+<span class='line-number'>92</span>
+<span class='line-number'>93</span>
+<span class='line-number'>94</span>
+<span class='line-number'>95</span>
+<span class='line-number'>96</span>
+<span class='line-number'>97</span>
+<span class='line-number'>98</span>
+<span class='line-number'>99</span>
+<span class='line-number'>100</span>
+<span class='line-number'>101</span>
+<span class='line-number'>102</span>
+<span class='line-number'>103</span>
+<span class='line-number'>104</span>
+<span class='line-number'>105</span>
+<span class='line-number'>106</span>
+<span class='line-number'>107</span>
+<span class='line-number'>108</span>
+<span class='line-number'>109</span>
+<span class='line-number'>110</span>
+<span class='line-number'>111</span>
+<span class='line-number'>112</span>
+<span class='line-number'>113</span>
+<span class='line-number'>114</span>
+<span class='line-number'>115</span>
+<span class='line-number'>116</span>
+<span class='line-number'>117</span>
+<span class='line-number'>118</span>
+<span class='line-number'>119</span>
+<span class='line-number'>120</span>
+<span class='line-number'>121</span>
+<span class='line-number'>122</span>
+<span class='line-number'>123</span>
+<span class='line-number'>124</span>
+<span class='line-number'>125</span>
+<span class='line-number'>126</span>
+<span class='line-number'>127</span>
+<span class='line-number'>128</span>
+<span class='line-number'>129</span>
+<span class='line-number'>130</span>
+<span class='line-number'>131</span>
+<span class='line-number'>132</span>
+<span class='line-number'>133</span>
+<span class='line-number'>134</span>
+<span class='line-number'>135</span>
+<span class='line-number'>136</span>
+<span class='line-number'>137</span>
+<span class='line-number'>138</span>
+<span class='line-number'>139</span>
+<span class='line-number'>140</span>
+<span class='line-number'>141</span>
+<span class='line-number'>142</span>
+<span class='line-number'>143</span>
+<span class='line-number'>144</span>
+<span class='line-number'>145</span>
+<span class='line-number'>146</span>
+<span class='line-number'>147</span>
+<span class='line-number'>148</span>
+<span class='line-number'>149</span>
+<span class='line-number'>150</span>
+<span class='line-number'>151</span>
+<span class='line-number'>152</span>
+</pre></td><td class='code'><pre><code class='perl'><span class='line'><span class="c1">#!/usr/bin/perl</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># arguments: one of more report files</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># Christian Mautner &lt;christian * mautner . ca&gt;, 2005-10-31</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># This script is based loosely on the Generate_Graph set</span>
+</span><span class='line'><span class="c1"># of scripts that come with iozone, but is a complete re-write</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># The main reason to write this was the need to compare the behaviour of</span>
+</span><span class='line'><span class="c1"># two or more different setups, for tuning filesystems or </span>
+</span><span class='line'><span class="c1"># comparing different pieces of hardware.</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># This script is in the public domain, too short and too trivial</span>
+</span><span class='line'><span class="c1"># to deserve a copyright.</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># Simply run iozone like, for example, ./iozone -a -g 4G &gt; config1.out (if your machine has 4GB)</span>
+</span><span class='line'><span class="c1"># and then run perl report.pl config1.out</span>
+</span><span class='line'><span class="c1"># or get another report from another box into config2.out and run</span>
+</span><span class='line'><span class="c1"># perl report.pl config1.out config2.out</span>
+</span><span class='line'><span class="c1"># the look in the report_* directory for .png</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># If you don&#39;t like png or the graphic size, search for &quot;set terminal&quot; in this file and put whatever gnuplot</span>
+</span><span class='line'><span class="c1"># terminal you want. Note I&#39;ve also noticed that gnuplot switched the set terminal png syntax</span>
+</span><span class='line'><span class="c1"># a while back, you might need &quot;set terminal png small size 900,700&quot;</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'>
+</span><span class='line'>
+</span><span class='line'><span class="nv">@Reports</span><span class="o">=</span><span class="nv">@ARGV</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">die</span> <span class="s">&quot;usage: $0 &lt;iozone.out&gt; [&lt;iozone2.out&gt;...]\n&quot;</span> <span class="k">if</span> <span class="ow">not</span> <span class="nv">@Reports</span> <span class="ow">or</span> <span class="nb">grep</span> <span class="p">(</span><span class="n">m</span><span class="o">|^-|</span><span class="p">,</span> <span class="nv">@Reports</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">die</span> <span class="s">&quot;report files must be in current directory&quot;</span> <span class="k">if</span> <span class="nb">grep</span> <span class="p">(</span><span class="n">m</span><span class="o">|/|</span><span class="p">,</span> <span class="nv">@Reports</span><span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="nv">%columns</span><span class="o">=</span><span class="p">(</span>
+</span><span class='line'>         <span class="s">&#39;write&#39;</span>     <span class="o">=&gt;</span><span class="mi">3</span><span class="p">,</span>
+</span><span class='line'>         <span class="s">&#39;read&#39;</span>      <span class="o">=&gt;</span><span class="mi">5</span><span class="p">,</span>
+</span><span class='line'>         <span class="s">&#39;rewrite&#39;</span>   <span class="o">=&gt;</span><span class="mi">4</span><span class="p">,</span>
+</span><span class='line'>         <span class="s">&#39;reread&#39;</span>    <span class="o">=&gt;</span><span class="mi">6</span><span class="p">,</span>
+</span><span class='line'>         <span class="s">&#39;randread&#39;</span>  <span class="o">=&gt;</span><span class="mi">7</span><span class="p">,</span>
+</span><span class='line'>         <span class="s">&#39;randwrite&#39;</span> <span class="o">=&gt;</span><span class="mi">8</span><span class="p">,</span>
+</span><span class='line'>         <span class="s">&#39;bkwdread&#39;</span>  <span class="o">=&gt;</span><span class="mi">9</span><span class="p">,</span>
+</span><span class='line'>         <span class="s">&#39;recrewrite&#39;</span><span class="o">=&gt;</span><span class="mi">10</span><span class="p">,</span>
+</span><span class='line'>         <span class="s">&#39;strideread&#39;</span><span class="o">=&gt;</span><span class="mi">11</span><span class="p">,</span>
+</span><span class='line'>         <span class="s">&#39;fwrite&#39;</span>    <span class="o">=&gt;</span><span class="mi">12</span><span class="p">,</span>
+</span><span class='line'>         <span class="s">&#39;frewrite&#39;</span>  <span class="o">=&gt;</span><span class="mi">13</span><span class="p">,</span>
+</span><span class='line'>         <span class="s">&#39;fread&#39;</span>     <span class="o">=&gt;</span><span class="mi">14</span><span class="p">,</span>
+</span><span class='line'>         <span class="s">&#39;freread&#39;</span>   <span class="o">=&gt;</span><span class="mi">15</span><span class="p">,</span>
+</span><span class='line'>         <span class="p">);</span>
+</span><span class='line'>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="c1"># create output directory. the name is the concatenation</span>
+</span><span class='line'><span class="c1"># of all report file names (minus the file extension, plus</span>
+</span><span class='line'><span class="c1"># prefix report_)</span>
+</span><span class='line'><span class="c1">#</span>
+</span><span class='line'><span class="nv">$outdir</span><span class="o">=</span><span class="s">&quot;report_&quot;</span><span class="o">.</span><span class="nb">join</span><span class="p">(</span><span class="s">&quot;_&quot;</span><span class="p">,</span><span class="nb">map</span><span class="p">{</span><span class="sr">/([^\.]+)(\..*)?/</span> <span class="o">&amp;&amp;</span> <span class="nv">$1</span><span class="p">}(</span><span class="nv">@Reports</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">print</span> <span class="bp">STDERR</span> <span class="s">&quot;Output directory: $outdir &quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="p">(</span> <span class="o">-</span><span class="n">d</span> <span class="nv">$outdir</span> <span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">print</span> <span class="bp">STDERR</span> <span class="s">&quot;(removing old directory) &quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="nb">system</span> <span class="s">&quot;rm -rf $outdir&quot;</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="nb">mkdir</span> <span class="nv">$outdir</span> <span class="ow">or</span> <span class="nb">die</span> <span class="s">&quot;cannot make directory $outdir&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">print</span> <span class="bp">STDERR</span> <span class="s">&quot;done.\nPreparing data files...&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">foreach</span> <span class="nv">$report</span> <span class="p">(</span><span class="nv">@Reports</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="nb">open</span><span class="p">(</span><span class="n">I</span><span class="p">,</span> <span class="nv">$report</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">die</span> <span class="s">&quot;cannot open $report for reading&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="nv">$report</span><span class="o">=~</span><span class="sr">/^([^\.]+)/</span><span class="p">;</span>
+</span><span class='line'>    <span class="nv">$datafile</span><span class="o">=</span><span class="s">&quot;$1.dat&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="nb">push</span> <span class="nv">@datafiles</span><span class="p">,</span> <span class="nv">$datafile</span><span class="p">;</span>
+</span><span class='line'>    <span class="nb">open</span><span class="p">(</span><span class="n">O</span><span class="p">,</span> <span class="s">&quot;&gt;$outdir/$datafile&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">die</span> <span class="s">&quot;cannot open $outdir/$datafile for writing&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="nb">open</span><span class="p">(</span><span class="n">O2</span><span class="p">,</span> <span class="s">&quot;&gt;$outdir/2d-$datafile&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">die</span> <span class="s">&quot;cannot open $outdir/$datafile for writing&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">while</span><span class="p">(</span><span class="sr">&lt;I&gt;</span><span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">next</span> <span class="k">unless</span> <span class="p">(</span><span class="sr"> /^[\s\d]+$/</span> <span class="p">);</span>
+</span><span class='line'>        <span class="nv">@split</span> <span class="o">=</span> <span class="nb">split</span><span class="p">();</span>
+</span><span class='line'>        <span class="c1"># We may have only 7 metrics (no block entries). Replaced == 15 with &gt;=8</span>
+</span><span class='line'>        <span class="k">next</span> <span class="k">unless</span> <span class="p">(</span> <span class="nv">@split</span> <span class="o">&gt;=</span> <span class="mi">8</span> <span class="p">);</span>
+</span><span class='line'>        <span class="k">print</span> <span class="n">O</span><span class="p">;</span>
+</span><span class='line'>        <span class="k">print</span> <span class="n">O2</span> <span class="k">if</span> <span class="nv">$split</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">16384</span> <span class="ow">or</span> <span class="nv">$split</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="nv">$split</span><span class="p">[</span><span class="mi">1</span><span class="p">];</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="nb">close</span> <span class="n">I</span><span class="p">,</span> <span class="n">O</span><span class="p">,</span> <span class="n">O2</span><span class="p">;</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">print</span> <span class="bp">STDERR</span> <span class="s">&quot;done.\nGenerating graphs:&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">foreach</span> <span class="nv">$column</span> <span class="p">(</span><span class="nb">keys</span> <span class="nv">%columns</span><span class="p">)</span>
+</span><span class='line'><span class="p">{</span>
+</span><span class='line'>    <span class="k">print</span> <span class="bp">STDERR</span> <span class="s">&quot; $column&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">open</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="s">&quot;&gt;$outdir/$column.do&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">die</span> <span class="s">&quot;cannot open $outdir/$column.do for writing&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">print</span> <span class="n">G</span> <span class="sx">qq{</span>
+</span><span class='line'><span class="sx">set title &quot;Iozone performance: $column&quot;</span>
+</span><span class='line'><span class="sx">set grid lt 2 lw 1</span>
+</span><span class='line'><span class="sx">set surface</span>
+</span><span class='line'><span class="sx">set parametric</span>
+</span><span class='line'><span class="sx">set xtics</span>
+</span><span class='line'><span class="sx">set ytics</span>
+</span><span class='line'><span class="sx">set logscale x 2</span>
+</span><span class='line'><span class="sx">set logscale y 2</span>
+</span><span class='line'><span class="sx">set autoscale z</span>
+</span><span class='line'><span class="sx">#set xrange [2.**5:2.**24]</span>
+</span><span class='line'><span class="sx">set xlabel &quot;File size in KBytes&quot;</span>
+</span><span class='line'><span class="sx">set ylabel &quot;Record size in Kbytes&quot;</span>
+</span><span class='line'><span class="sx">set zlabel &quot;Kbytes/sec&quot;</span>
+</span><span class='line'><span class="sx">#set data style lines</span>
+</span><span class='line'><span class="sx">set style data lines</span>
+</span><span class='line'><span class="sx">set dgrid3d 80,80,3</span>
+</span><span class='line'><span class="sx">#set terminal png small picsize 900 700</span>
+</span><span class='line'><span class="sx">set terminal png small size 900 700</span>
+</span><span class='line'><span class="sx">set output &quot;$column.png&quot;</span>
+</span><span class='line'><span class="sx">}</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">print</span> <span class="n">G</span> <span class="s">&quot;splot &quot;</span><span class="o">.</span> <span class="nb">join</span><span class="p">(</span><span class="s">&quot;, &quot;</span><span class="p">,</span> <span class="nb">map</span><span class="p">{</span><span class="sx">qq{&quot;$_&quot; using 1:2:$columns{$column} title &quot;$_&quot;}</span><span class="p">}(</span><span class="nv">@datafiles</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">print</span> <span class="n">G</span> <span class="s">&quot;\n&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">close</span> <span class="n">G</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">open</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="s">&quot;&gt;$outdir/2d-$column.do&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">die</span> <span class="s">&quot;cannot open $outdir/$column.do for writing&quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="k">print</span> <span class="n">G</span> <span class="sx">qq{</span>
+</span><span class='line'><span class="sx">set title &quot;Iozone performance: $column&quot;</span>
+</span><span class='line'><span class="sx">#set terminal png small picsize 450 350</span>
+</span><span class='line'><span class="sx">set terminal png small size 450 350</span>
+</span><span class='line'><span class="sx">set logscale x</span>
+</span><span class='line'><span class="sx">set xlabel &quot;File size in KBytes&quot;</span>
+</span><span class='line'><span class="sx">set ylabel &quot;Kbytes/sec&quot;</span>
+</span><span class='line'><span class="sx">set output &quot;2d-$column.png&quot;</span>
+</span><span class='line'><span class="sx">}</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">print</span> <span class="n">G</span> <span class="s">&quot;plot &quot;</span><span class="o">.</span> <span class="nb">join</span><span class="p">(</span><span class="s">&quot;, &quot;</span><span class="p">,</span> <span class="nb">map</span><span class="p">{</span><span class="sx">qq{&quot;2d-$_&quot; using 1:$columns{$column} title &quot;$_&quot; with lines}</span><span class="p">}(</span><span class="nv">@datafiles</span><span class="p">));</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">print</span> <span class="n">G</span> <span class="s">&quot;\n&quot;</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="nb">close</span> <span class="n">G</span><span class="p">;</span>
+</span><span class='line'>
+</span><span class='line'>    <span class="k">if</span> <span class="p">(</span> <span class="nb">system</span><span class="p">(</span><span class="s">&quot;cd $outdir &amp;&amp; gnuplot $column.do &amp;&amp; gnuplot 2d-$column.do&quot;</span><span class="p">)</span> <span class="p">)</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">print</span> <span class="bp">STDERR</span> <span class="s">&quot;(failed) &quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'>    <span class="k">else</span>
+</span><span class='line'>    <span class="p">{</span>
+</span><span class='line'>        <span class="k">print</span> <span class="bp">STDERR</span> <span class="s">&quot;(ok) &quot;</span><span class="p">;</span>
+</span><span class='line'>    <span class="p">}</span>
+</span><span class='line'><span class="p">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">print</span> <span class="bp">STDERR</span> <span class="s">&quot;done.\n&quot;</span><span class="p">;</span>
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
   
   
     <article>
@@ -983,44 +1934,6 @@ DMG_MOUNT_DIR=$BUILD_DIR/mount</p>
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2010/11/21/openjdk-1-7-for-osx-continuous-build-with-hudson/">OpenJDK 1.7 for OS/X Continuous Build With Hudson</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-11-21T03:06:22+01:00" pubdate data-updated="true">Nov 21<span>st</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content">
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1038,6 +1951,10 @@ DMG_MOUNT_DIR=$BUILD_DIR/mount</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2012/10/15/mountain-lion-apxs/">Mountain Lion and apxs</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/07/20/understanding-java-from-command-line-on-osx/">Understanding java from command line on OSX</a>
       </li>
     
@@ -1051,10 +1968,6 @@ DMG_MOUNT_DIR=$BUILD_DIR/mount</p>
     
       <li class="post">
         <a href="/blog/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx/">Building Universal Apache Tomcat Connector (mod_jk) on OSX</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/03/18/ssd-or-not-ssd/">SSD or not SSD ?</a>
       </li>
     
   </ul>

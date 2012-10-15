@@ -1,0 +1,442 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Mountain Lion and apxs - Rico's Blog</title>
+  <meta name="author" content="Henri Gomez">
+
+  
+  <meta name="description" content="Mountain Lion came with a version of apxs where C compiler and pre-processor are defined to a location not in phase with XCode 4.5. If you try to &hellip;">
+  
+
+  <!-- http://t.co/dKP3o1e -->
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
+  <link rel="canonical" href="http://hgomez.github.com/blog/2012/10/15/mountain-lion-apxs/">
+  <link href="/favicon.png" rel="icon">
+  <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
+  <script src="/javascripts/modernizr-2.0.js"></script>
+  <script src="/javascripts/ender.js"></script>
+  <script src="/javascripts/octopress.js" type="text/javascript"></script>
+  <link href="/atom.xml" rel="alternate" title="Rico's Blog" type="application/atom+xml">
+  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+  <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
+<link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+<link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
+
+  
+  <script type="text/javascript">
+    var _gaq = _gaq || [];
+    _gaq.push(['_setAccount', 'UA-35223600-1']);
+    _gaq.push(['_trackPageview']);
+
+    (function() {
+      var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+      ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+    })();
+  </script>
+
+
+</head>
+
+<body   >
+  <header role="banner"><hgroup>
+  <div id="logo">
+  	<div id="logoLeft">{</div>
+  	<div id="logoText">mob</div>
+  	<div id="logoRight">}</div>
+  	<div class="clear"></div>
+  </div>
+  <h1><a href="/">Rico's Blog</a></h1>
+  
+    <h2>Continuous Integration, Delivery, OSX, OpenJDK, Tomcat and much more.</h2>
+  
+  <div class="clear"></div>
+</hgroup>
+
+</header>
+  <nav role="navigation"><ul class="subscription" data-subscription="rss">
+  <li><a href="/atom.xml" rel="subscribe-rss" title="subscribe via RSS">RSS</a></li>
+  
+</ul>
+  
+<form action="http://google.com/search" method="get">
+  <fieldset role="search">
+    <input type="hidden" name="q" value="site:hgomez.github.com" />
+    <input class="search" type="text" name="q" results="0" placeholder="Search"/>
+  </fieldset>
+</form>
+  
+<ul class="main-navigation">
+  <li><a href="/">Blog</a></li>
+  <li><a href="/blog/archives">Archives</a></li>
+</ul>
+
+</nav>
+  <div id="main">
+    <div id="content">
+      <div>
+<article class="hentry" role="article">
+  
+  <header>
+    
+      
+        <h1 class="entry-title">Mountain Lion and Apxs</h1>
+      
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-15T13:06:15+02:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time>
+        
+      </p>
+    
+  </header>
+
+
+<div class="entry-content"><p>Mountain Lion came with a version of apxs where C compiler and pre-processor are defined to a location not in phase with XCode 4.5.</p>
+
+<p>If you try to build any apxs related modules or Tomcat Native Library, it will fail like this :</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>checking build system type... x86_64-apple-darwin12.2.0
+</span><span class='line'>checking host system type... x86_64-apple-darwin12.2.0
+</span><span class='line'>checking target system type... x86_64-apple-darwin12.2.0
+</span><span class='line'>checking <span class="k">for </span>a BSD-compatible install... /usr/bin/install -c
+</span><span class='line'>checking <span class="k">for </span>working mkdir -p... yes
+</span><span class='line'>Tomcat Native Version: 1.1.24
+</span><span class='line'>checking <span class="k">for </span>chosen layout... tcnative
+</span><span class='line'>checking <span class="k">for </span>APR... yes
+</span><span class='line'>  setting CC to <span class="s2">&quot;/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc&quot;</span>
+</span><span class='line'>  setting CPP to <span class="s2">&quot;/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc -E&quot;</span>
+</span><span class='line'>checking <span class="k">for </span>JDK location <span class="o">(</span>please <span class="nb">wait</span><span class="o">)</span>... /System/Library/Frameworks/JavaVM.framework/Versions/A/
+</span><span class='line'>checking Java platform... checking Java platform...
+</span><span class='line'>checking <span class="k">for </span>sablevm... NONE
+</span><span class='line'>  adding <span class="s2">&quot;-I/System/Library/Frameworks/JavaVM.framework/Versions/A//Headers&quot;</span> to TCNATIVE_PRIV_INCLUDES
+</span><span class='line'>checking os_type directory... jni_md.h found in /System/Library/Frameworks/JavaVM.framework/Versions/A//Headers
+</span><span class='line'>checking <span class="k">for </span>gcc... /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc
+</span><span class='line'>checking whether the C compiler works... no
+</span><span class='line'>configure: error: in <span class="sb">`</span>/Users/henri/tomcat-native-1.1.24-src/jni/native<span class="s1">&#39;:</span>
+</span><span class='line'><span class="s1">configure: error: C compiler cannot create executables</span>
+</span><span class='line'><span class="s1">See `config.log&#39;</span> <span class="k">for </span>more details
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>apxs get its configurations from  <strong>/usr/share/httpd/build/config_vars.mk</strong> who reference <strong>/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain</strong></p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="nv">CC</span> <span class="o">=</span> /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc
+</span><span class='line'><span class="nv">CPP</span> <span class="o">=</span> /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc -E
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>If you installed XCode to standard location, you&#8217;ll find toolchain at <strong>/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain</strong> so until Apple fix apxs, you should create a symlink between real and expected location :</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>sudo ln -s /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Configure will now works as expected :</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+<span class='line-number'>23</span>
+<span class='line-number'>24</span>
+<span class='line-number'>25</span>
+<span class='line-number'>26</span>
+<span class='line-number'>27</span>
+<span class='line-number'>28</span>
+<span class='line-number'>29</span>
+<span class='line-number'>30</span>
+<span class='line-number'>31</span>
+<span class='line-number'>32</span>
+<span class='line-number'>33</span>
+<span class='line-number'>34</span>
+<span class='line-number'>35</span>
+<span class='line-number'>36</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>mbp-rico:native henri<span class="nv">$ CFLAGS</span><span class="o">=</span><span class="s1">&#39;-arch i386 -arch x86_64&#39;</span> ./configure --with-apr<span class="o">=</span>/usr --with-ssl<span class="o">=</span>/usr --with-java-home<span class="o">=</span>/System/Library/Frameworks/JavaVM.framework/Versions/A/
+</span><span class='line'>checking build system type... x86_64-apple-darwin12.2.0
+</span><span class='line'>checking host system type... x86_64-apple-darwin12.2.0
+</span><span class='line'>checking target system type... x86_64-apple-darwin12.2.0
+</span><span class='line'>checking <span class="k">for </span>a BSD-compatible install... /usr/bin/install -c
+</span><span class='line'>checking <span class="k">for </span>working mkdir -p... yes
+</span><span class='line'>Tomcat Native Version: 1.1.24
+</span><span class='line'>checking <span class="k">for </span>chosen layout... tcnative
+</span><span class='line'>checking <span class="k">for </span>APR... yes
+</span><span class='line'>  setting CC to <span class="s2">&quot;/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc&quot;</span>
+</span><span class='line'>  setting CPP to <span class="s2">&quot;/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc -E&quot;</span>
+</span><span class='line'>checking <span class="k">for </span>JDK location <span class="o">(</span>please <span class="nb">wait</span><span class="o">)</span>... /System/Library/Frameworks/JavaVM.framework/Versions/A/
+</span><span class='line'>checking Java platform... checking Java platform...
+</span><span class='line'>checking <span class="k">for </span>sablevm... NONE
+</span><span class='line'>  adding <span class="s2">&quot;-I/System/Library/Frameworks/JavaVM.framework/Versions/A//Headers&quot;</span> to TCNATIVE_PRIV_INCLUDES
+</span><span class='line'>checking os_type directory... jni_md.h found in /System/Library/Frameworks/JavaVM.framework/Versions/A//Headers
+</span><span class='line'>checking <span class="k">for </span>gcc... /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc
+</span><span class='line'>checking whether the C compiler works... yes
+</span><span class='line'>checking <span class="k">for </span>C compiler default output file name... a.out
+</span><span class='line'>checking <span class="k">for </span>suffix of executables...
+</span><span class='line'>checking whether we are cross compiling... no
+</span><span class='line'>checking <span class="k">for </span>suffix of object files... o
+</span><span class='line'>checking whether we are using the GNU C compiler... yes
+</span><span class='line'>checking whether /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc accepts -g... yes
+</span><span class='line'>checking <span class="k">for</span> /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc option to accept ISO C89... none needed
+</span><span class='line'>checking <span class="k">for </span>OpenSSL library... using openssl from /usr/lib and /usr/include
+</span><span class='line'>checking OpenSSL library version... ok
+</span><span class='line'>checking <span class="k">for </span>OpenSSL DSA support... yes
+</span><span class='line'>  setting TCNATIVE_LDFLAGS to <span class="s2">&quot;-lssl -lcrypto&quot;</span>
+</span><span class='line'>  adding <span class="s2">&quot;-DHAVE_OPENSSL&quot;</span> to CFLAGS
+</span><span class='line'>  setting TCNATIVE_LIBS to <span class="s2">&quot;&quot;</span>
+</span><span class='line'>  setting TCNATIVE_LIBS to <span class="s2">&quot; -L/usr/lib -R/usr/lib -lapr-1 -lpthread&quot;</span>
+</span><span class='line'>configure: creating ./config.status
+</span><span class='line'>config.status: creating tcnative.pc
+</span><span class='line'>config.status: creating Makefile
+</span><span class='line'>config.status: executing default commands
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p></p>
+
+<p>Thanks <a href="http://apple.stackexchange.com/questions/58186/how-to-compile-mod-wsgi-mod-fastcgi-etc-on-mountain-lion-by-fixing-apxserror">stack-exchange</a> for covering this issue</p>
+</div>
+
+
+  <footer>
+    <p class="meta">
+      
+  
+
+<span class="byline author vcard">Posted by <span class="fn">Henri Gomez</span></span>
+
+      
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2012-10-15T13:06:15+02:00" pubdate data-updated="true">Oct 15<span>th</span>, 2012</time>
+      
+
+<span class="categories">
+  
+    <a class='category' href='/blog/categories/os-x/'>OS/X</a>, <a class='category' href='/blog/categories/tomcat/'>Tomcat</a>
+  
+</span>
+
+
+    </p>
+    
+      <div class="sharing">
+  
+  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hgomez.github.com/blog/2012/10/15/mountain-lion-apxs/" data-via="hgomez" data-counturl="http://hgomez.github.com/blog/2012/10/15/mountain-lion-apxs/" >Tweet</a>
+  
+  
+  
+</div>
+
+    
+    <p class="meta">
+      
+        <a class="basic-alignment left articlenav" href="/blog/2012/07/20/understanding-java-from-command-line-on-osx/" title="Previous Post: Understanding java from command line on OSX">&laquo; Understanding java from command line on OSX</a>
+      
+      
+    </p>
+  </footer>
+</article>
+
+</div>
+
+<aside class="sidebar">
+  
+    <section>
+  <h1>Recent Posts</h1>
+  <ul id="recent_posts">
+    
+      <li class="post">
+        <a href="/blog/2012/10/15/mountain-lion-apxs/">Mountain Lion and apxs</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/07/20/understanding-java-from-command-line-on-osx/">Understanding java from command line on OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/06/13/building-universal-apache-tomcat-native-library-on-osx-updated/">Building Universal Apache Tomcat Native Library on OS/X - updated</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/21/using-apache-tomcat-connector-mod_jk-on-osx/">Using Apache Tomcat Connector (mod_jk) on OSX</a>
+      </li>
+    
+      <li class="post">
+        <a href="/blog/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx/">Building Universal Apache Tomcat Connector (mod_jk) on OSX</a>
+      </li>
+    
+  </ul>
+</section>
+
+<section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/hgomez">@hgomez</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'hgomez',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
+  <h1>Latest Tweets</h1>
+  <ul id="tweets">
+    <li class="loading">Status updating...</li>
+  </ul>
+  <script type="text/javascript">
+    $.domReady(function(){
+      getTwitterFeed("hgomez", 4, false);
+    });
+  </script>
+  <script src="/javascripts/twitter.js" type="text/javascript"> </script>
+  
+    <a href="http://twitter.com/hgomez" class="twitter-follow-button" data-show-count="false">Follow @hgomez</a>
+  
+</section>
+
+
+<section>
+  <h1>On Delicious</h1>
+  <div id="delicious"></div>
+  <script type="text/javascript" src="http://feeds.delicious.com/v2/json/henri.gomez?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
+  <p><a href="http://delicious.com/henri.gomez">My Delicious Bookmarks &raquo;</a></p>
+</section>
+
+
+<section class="googleplus">
+  <h1>
+    <a href="https://plus.google.com/109187972559091018844?rel=author">
+      <img src="http://www.google.com/images/icons/ui/gprofile_button-32.png" width="32" height="32">
+      Google+
+    </a>
+  </h1>
+</section>
+
+
+
+  
+</aside>
+
+
+    </div>
+  </div>
+  <footer role="contentinfo"><p>
+  Copyright &copy; 2012 - Henri Gomez -
+  <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
+</p>
+
+</footer>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function(){
+      var twitterWidgets = document.createElement('script');
+      twitterWidgets.type = 'text/javascript';
+      twitterWidgets.async = true;
+      twitterWidgets.src = 'http://platform.twitter.com/widgets.js';
+      document.getElementsByTagName('head')[0].appendChild(twitterWidgets);
+    })();
+  </script>
+
+
+
+
+
+</body>
+</html>

@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tomcat | Rico's Blog]]></title>
   <link href="http://hgomez.github.com/blog/categories/tomcat/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2012-10-01T14:47:04+02:00</updated>
+  <updated>2012-10-15T11:43:46+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -12,6 +12,96 @@
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Mountain Lion and apxs]]></title>
+    <link href="http://hgomez.github.com/blog/2012/10/15/mountain-lion-apxs/"/>
+    <updated>2012-10-15T13:06:15+02:00</updated>
+    <id>http://hgomez.github.com/blog/2012/10/15/mountain-lion-apxs</id>
+    <content type="html"><![CDATA[<p>Mountain Lion came with a version of apxs where C compiler and pre-processor are defined to a location not in phase with XCode 4.5.</p>
+
+<p>If you try to build any apxs related modules or Tomcat Native Library, it will fail like this :</p>
+
+<p><code>bash
+checking build system type... x86_64-apple-darwin12.2.0
+checking host system type... x86_64-apple-darwin12.2.0
+checking target system type... x86_64-apple-darwin12.2.0
+checking for a BSD-compatible install... /usr/bin/install -c
+checking for working mkdir -p... yes
+Tomcat Native Version: 1.1.24
+checking for chosen layout... tcnative
+checking for APR... yes
+  setting CC to "/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc"
+  setting CPP to "/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc -E"
+checking for JDK location (please wait)... /System/Library/Frameworks/JavaVM.framework/Versions/A/
+checking Java platform... checking Java platform...
+checking for sablevm... NONE
+  adding "-I/System/Library/Frameworks/JavaVM.framework/Versions/A//Headers" to TCNATIVE_PRIV_INCLUDES
+checking os_type directory... jni_md.h found in /System/Library/Frameworks/JavaVM.framework/Versions/A//Headers
+checking for gcc... /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc
+checking whether the C compiler works... no
+configure: error: in `/Users/henri/tomcat-native-1.1.24-src/jni/native':
+configure: error: C compiler cannot create executables
+See `config.log' for more details
+</code></p>
+
+<p>apxs get its configurations from  <strong>/usr/share/httpd/build/config_vars.mk</strong> who reference <strong>/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain</strong></p>
+
+<p><code>bash
+CC = /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc
+CPP = /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc -E
+</code></p>
+
+<p>If you installed XCode to standard location, you'll find toolchain at <strong>/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain</strong> so until Apple fix apxs, you should create a symlink between real and expected location :</p>
+
+<p><code>bash
+sudo ln -s /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain
+</code></p>
+
+<p>Configure will now works as expected :</p>
+
+<p><code>bash
+mbp-rico:native henri$ CFLAGS='-arch i386 -arch x86_64' ./configure --with-apr=/usr --with-ssl=/usr --with-java-home=/System/Library/Frameworks/JavaVM.framework/Versions/A/
+checking build system type... x86_64-apple-darwin12.2.0
+checking host system type... x86_64-apple-darwin12.2.0
+checking target system type... x86_64-apple-darwin12.2.0
+checking for a BSD-compatible install... /usr/bin/install -c
+checking for working mkdir -p... yes
+Tomcat Native Version: 1.1.24
+checking for chosen layout... tcnative
+checking for APR... yes
+  setting CC to "/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc"
+  setting CPP to "/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc -E"
+checking for JDK location (please wait)... /System/Library/Frameworks/JavaVM.framework/Versions/A/
+checking Java platform... checking Java platform...
+checking for sablevm... NONE
+  adding "-I/System/Library/Frameworks/JavaVM.framework/Versions/A//Headers" to TCNATIVE_PRIV_INCLUDES
+checking os_type directory... jni_md.h found in /System/Library/Frameworks/JavaVM.framework/Versions/A//Headers
+checking for gcc... /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc
+checking whether the C compiler works... yes
+checking for C compiler default output file name... a.out
+checking for suffix of executables...
+checking whether we are cross compiling... no
+checking for suffix of object files... o
+checking whether we are using the GNU C compiler... yes
+checking whether /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc accepts -g... yes
+checking for /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc option to accept ISO C89... none needed
+checking for OpenSSL library... using openssl from /usr/lib and /usr/include
+checking OpenSSL library version... ok
+checking for OpenSSL DSA support... yes
+  setting TCNATIVE_LDFLAGS to "-lssl -lcrypto"
+  adding "-DHAVE_OPENSSL" to CFLAGS
+  setting TCNATIVE_LIBS to ""
+  setting TCNATIVE_LIBS to " -L/usr/lib -R/usr/lib -lapr-1 -lpthread"
+configure: creating ./config.status
+config.status: creating tcnative.pc
+config.status: creating Makefile
+config.status: executing default commands
+</code></p>
+
+<p>Thanks <a href="http://apple.stackexchange.com/questions/58186/how-to-compile-mod-wsgi-mod-fastcgi-etc-on-mountain-lion-by-fixing-apxserror">stack-exchange</a> for covering this issue</p>
+]]></content>
+  </entry>
   
   <entry>
     <title type="html"><![CDATA[Building Universal Apache Tomcat Native Library on OS/X - updated]]></title>
@@ -211,129 +301,6 @@ make</p>
 sudo rm -f  /usr/lib/java/libtcnative-1.dylib
 sudo ln -s /usr/lib/java/libtcnative-1.0.dylib /usr/lib/java/libtcnative-1.dylib
 ```</p>
-]]></content>
-  </entry>
-  
-  <entry>
-    <title type="html"><![CDATA[Tomcat Maven Plugin and Apache Tomcat post 6.0.29 ]]></title>
-    <link href="http://hgomez.github.com/blog/2011/03/11/maven-tomcat-plugin-and-post-6-0-29-tomcat/"/>
-    <updated>2011-03-11T13:56:04+01:00</updated>
-    <id>http://hgomez.github.com/blog/2011/03/11/maven-tomcat-plugin-and-post-6-0-29-tomcat</id>
-    <content type="html"><![CDATA[<p>If you're using the <a href="http://mojo.codehaus.org/tomcat-maven-plugin/">Tomcat Maven Plugin</a> and want to use post 6.0.29  Apache Tomcat, ie latest 6.0.32, you should update your pom to handle a change in artifact.</p>
-
-<p>Up to 6.0.29, Eclipse JDT compiler was bundled as jasper-jdt :</p>
-
-<p>[xml]
-<dependency></p>
-
-<pre><code>          &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
-          &lt;artifactId&gt;jasper-jdt&lt;/artifactId&gt;
-          &lt;version&gt;6.0.29&lt;/version&gt;
-        &lt;/dependency&gt;
-</code></pre>
-
-<p>[/xml]</p>
-
-<p>With <a href="http://tomcat.apache.org/tomcat-6.0-doc/changelog.html">6.0.30</a>, Apache Tomcat team started to bundle Eclipse JDT directly:</p>
-
-<p>[xml]
-<dependency>
-  <groupId>org.eclipse.jdt.core.compiler</groupId>
-  <artifactId>ecj</artifactId>
-  <version>3.5.1</version>
-</dependency>
-[/xml]</p>
-
-<p>As consequence, org.apache.tomcat/jasper-jdt artifact didn't exist anymore after release 6.0.29.</p>
-
-<p>[caption id="attachment_742" align="alignnone" width="743" caption="Jasper JDT up to 6.0.29"]<a href="http://blog.hgomez.net/wp-content/uploads/2011/03/jasper-jdt.png"><img src="http://blog.hgomez.net/wp-content/uploads/2011/03/jasper-jdt.png" alt="Jasper JDT up to 6.0.29" /></a>[/caption]</p>
-
-<p>For Tomcat Maven Plugin, you should update the <a href="http://mojo.codehaus.org/tomcat-maven-plugin/examples/adjust-embedded-tomcat-version.html">suggested pom</a> like this :</p>
-
-<p>[xml]</p>
-
-<pre><code>&lt;build&gt;
-    &lt;pluginManagement&gt;
-        &lt;plugins&gt;
-            &lt;plugin&gt;
-                &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
-                &lt;artifactId&gt;tomcat-maven-plugin&lt;/artifactId&gt;
-                &lt;version&gt;1.2-SNAPSHOT&lt;/version&gt;
-                &lt;dependencies&gt;
-                    &lt;dependency&gt;
-                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
-                        &lt;artifactId&gt;catalina&lt;/artifactId&gt;
-                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
-                    &lt;/dependency&gt;
-                    &lt;dependency&gt;
-                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
-                        &lt;artifactId&gt;catalina-ha&lt;/artifactId&gt;
-                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
-                        &lt;scope&gt;runtime&lt;/scope&gt;
-                    &lt;/dependency&gt;
-                    &lt;dependency&gt;
-                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
-                        &lt;artifactId&gt;tribes&lt;/artifactId&gt;
-                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
-                        &lt;scope&gt;runtime&lt;/scope&gt;
-                    &lt;/dependency&gt;
-                    &lt;dependency&gt;
-                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
-                        &lt;artifactId&gt;el-api&lt;/artifactId&gt;
-                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
-                        &lt;scope&gt;runtime&lt;/scope&gt;
-                    &lt;/dependency&gt;
-                    &lt;dependency&gt;
-                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
-                        &lt;artifactId&gt;jasper&lt;/artifactId&gt;
-                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
-                        &lt;scope&gt;runtime&lt;/scope&gt;
-                    &lt;/dependency&gt;
-                    &lt;dependency&gt;
-                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
-                        &lt;artifactId&gt;jasper-el&lt;/artifactId&gt;
-                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
-                        &lt;scope&gt;runtime&lt;/scope&gt;
-                    &lt;/dependency&gt;
-                    &lt;dependency&gt;
-                        &lt;groupId&gt;org.eclipse.jdt.core.compiler&lt;/groupId&gt;
-                        &lt;artifactId&gt;ecj&lt;/artifactId&gt;
-                        &lt;version&gt;3.5.1&lt;/version&gt;
-                        &lt;scope&gt;runtime&lt;/scope&gt;
-                    &lt;/dependency&gt;
-                    &lt;dependency&gt;
-                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
-                        &lt;artifactId&gt;jsp-api&lt;/artifactId&gt;
-                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
-                        &lt;scope&gt;runtime&lt;/scope&gt;
-                    &lt;/dependency&gt;
-                    &lt;dependency&gt;
-                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
-                        &lt;artifactId&gt;servlet-api&lt;/artifactId&gt;
-                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
-                        &lt;scope&gt;runtime&lt;/scope&gt;
-                    &lt;/dependency&gt;
-                    &lt;dependency&gt;
-                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
-                        &lt;artifactId&gt;coyote&lt;/artifactId&gt;
-                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
-                        &lt;scope&gt;runtime&lt;/scope&gt;
-                    &lt;/dependency&gt;
-                    &lt;dependency&gt;
-                        &lt;groupId&gt;org.apache.tomcat&lt;/groupId&gt;
-                        &lt;artifactId&gt;dbcp&lt;/artifactId&gt;
-                        &lt;version&gt;${tomcat.version}&lt;/version&gt;
-                        &lt;scope&gt;runtime&lt;/scope&gt;
-                    &lt;/dependency&gt;
-                &lt;/dependencies&gt;
-            &lt;/plugin&gt;
-        &lt;/plugins&gt;
-    &lt;/pluginManagement&gt;
-</code></pre>
-
-<p>[/xml]</p>
-
-<h3>Notice: An updated version of Tomcat Maven Plugin 1.2-SNAPSHOT has been released, this hack is no more necessary</h3>
 ]]></content>
   </entry>
   
