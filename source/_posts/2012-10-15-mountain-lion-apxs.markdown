@@ -37,14 +37,16 @@ configure: error: C compiler cannot create executables
 See `config.log' for more details
 ```
 
-apxs get its configurations from  **/usr/share/httpd/build/config_vars.mk** who reference **/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain**
+apxs get its configurations from **/usr/share/httpd/build/config_vars.mk** who reference **/Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain**.
 
 ```bash
 CC = /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc
 CPP = /Applications/Xcode.app/Contents/Developer/Toolchains/OSX10.8.xctoolchain/usr/bin/cc -E
 ```
 
-If you installed XCode to standard location, you'll find toolchain at **/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain** so until Apple fix apxs, you should create a symlink between real and expected location :
+If you installed XCode to standard location, you'll find toolchain at **/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain**.
+
+So until Apple fix apxs, you should create a symlink between real and expected location :
 
 
 ``` bash
