@@ -1,0 +1,11 @@
+---
+layout: post
+title: "Refresh"
+date: 2013-07-22 14:59
+comments: true
+categories: 
+- blog
+---
+Just refreshed github project with Octopress contents.
+
+Stay tuned for new blog posts :)
