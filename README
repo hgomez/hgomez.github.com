@@ -1,0 +1,10 @@
+# http://octopress.org/docs/blogging/
+
+rake new_post["Zombie Ninjas Attack: A survivor's retrospective"]
+
+rake generate
+rake deploy
+
+git add .
+git commit -m 'your message'
+git push origin source
