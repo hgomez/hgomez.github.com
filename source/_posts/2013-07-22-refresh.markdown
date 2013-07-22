@@ -9,4 +9,4 @@ categories:
 ---
 Just refreshed github project with Octopress contents.
 
-Stay tuned for new blog posts :)
+Stay tuned for more new blog posts :)
