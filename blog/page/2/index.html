@@ -9,8 +9,7 @@
   <meta name="author" content="Henri Gomez">
 
   
-  <meta name="description" content="Iozone is a great tool to mesure performance of filesystem.
-You could find 10 examples here. In it latest version, 3.97, it came with reporting tools &hellip;">
+  <meta name="description" content="I&#8217;m using Jenkins to build RPMs with free-style scripts. Decent RPM packager should sign his RPMs so they could be checked by yum/zypper tools &hellip;">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -26,7 +25,6 @@ You could find 10 examples here. In it latest version, 3.97, it came with report
   <script src="/javascripts/ender.js"></script>
   <script src="/javascripts/octopress.js" type="text/javascript"></script>
   <link href="/atom.xml" rel="alternate" title="Rico's Blog" type="application/atom+xml">
-  <link href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
   <!--Fonts from Google"s Web font directory at http://google.com/webfonts -->
 <link href="http://fonts.googleapis.com/css?family=PT+Serif:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
 <link href="http://fonts.googleapis.com/css?family=PT+Sans:regular,italic,bold,bolditalic" rel="stylesheet" type="text/css">
@@ -91,9 +89,128 @@ You could find 10 examples here. In it latest version, 3.97, it came with report
       
   <header>
     
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2011/11/03/iozone-and-gnuplot-4-x/">Iozone and Gnuplot 4.x</a></h1>
+      <h1 class="entry-title"><a href="/blog/2011/12/28/batch-rpm-signing/">Batch Rpm Signing</a></h1>
+    
+    
+      <p class="meta">
+        
+
+
+
+
+
+
+
+
+  
+
+
+<time datetime="2011-12-28T18:05:42+01:00" pubdate data-updated="true">Dec 28<span>th</span>, 2011</time>
+        
+      </p>
+    
+  </header>
+
+
+  <div class="entry-content"><p>I&#8217;m using <a href="http://jenkins-ci.org/">Jenkins</a> to build RPMs with free-style scripts.</p>
+
+<p>Decent RPM packager should sign his RPMs so they could be checked by yum/zypper tools.</p>
+
+<p>Here you could be in trouble since rpm signing require a password to be passed in command line :</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'>rpm --addsign -D <span class="s2">&quot;_signature gpg&quot;</span> -D <span class="s2">&quot;_gpg_name packagers@myforge.org&quot;</span> RPMS/noarch/myjenkins-1.0.0-1.noarch.rpm&lt;br /&gt;
+</span><span class='line'>Enter pass phrase:&lt;br /&gt;
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>It&#8217;s quite problematic for a RPM build factory.</p>
+
+<p>After digging around Internet, best solution appears to be using <a href="http://expect.sourceforge.net/">expect</a> and I developped a simple script for such purpose with following constraints :</p>
+
+<ul>
+<li><p>packager gpg name should be parametized (to avoid injecting it in ~/.rpmmacros)</p></li>
+<li><p>gpg passphrase should be provided to command line (could be read from a secret file)</p></li>
+</ul>
+
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+<span class='line-number'>7</span>
+<span class='line-number'>8</span>
+<span class='line-number'>9</span>
+<span class='line-number'>10</span>
+<span class='line-number'>11</span>
+<span class='line-number'>12</span>
+<span class='line-number'>13</span>
+<span class='line-number'>14</span>
+<span class='line-number'>15</span>
+<span class='line-number'>16</span>
+<span class='line-number'>17</span>
+<span class='line-number'>18</span>
+<span class='line-number'>19</span>
+<span class='line-number'>20</span>
+<span class='line-number'>21</span>
+<span class='line-number'>22</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c">#!/usr/bin/expect -f</span>
+</span><span class='line'><span class="c">#</span>
+</span><span class='line'><span class="c"># rpmsign-batch.expect : expect powered rpm signing command</span>
+</span><span class='line'><span class="c">#</span>
+</span><span class='line'>
+</span><span class='line'>proc usage <span class="o">{}</span> <span class="o">{</span>
+</span><span class='line'>        send_user <span class="s2">&quot;Usage: rpmsign-batch.expect gpgname passphrase rpmfile\n\n&quot;</span>
+</span><span class='line'>        <span class="nb">exit</span>
+</span><span class='line'><span class="o">}</span>
+</span><span class='line'>
+</span><span class='line'><span class="k">if</span> <span class="o">{[</span>llength <span class="nv">$argv</span><span class="o">]</span>!<span class="o">=</span>3<span class="o">}</span> usage
+</span><span class='line'>
+</span><span class='line'><span class="nb">set </span>gpgname <span class="o">[</span>lrange <span class="nv">$argv</span> 0 0<span class="o">]</span>
+</span><span class='line'><span class="nb">set </span>passphrase <span class="o">[</span>lrange <span class="nv">$argv</span> 1 1<span class="o">]</span>
+</span><span class='line'><span class="nb">set </span>rpmfile <span class="o">[</span>lrange <span class="nv">$argv</span> 2 2<span class="o">]</span>
+</span><span class='line'>
+</span><span class='line'>send_user <span class="s2">&quot;passphrase=$passphrase gpgname=$gpgname\n&quot;</span>
+</span><span class='line'>
+</span><span class='line'>spawn rpm --addsign -D <span class="s2">&quot;_signature gpg&quot;</span> -D <span class="s2">&quot;_gpg_name $gpgname&quot;</span> <span class="nv">$rpmfile</span>
+</span><span class='line'>expect -exact <span class="s2">&quot;Enter pass phrase: &quot;</span>
+</span><span class='line'>send -- <span class="s2">&quot;$passphrase\r&quot;</span>
+</span><span class='line'>expect eof
+</span></code></pre></td></tr></table></div></figure>
+
+
+<p>You could then use it to sign rpms from your freestyle jobs like :</p>
+
+<figure class='code'><figcaption><span></span></figcaption><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+<span class='line-number'>5</span>
+<span class='line-number'>6</span>
+</pre></td><td class='code'><pre><code class='bash'><span class='line'><span class="c"># Password provided in clear in job (weird)</span>
+</span><span class='line'>rpmsign-batch.expect packagers@myforge.org mypassphrase RPMS/noarch/myjenkins-1.0.0-1.noarch.rpm
+</span><span class='line'>
+</span><span class='line'><span class="c"># Password grabbed from a secret file (better)</span>
+</span><span class='line'><span class="nv">PASSPHRASE</span><span class="o">=</span><span class="sb">`</span>cat /my/secret-passphrase-file<span class="sb">`</span>
+</span><span class='line'>rpmsign-batch.expect packagers@myforge.org <span class="nv">$PASSPHRASE</span> RPMS/noarch/myjenkins-1.0.0-1.noarch.rpm
+</span></code></pre></td></tr></table></div></figure>
+
+</div>
+  
+  
+
+
+    </article>
+  
+  
+    <article>
       
+  <header>
+    
+      <h1 class="entry-title"><a href="/blog/2011/11/03/iozone-and-gnuplot-4-x/">Iozone and Gnuplot 4.x</a></h1>
     
     
       <p class="meta">
@@ -1042,9 +1159,7 @@ Also you may get only <strong>8 metrics</strong> in reports instead of <strong>1
       
   <header>
     
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2011/07/15/servlet-containers-startup-time/">Servlet Containers, Startup Time</a></h1>
-      
+      <h1 class="entry-title"><a href="/blog/2011/07/15/servlet-containers-startup-time/">Servlet Containers, Startup Time</a></h1>
     
     
       <p class="meta">
@@ -1112,9 +1227,7 @@ Even if this appears marginal in real life (an application server is expected to
       
   <header>
     
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2011/07/13/building-universal-apache-tomcat-native-library-on-osx/">Building Universal Apache Tomcat Native Library on OS/X</a></h1>
-      
+      <h1 class="entry-title"><a href="/blog/2011/07/13/building-universal-apache-tomcat-native-library-on-osx/">Building Universal Apache Tomcat Native Library on OS/X</a></h1>
     
     
       <p class="meta">
@@ -1241,9 +1354,7 @@ Even if this appears marginal in real life (an application server is expected to
       
   <header>
     
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2011/04/18/apple-jdke28099s-openjdks-e28093-core2duo-vs-core-i7/">Apple JDK’s / OpenJDK&#8217;s – Core2Duo vs Core I7</a></h1>
-      
+      <h1 class="entry-title"><a href="/blog/2011/04/18/apple-jdke28099s-openjdks-e28093-core2duo-vs-core-i7/">Apple JDK’s / OpenJDK&#8217;s – Core2Duo vs Core I7</a></h1>
     
     
       <p class="meta">
@@ -1308,9 +1419,7 @@ Even if this appears marginal in real life (an application server is expected to
       
   <header>
     
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2011/04/16/apple-jdks-openjdk-back-to-benchs/">Apple JDK&#8217;s / OpenJDK - Back to Benchs</a></h1>
-      
+      <h1 class="entry-title"><a href="/blog/2011/04/16/apple-jdks-openjdk-back-to-benchs/">Apple JDK&#8217;s / OpenJDK - Back to Benchs</a></h1>
     
     
       <p class="meta">
@@ -1413,9 +1522,7 @@ llvm-g++ -D_ALLBSD_SOURCE -D_GNU_SOURCE -DIA32 -I/Users/henri/Documents/jenkins/
       
   <header>
     
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2011/04/16/openjdk-7-on-osx-first-swing-app/">OpenJDK 7 on OS/X and IntelliJ IDEA EAP</a></h1>
-      
+      <h1 class="entry-title"><a href="/blog/2011/04/16/openjdk-7-on-osx-first-swing-app/">OpenJDK 7 on OS/X and IntelliJ IDEA EAP</a></h1>
     
     
       <p class="meta">
@@ -1486,9 +1593,7 @@ I tested with both NetBeans 7 RC1 and RC2 but it didn&#8217;t works. I hope it w
       
   <header>
     
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2011/03/11/maven-tomcat-plugin-and-post-6-0-29-tomcat/">Tomcat Maven Plugin and Apache Tomcat Post 6.0.29</a></h1>
-      
+      <h1 class="entry-title"><a href="/blog/2011/03/11/maven-tomcat-plugin-and-post-6-0-29-tomcat/">Tomcat Maven Plugin and Apache Tomcat Post 6.0.29</a></h1>
     
     
       <p class="meta">
@@ -1638,9 +1743,7 @@ I tested with both NetBeans 7 RC1 and RC2 but it didn&#8217;t works. I hope it w
       
   <header>
     
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2010/12/04/openjdk-1-7-for-osx-benchs/">OpenJDK 1.7 for OS/X Benchs</a></h1>
-      
+      <h1 class="entry-title"><a href="/blog/2010/12/04/openjdk-1-7-for-osx-benchs/">OpenJDK 1.7 for OS/X Benchs</a></h1>
     
     
       <p class="meta">
@@ -1714,9 +1817,7 @@ OpenJDK 64-Bit Server VM (build 20.0-b02, mixed mode)
       
   <header>
     
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2010/11/26/openjdk-1-7-for-osx-continuous-build-with-hudson-e28093-episode-3/">OpenJDK 1.7 for OS/X Continuous Build With Hudson – Episode 3</a></h1>
-      
+      <h1 class="entry-title"><a href="/blog/2010/11/26/openjdk-1-7-for-osx-continuous-build-with-hudson-e28093-episode-3/">OpenJDK 1.7 for OS/X Continuous Build With Hudson – Episode 3</a></h1>
     
     
       <p class="meta">
@@ -1753,187 +1854,6 @@ OpenJDK 64-Bit Server VM (build 20.0-b02, mixed mode)
 
     </article>
   
-  
-    <article>
-      
-  <header>
-    
-      <!-- Now we're back to normal posts. Note the links used under href in both headers.-->
-        <h1 class="entry-title"><a href="/blog/2010/11/25/openjdk-1-7-for-osx-continuous-build-with-hudson-episode-2/">OpenJDK 1.7 for OS/X Continuous Build With Hudson - Episode 2</a></h1>
-      
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2010-11-25T22:49:48+01:00" pubdate data-updated="true">Nov 25<span>th</span>, 2010</time>
-        
-      </p>
-    
-  </header>
-
-
-  <div class="entry-content"><p><a href="http://blog.hgomez.net/?p=670">First episode</a> of OpenJDK 1.7 for OS/X covered build of 32 and 64 bits VM via Hudson.</p>
-
-<p>We ended with two VMs, 32bits was under build/bsd-i586/j2sdk-image and 64bits in build/bsd-amd64/j2sdk-image
-And here appears a new OS/X jedi, <a href="http://www.hikage.be/">Gildas</a>, providing .PKG and .DMG scripting.</p>
-
-<p>This episode will describe how packaging, PKG and DMG was done.</p>
-
-<h2>OS/X Package .PKG</h2>
-
-<p>First we need to transform j2sdk-image folder into .PKG</p>
-
-<p>We used OS/X <strong>packagemaker</strong>, provided by <strong>XCode</strong> :</p>
-
-<p>[bash]
-  /Developer/usr/bin/packagemaker \</p>
-
-<pre><code>--title "Open JDK 7 (32bits) for OS X Installer" \
---version 1.0 \
---filter "\.DS_Store" \
---root-volume-only \
---domain system \
---verbose \
---no-relocate \
--l "/Library/Java/JavaVirtualMachines/openjdk-1.7-i586" \
---target 10.5 \
---id net.openjdk.java.i586.pkg \
---root ${SOURCE_DIR} \
---out ${BUILD_DIR}/openjdk-1.7-i586.pkg \
--v
-</code></pre>
-
-<p>[/bash]</p>
-
-<h2>From .PKG to .DMG</h2>
-
-<p>Next step is to transform the <strong>.PKG</strong> into a mountable image <strong>.DMG</strong>.
-Here we used hdiutil :</p>
-
-<p>[bash]
-  hdiutil create -srcfolder ${BUILD_DIR}/openjdk-1.7-i586.pkg -volname &#8216;Open JDK 7 (32bits)&#8217; -fs HFS+ -fsargs &#8216;-c c=64,a=16,e=16&#8217; -format UDRW ${BUILD_DIR}/openjdk-1.7-i586-tmp.dmg
-  hdiutil convert ${BUILD_DIR}/openjdk-1.7-i586-tmp.dmg -format UDZO -imagekey zlib-level=9 -o ${BUILD_DIR}/OpenJDK-1.7-i586.dmg
-[/bash]</p>
-
-<h2>Scripts for 32 and 64bits VM</h2>
-
-<p>The following scripts could be added at the end of the Hudson script zone, or called in a second pass.</p>
-
-<h3>32bits</h3>
-
-<p>[bash]</p>
-
-<h1>!/bin/bash</h1>
-
-<p>SOURCE_DIR=<code>pwd</code>/build/bsd-i586/j2sdk-image
-BUILD_DIR=<code>pwd</code>/java-osx
-DMG_MOUNT_DIR=$BUILD_DIR/mount</p>
-
-<p>mkdir -p ${BUILD_DIR}</p>
-
-<p>if [ -x build/bsd-i586/j2sdk-image/bin/java ]; then</p>
-
-<p>  rm -f ${BUILD_DIR}/OpenJDK-1.7-i586.dmg ${BUILD_DIR}/openjdk-1.7-i586.pkg</p>
-
-<p>  /Developer/usr/bin/packagemaker \</p>
-
-<pre><code>--title "Open JDK 7 (32bits) for OS X Installer" \
---version 1.0 \
---filter "\.DS_Store" \
---root-volume-only \
---domain system \
---verbose \
---no-relocate \
--l "/Library/Java/JavaVirtualMachines/openjdk-1.7-i586" \
---target 10.5 \
---id net.openjdk.java.i586.pkg \
---root ${SOURCE_DIR} \
---out ${BUILD_DIR}/openjdk-1.7-i586.pkg \
--v
-</code></pre>
-
-<p>  hdiutil create -srcfolder ${BUILD_DIR}/openjdk-1.7-i586.pkg -volname &#8216;Open JDK 7 (32bits)&#8217; -fs HFS+ -fsargs &#8216;-c c=64,a=16,e=16&#8217; -format UDRW ${BUILD_DIR}/openjdk-1.7-i586-tmp.dmg
-  hdiutil convert ${BUILD_DIR}/openjdk-1.7-i586-tmp.dmg -format UDZO -imagekey zlib-level=9 -o ${BUILD_DIR}/OpenJDK-1.7-i586.dmg</p>
-
-<p>  rm -f ${BUILD_DIR}/openjdk-1.7-i586-tmp.dmg</p>
-
-<p>else</p>
-
-<p>  echo &#8220;no valid exec under build/bsd-i586/j2sdk-image/bin/java, packaging skipped&#8221;</p>
-
-<p>fi
-[/bash]</p>
-
-<h3>64bits</h3>
-
-<p>[bash]</p>
-
-<h1>!/bin/bash</h1>
-
-<p>SOURCE_DIR=<code>pwd</code>/build/bsd-amd64/j2sdk-image
-BUILD_DIR=<code>pwd</code>/java-osx
-DMG_MOUNT_DIR=$BUILD_DIR/mount</p>
-
-<p>mkdir -p ${BUILD_DIR}</p>
-
-<p>if [ -x build/bsd-amd64/j2sdk-image/bin/java ]; then</p>
-
-<p>  rm -f ${BUILD_DIR}/OpenJDK-1.7-x86_64.dmg ${BUILD_DIR}/openjdk-1.7-x86_64.pkg</p>
-
-<p>  /Developer/usr/bin/packagemaker \</p>
-
-<pre><code>--title "Open JDK 7 (64bits) for OS X Installer" \
---version 1.0 \
---filter "\.DS_Store" \
---root-volume-only \
---domain system \
---verbose \
---no-relocate \
--l "/Library/Java/JavaVirtualMachines/openjdk-1.7-x86_64" \
---target 10.5 \
---id net.openjdk.java.x86_64.pkg \
---root ${SOURCE_DIR} \
---out ${BUILD_DIR}/openjdk-1.7-x86_64.pkg \
--v
-</code></pre>
-
-<p>  hdiutil create -srcfolder ${BUILD_DIR}/openjdk-1.7-x86_64.pkg -volname &#8216;Open JDK 7 (64bits)&#8217; -fs HFS+ -fsargs &#8216;-c c=64,a=16,e=16&#8217; -format UDRW ${BUILD_DIR}/openjdk-1.7-x86_64-tmp.dmg
-  hdiutil convert ${BUILD_DIR}/openjdk-1.7-x86_64-tmp.dmg -format UDZO -imagekey zlib-level=9 -o ${BUILD_DIR}/OpenJDK-1.7-x86_64.dmg</p>
-
-<p>  rm -f ${BUILD_DIR}/openjdk-1.7-x86_64-tmp.dmg</p>
-
-<p>else</p>
-
-<p>  echo &#8220;no valid exec under build/bsd-amd64/j2sdk-image/bin/java, packaging skipped&#8221;</p>
-
-<p>fi
-[/bash]</p>
-
-<h2>Next Step</h2>
-
-<p>Gildas and I, will continue to improve these basic .PKG/.DMG scripts and OS/X gurus advices are more than welcome.</p>
-
-<p>Next steps is to find storage on the net so we could provide DMG regularly. Even better, an OS/X box (under SnowLeopard) available on the net, will help us provide continuous DMG.</p>
-
-<p>Plus on est de fous, &#8230;.</p>
-</div>
-  
-  
-
-
-    </article>
-  
   <div class="pagination">
     
       <a class="prev" href="/blog/page/3/">&larr; Older</a>
@@ -1951,6 +1871,10 @@ DMG_MOUNT_DIR=$BUILD_DIR/mount</p>
   <ul id="recent_posts">
     
       <li class="post">
+        <a href="/blog/2013/07/22/refresh/">Refresh</a>
+      </li>
+    
+      <li class="post">
         <a href="/blog/2012/10/15/mountain-lion-apxs/">Mountain Lion and apxs</a>
       </li>
     
@@ -1964,10 +1888,6 @@ DMG_MOUNT_DIR=$BUILD_DIR/mount</p>
     
       <li class="post">
         <a href="/blog/2012/03/21/using-apache-tomcat-connector-mod_jk-on-osx/">Using Apache Tomcat Connector (mod_jk) on OSX</a>
-      </li>
-    
-      <li class="post">
-        <a href="/blog/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx/">Building Universal Apache Tomcat Connector (mod_jk) on OSX</a>
       </li>
     
   </ul>
@@ -2045,7 +1965,7 @@ DMG_MOUNT_DIR=$BUILD_DIR/mount</p>
     </div>
   </div>
   <footer role="contentinfo"><p>
-  Copyright &copy; 2012 - Henri Gomez -
+  Copyright &copy; 2013 - Henri Gomez -
   <span class="credit">Powered by <a href="http://octopress.org">Octopress</a></span>
 </p>
 

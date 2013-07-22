@@ -5,11 +5,11 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>OpenJDK 7 on OS/X and IntelliJ IDEA EAP - Rico's Blog</title>
+  <title>Category: blog - Rico's Blog</title>
   <meta name="author" content="Henri Gomez">
 
   
-  <meta name="description" content="During the last weeks, Apple started to contribute it&#8217;s Aqua/Cocoa port to OpenJDK 7 on the macosx-port branch. It&#8217;s still works it &hellip;">
+  <meta name="description" content="Category: blog">
   
 
   <!-- http://t.co/dKP3o1e -->
@@ -18,7 +18,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   
-  <link rel="canonical" href="http://hgomez.github.com/blog/2011/04/16/openjdk-7-on-osx-first-swing-app/">
+  <link rel="canonical" href="http://hgomez.github.comblog/categories/blog/">
   <link href="/favicon.png" rel="icon">
   <link href="/stylesheets/screen.css" media="screen, projection" rel="stylesheet" type="text/css">
   <script src="/javascripts/modernizr-2.0.js"></script>
@@ -82,121 +82,35 @@
   <div id="main">
     <div id="content">
       <div>
-<article class="hentry" role="article">
+<article role="article">
   
   <header>
-    
-      <h1 class="entry-title">OpenJDK 7 on OS/X and IntelliJ IDEA EAP</h1>
-    
-    
-      <p class="meta">
-        
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-04-16T16:16:27+02:00" pubdate data-updated="true">Apr 16<span>th</span>, 2011</time>
-        
-      </p>
+    <h1 class="entry-title">Category: Blog</h1>
     
   </header>
+  
+  <div id="blog-archives" class="category">
 
 
-<div class="entry-content"><p>During the last weeks, Apple started to contribute it&#8217;s Aqua/Cocoa port to OpenJDK 7 on the macosx-port branch. It&#8217;s still works it progress but it was nice to see some SWING apps like IntelliJ IDEA works on the preliminary release.</p>
 
-<p>I used IntelliJ IDEA EAP (10.5) and tweaked it&#8217;s startup shell.sh to define AWT_TOOLKIT=CToolkit and add -Dswing.defaultlaf=com.apple.laf.AquaLookAndFeel since Aqua Look and Feel is not default for now.</p>
+  
+  <h2>2013</h2>
 
-<p>[bash]
-export CLASSPATH</p>
+<article>
+  
+<h1><a href="/blog/2013/07/22/refresh/">Refresh</a></h1>
+<time datetime="2013-07-22T14:59:00+02:00" pubdate><span class='month'>Jul</span> <span class='day'>22</span> <span class='year'>2013</span></time>
 
-<p>LD_LIBRARY_PATH=.:$LD_LIBRARY_PATH
-export LD_LIBRARY_PATHAWT_TOOLKIT</p>
+<footer>
+  <span class="categories">posted in <a class='category' href='/blog/categories/blog/'>blog</a></span>
+</footer>
 
-<h1>AWT/Cocoa port for OpenJDK 7 macosx-port</h1>
 
-<p>export=CToolkit
-JVM_ARGS=&#8221;-Dswing.defaultlaf=com.apple.laf.AquaLookAndFeel $JVM_ARGS&#8221;</p>
+</article>
 
-<p>cd &#8220;$IDEA_BIN_HOME&#8221;
-while true ; do
-  $IDEA_JDK/bin/java $JVM_ARGS -Djb.restart.code=88 $IDEA_MAIN_CLASS_NAME $*
-  test $? -ne 88 &amp;&amp; break
-done</p>
-
-<p>[/bash]</p>
-
-<p>Then defined OpenJDK 7 from macosx port (available <a href="http://openjdk-osx-build.googlecode.com/files/OpenJDK-OSX-1.7-universal-20110416.dmg">here</a>) as default JVM and started IntelliJ by calling its shell script :</p>
-
-<p>[bash]
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/1.7.0.jdk/Contents/Home
-/Applications/IdeaX-IU-106.396.app/bin/idea.sh
-[/bash]</p>
-
-<p>And I could see a Swing based application running on OpenJDK 7 and OS/X.</p>
-
-<p><a href="http://blog.hgomez.net/wp-content/uploads/2011/04/IntelliJ-OpenJDK7-UI.png"><img src="http://blog.hgomez.net/wp-content/uploads/2011/04/IntelliJ-OpenJDK7-UI-1024x745.png" alt="" /></a></p>
-
-<p>IntelliJ IDEA is so the second major IDE to be compatible with OpenJDK 7 and OS/X - Cocoa, first one was Eclipse thanks to it&#8217;s SWT/Cocoa bridge.
-I tested with both NetBeans 7 RC1 and RC2 but it didn&#8217;t works. I hope it will be fixed in NetBeans 7 final release.</p>
 </div>
 
-
-  <footer>
-    <p class="meta">
-      
   
-
-<span class="byline author vcard">Posted by <span class="fn">Henri Gomez</span></span>
-
-      
-
-
-
-
-
-
-
-
-  
-
-
-<time datetime="2011-04-16T16:16:27+02:00" pubdate data-updated="true">Apr 16<span>th</span>, 2011</time>
-      
-
-<span class="categories">
-  
-    <a class='category' href='/blog/categories/os-x/'>OS/X</a>, <a class='category' href='/blog/categories/openjdk/'>OpenJDK</a>
-  
-</span>
-
-
-    </p>
-    
-      <div class="sharing">
-  
-  <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hgomez.github.com/blog/2011/04/16/openjdk-7-on-osx-first-swing-app/" data-via="hgomez" data-counturl="http://hgomez.github.com/blog/2011/04/16/openjdk-7-on-osx-first-swing-app/" >Tweet</a>
-  
-  
-  
-</div>
-
-    
-    <p class="meta">
-      
-        <a class="basic-alignment left" href="/blog/2011/03/11/maven-tomcat-plugin-and-post-6-0-29-tomcat/" title="Previous Post: Tomcat Maven Plugin and Apache Tomcat post 6.0.29 ">&laquo; Tomcat Maven Plugin and Apache Tomcat post 6.0.29 </a>
-      
-      
-        <a class="basic-alignment right" href="/blog/2011/04/16/apple-jdks-openjdk-back-to-benchs/" title="Next Post: Apple JDK's / OpenJDK - back to benchs">Apple JDK's / OpenJDK - back to benchs &raquo;</a>
-      
-    </p>
-  </footer>
 </article>
 
 </div>
