@@ -4,7 +4,7 @@
   <title><![CDATA[Category: Tomcat | Rico's Blog]]></title>
   <link href="http://hgomez.github.com/blog/categories/tomcat/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2013-07-22T17:29:55+02:00</updated>
+  <updated>2013-07-22T17:52:02+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -211,7 +211,7 @@ Even if this appears marginal in real life (an application server is expected to
 
 <h3>Results on MacBook Pro - Core2Duo 2.66Ghz</h3>
 
-<p><img class="center" src="/images/Startup6.png"></p>
+<p>{% img center /images/Startup6.png %}</p>
 
 <p>all time in millisecondes</p>
 

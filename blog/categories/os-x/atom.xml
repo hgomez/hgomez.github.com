@@ -4,7 +4,7 @@
   <title><![CDATA[Category: OS/X | Rico's Blog]]></title>
   <link href="http://hgomez.github.com/blog/categories/os-x/atom.xml" rel="self"/>
   <link href="http://hgomez.github.com/"/>
-  <updated>2013-07-22T17:29:55+02:00</updated>
+  <updated>2013-07-22T17:52:02+02:00</updated>
   <id>http://hgomez.github.com/</id>
   <author>
     <name><![CDATA[Henri Gomez]]></name>
@@ -128,7 +128,7 @@ config.status: executing default commands
 
 <p>Apple provide a good tool to select default JVM, Java Preferences :</p>
 
-<p><img class="center" src="/images/JavaPreferences.png" title="[Java Preferences [Java Preferences]]" ></p>
+<p>{% img center /images/JavaPreferences.png [Java Preferences [Java Preferences]] %}</p>
 
 <p>In this screenshot you could see many JVM, from many sources, <strong>Apple, Oracle</strong> and <strong>openjdk-osx-build</strong> and default ordering Java (from up to bottom).</p>
 
@@ -140,15 +140,12 @@ config.status: executing default commands
 
 <p>Let see java used by default :</p>
 
-<p><div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>mbp-rico:~ henri<span class="nv">$ </span>java -version
-</span><span class='line'>java version <span class="s2">&quot;1.6.0_33&quot;</span>
-</span><span class='line'>Java<span class="o">(</span>TM<span class="o">)</span> SE Runtime Environment <span class="o">(</span>build 1.6.0_33-b03-424-11M3720<span class="o">)</span>
-</span><span class='line'>Java HotSpot<span class="o">(</span>TM<span class="o">)</span> 64-Bit Server VM <span class="o">(</span>build 20.8-b03-424, mixed mode<span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+<p>{% codeblock lang:bash %}
+mbp-rico:~ henri$ java -version
+java version "1.6.0_33"
+Java(TM) SE Runtime Environment (build 1.6.0_33-b03-424-11M3720)
+Java HotSpot(TM) 64-Bit Server VM (build 20.8-b03-424, mixed mode)
+{% endcodeblock %}</p>
 
 <p>Default Java is Apple 1.6.0_33, 64bits as expected, so far so good.</p>
 
@@ -157,17 +154,13 @@ config.status: executing default commands
 <h2>Standard Unix way</h2>
 
 <p>You could just update your PATH environment variable to update search path :
-<div class='bogus-wrapper'><notextile><figure class='code'> <div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-<span class='line-number'>3</span>
-<span class='line-number'>4</span>
-<span class='line-number'>5</span>
-</pre></td><td class='code'><pre><code class='bash'><span class='line'>mbp-rico:~ henri<span class="nv">$ </span><span class="nb">export </span><span class="nv">PATH</span><span class="o">=</span>/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home/bin:<span class="nv">$PATH</span>
-</span><span class='line'>mbp-rico:~ henri<span class="nv">$ </span>java -version
-</span><span class='line'>openjdk version <span class="s2">&quot;1.7.0-jdk7u6-b20&quot;</span>
-</span><span class='line'>OpenJDK Runtime Environment <span class="o">(</span>build 1.7.0-jdk7u6-b20-20120719<span class="o">)</span>
-</span><span class='line'>OpenJDK 64-Bit Server VM <span class="o">(</span>build 23.2-b09, mixed mode<span class="o">)</span>
-</span></code></pre></td></tr></table></div></figure></notextile></div></p>
+{% codeblock lang:bash %}
+mbp-rico:~ henri$ export PATH=/Library/Java/JavaVirtualMachines/1.7.0u6.jdk/Contents/Home/bin:$PATH
+mbp-rico:~ henri$ java -version
+openjdk version "1.7.0-jdk7u6-b20"
+OpenJDK Runtime Environment (build 1.7.0-jdk7u6-b20-20120719)
+OpenJDK 64-Bit Server VM (build 23.2-b09, mixed mode)
+{% endcodeblock %}</p>
 
 <p>It works but OSX provide smarter mechanism.</p>
 
