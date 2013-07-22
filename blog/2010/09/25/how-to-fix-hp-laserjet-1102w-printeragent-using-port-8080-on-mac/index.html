@@ -212,6 +212,8 @@ tcp6       0      0  ::1.631                </em>.*                    LISTEN
   <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hgomez.github.com/blog/2010/09/25/how-to-fix-hp-laserjet-1102w-printeragent-using-port-8080-on-mac/" data-via="hgomez" data-counturl="http://hgomez.github.com/blog/2010/09/25/how-to-fix-hp-laserjet-1102w-printeragent-using-port-8080-on-mac/" >Tweet</a>
   
   
+  <div class="g-plusone" data-size="medium"></div>
+  
   
 </div>
 
@@ -264,6 +266,36 @@ tcp6       0      0  ::1.631                </em>.*                    LISTEN
 </section>
 
 <section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/hgomez">@hgomez</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'hgomez',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
   <h1>Latest Tweets</h1>
 <a class="twitter-timeline"  href="https://twitter.com/hgomez"  data-widget-id="359344219032260608">Tweets by @hgomez</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
@@ -276,7 +308,6 @@ tcp6       0      0  ::1.631                </em>.*                    LISTEN
   <script type="text/javascript" src="http://feeds.delicious.com/v2/json/henri.gomez?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
   <p><a href="http://delicious.com/henri.gomez">My Delicious Bookmarks &raquo;</a></p>
 </section>
-
 
   
 </aside>
@@ -295,6 +326,14 @@ tcp6       0      0  ::1.631                </em>.*                    LISTEN
 
 
 
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
 
 
 

@@ -193,6 +193,8 @@ CFLAGS=&#39;-arch i386 -arch x86_64&# &hellip;">
   <a href="http://twitter.com/share" class="twitter-share-button" data-url="http://hgomez.github.com/blog/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx/" data-via="hgomez" data-counturl="http://hgomez.github.com/blog/2012/03/21/building-universal-apache-tomcat-connector-mod_jk-on-osx/" >Tweet</a>
   
   
+  <div class="g-plusone" data-size="medium"></div>
+  
   
 </div>
 
@@ -245,6 +247,36 @@ CFLAGS=&#39;-arch i386 -arch x86_64&# &hellip;">
 </section>
 
 <section>
+  <h1>GitHub Repos</h1>
+  <ul id="gh_repos">
+    <li class="loading">Status updating...</li>
+  </ul>
+  
+  <a href="https://github.com/hgomez">@hgomez</a> on GitHub
+  
+  <script type="text/javascript">
+    $.domReady(function(){
+        if (!window.jXHR){
+            var jxhr = document.createElement('script');
+            jxhr.type = 'text/javascript';
+            jxhr.src = '/javascripts/libs/jXHR.js';
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(jxhr, s);
+        }
+
+        github.showRepos({
+            user: 'hgomez',
+            count: 0,
+            skip_forks: true,
+            target: '#gh_repos'
+        });
+    });
+  </script>
+  <script src="/javascripts/github.js" type="text/javascript"> </script>
+</section>
+
+
+<section>
   <h1>Latest Tweets</h1>
 <a class="twitter-timeline"  href="https://twitter.com/hgomez"  data-widget-id="359344219032260608">Tweets by @hgomez</a>
 <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+"://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
@@ -257,7 +289,6 @@ CFLAGS=&#39;-arch i386 -arch x86_64&# &hellip;">
   <script type="text/javascript" src="http://feeds.delicious.com/v2/json/henri.gomez?count=3&amp;sort=date&amp;callback=renderDeliciousLinks"></script>
   <p><a href="http://delicious.com/henri.gomez">My Delicious Bookmarks &raquo;</a></p>
 </section>
-
 
   
 </aside>
@@ -276,6 +307,14 @@ CFLAGS=&#39;-arch i386 -arch x86_64&# &hellip;">
 
 
 
+
+  <script type="text/javascript">
+    (function() {
+      var script = document.createElement('script'); script.type = 'text/javascript'; script.async = true;
+      script.src = 'https://apis.google.com/js/plusone.js';
+      var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(script, s);
+    })();
+  </script>
 
 
 
